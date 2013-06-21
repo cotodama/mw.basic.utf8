@@ -387,6 +387,7 @@ bo_table = '$bo_table'
 ,cf_lucky_writing_comment_chance = '$cf_lucky_writing_comment_chance'
 ,cf_lucky_writing_comment_point_start = '$cf_lucky_writing_comment_point_start'
 ,cf_lucky_writing_comment_point_end = '$cf_lucky_writing_comment_point_end'
+,cf_lucky_writing_no_admin = '$cf_lucky_writing_no_admin'
 where bo_table = '$bo_table'";
 sql_query($sql);
 //,cf_preview_level = '$cf_preview_level'
@@ -740,6 +741,7 @@ if ($chk[cf_lucky_writing_chance]) {
     $sql .= ", cf_lucky_writing_comment_chance = '$cf_lucky_writing_comment_chance' ";
     $sql .= ", cf_lucky_writing_comment_point_start = '$cf_lucky_writing_comment_point_start' ";
     $sql .= ", cf_lucky_writing_comment_point_end = '$cf_lucky_writing_comment_point_end' ";
+    $sql .= ", cf_lucky_writing_no_admin = '$cf_lucky_writing_no_admin' ";
 }
 $sql .= " where gr_id = '$gr_id' ";
 $def .= " where gr_id = '$gr_id' ";

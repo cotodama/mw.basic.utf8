@@ -1,3 +1,29 @@
+ver 2.1.6 (13.06.21)
+    : 유투브 수집기 플러그인 지원 (신규출시! -> http://mwt.so/0FBEw )
+    : 유투브 첨부시 아이콘
+    : 본문에 유투브 주소 입력시 자동 변환 (브라운아이즈님 제안, 사용법:[유투브주소])
+    : 질문게시판에서 관리자는 원클릭으로 채택변경 가능
+    : 비밀 댓글 수정시 비밀글 옵션 풀리는 문제 해결 (csacsa님 제안)
+    : 배추스킨설정 스크립트 오류 수정 (호이님 제안)
+    : 제목 특수문자 브라우져 타이틀에서 깨지는 문제 (껨보이님 제안)
+    : 배추스킨설정에서 코멘트, 댓글 단어 통일 (재아님 제안)
+    : 럭키라이팅 관리자 제외 옵션 추가 (럭키라이팅 1.1.4이상)
+    : 설문 그래프 길이 오류 수정
+    : 코멘트 작성 제한시 수정불가 오류
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/img/icon_youtube.png
+    mw.basic/list.skin.ph
+    mw.basic/view.skin.ph
+    mw.basic/view_comment.skin.php
+    mw.basic/write.skin.ph
+    mw.basic/write_comment_update.head.skin.php
+    mw.basic/mw.proc/mw.qna.choose.php
+    mw.basic/mw.proc/mw.vote.php
+ 
 ver 2.1.5 (13.06.14)
     : 코멘트 새창 이용시 글변경 로그 창 안열리는 문제 해결 (csacsa님 제안)
     : 공지글 추천수 표시 안함 (에버카라님 제안)

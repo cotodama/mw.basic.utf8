@@ -933,6 +933,7 @@ if (is_null($mw_basic[cf_lucky_writing_ment])) {
 if (is_null($mw_basic[cf_lucky_writing_comment])) {
     sql_query("alter table $mw[basic_config_table] add cf_lucky_writing_comment varchar(255) not null", false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_lucky_writing_no_admin varchar(1) not null", false);
 
 // 임시저장
 $sql = "create table if not exists $mw[temp_table] (

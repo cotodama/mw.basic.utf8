@@ -2115,6 +2115,21 @@ function mw_youtube($url)
     return $you;
 }
 
+function mw_youtube_content($content)
+{
+    $pt1 = "/\[<a href=\"(http:\/\/youtu\.be\/[^\"]+)\" [^>]+>[^<]+<\/a>\]/ie";
+    $pt2 = "/\[<a href=\"(http:\/\/www\.youtube\.com\/[^\"]+)\" [^>]+>[^<]+<\/a>\]/ie";
+    $pt3 = "/\[(http:\/\/youtu\.be\/[^\"]+)\]/ie";
+    $pt4 = "/\[(http:\/\/www\.youtube\.com\/[^\"]+)\]/ie";
+
+    $content = preg_replace($pt1, "mw_youtube('\\1')", $content);
+    $content = preg_replace($pt2, "mw_youtube('\\1')", $content);
+    $content = preg_replace($pt3, "mw_youtube('\\1')", $content);
+    $content = preg_replace($pt4, "mw_youtube('\\1')", $content);
+
+    return $content;
+} 
+
 function mw_make_lightbox()
 {
     global $g4, $mw_basic, $view, $lightbox_path, $file_start;

@@ -515,7 +515,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <option value="hit"> 조회수 </option>
 	    <option value="good"> 추천수 </option>
 	    <option value="nogood"> 비추천수 </option>
-	    <option value="comment"> 댓글수 </option>
+	    <option value="comment"> 코멘트수 </option>
 	    <option value="link1_hit"> 링크1 클릭수 </option>
 	    <option value="file"> 다운로드수 </option>
 	    </select>
@@ -760,7 +760,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_content">
 	    <input type=checkbox name=cf_notice_good value=1> 출력안함 
 	    <span class="cf_info">(체크하면 목록에서 출력하지 않습니다.)</span>
-	    <script> document.cf_form.cf_notice_good.checked = <?=$mw_basic[cf_notice_good]?>; </script>
+	    <script> document.cf_form.cf_notice_good.checked = '<?=$mw_basic[cf_notice_good]?>'; </script>
 	</div>
     </div>
 
@@ -1421,7 +1421,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
-	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_day] value=1>&nbsp; 댓글작성 제한 </div>
+	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_day] value=1>&nbsp; 코멘트작성 제한 </div>
 	<div class="cf_content">
 	    <input type=text size=10 name=cf_comment_day class=ed value="<?=$mw_basic[cf_comment_day]?>"> 일에
 	    <input type=text size=10 name=cf_comment_day_count class=ed value="<?=$mw_basic[cf_comment_day_count]?>"> 번 이하, 
@@ -1431,7 +1431,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
-	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_register] value=1>&nbsp; 댓글작성 조건 </div>
+	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_register] value=1>&nbsp; 코멘트작성 조건 </div>
 	<div class="cf_content">
 	    <input type=text size=10 name=cf_comment_point class=ed value="<?=$mw_basic[cf_comment_point]?>"> 포인트 이상, 
 	    가입후 <input type=text size=10 name=cf_comment_register class=ed value="<?=$mw_basic[cf_comment_register]?>"> 일 이상
@@ -1545,7 +1545,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_content">
 	    <input type=checkbox name=cf_must_notice value=1> 쓰기
 	    <input type=checkbox name=cf_must_notice_read value=1> 읽기
-	    <input type=checkbox name=cf_must_notice_comment value=1> 댓글
+	    <input type=checkbox name=cf_must_notice_comment value=1> 코멘트
 	    <input type=checkbox name=cf_must_notice_down value=1> 다운 
 	    <span class="cf_info">(게시판 공지를 모두 읽어야 가능함)</span>
 	    <script>
@@ -1750,7 +1750,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             <br/>
 	    조회수 : <input type=text size=3 class=ed name=cf_auto_move_hit value="<?=$mw_basic[cf_auto_move][hit]?>">,
 	    신고수 : <input type=text size=3 class=ed name=cf_auto_move_singo value="<?=$mw_basic[cf_auto_move][singo]?>">,
-	    댓글수 : <input type=text size=3 class=ed name=cf_auto_move_comment value="<?=$mw_basic[cf_auto_move][comment]?>">,
+	    코멘트수 : <input type=text size=3 class=ed name=cf_auto_move_comment value="<?=$mw_basic[cf_auto_move][comment]?>">,
 	    비추천수 : <input type=text size=3 class=ed name=cf_auto_move_nogood value="<?=$mw_basic[cf_auto_move][nogood]?>">,
 	    추천수 : <input type=text size=3 class=ed name=cf_auto_move_good value="<?=$mw_basic[cf_auto_move][good]?>">
             (<input type='checkbox' name="cf_auto_move_sub" value='1'> 추천수=추천-비추천수)
@@ -2351,17 +2351,19 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             ?>
             본문 문구 : <input type="text" class="ed" name="cf_lucky_writing_ment" size="50" value="<?=$mw_basic[cf_lucky_writing_ment]?>">
             <span class="cf_info">(사용가능 치환자 {별명}, {럭키}, {포인트})</span><br/>
-            댓글 문구 : <input type="text" class="ed" name="cf_lucky_writing_comment" size="50" value="<?=$mw_basic[cf_lucky_writing_comment]?>">
+            코멘트 문구 : <input type="text" class="ed" name="cf_lucky_writing_comment" size="50" value="<?=$mw_basic[cf_lucky_writing_comment]?>">
             <span class="cf_info">(사용가능 치환자 {별명}, {럭키}, {포인트})</span><br/>
 
             본문 확률 : <input type="text" class="ed" name="cf_lucky_writing_chance" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_chance]?>"> %, 포인트
             <input type="text" class="ed" name="cf_lucky_writing_point_start" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_point_start]?>"> 이상 ~
             <input type="text" class="ed" name="cf_lucky_writing_point_end" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_point_end]?>"> 이하.<br/>
 
-            댓글 확률 : <input type="text" class="ed" name="cf_lucky_writing_comment_chance" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_comment_chance]?>"> %, 포인트
+            코멘트 확률 : <input type="text" class="ed" name="cf_lucky_writing_comment_chance" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_comment_chance]?>"> %, 포인트
             <input type="text" class="ed" name="cf_lucky_writing_comment_point_start" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_comment_point_start]?>"> 이상 ~
             <input type="text" class="ed" name="cf_lucky_writing_comment_point_end" size="4" numeric value="<?=$mw_basic[cf_lucky_writing_comment_point_end]?>"> 이하.
-
+            <br/>
+            <input type="checkbox" name="cf_lucky_writing_no_admin" value="1"> 관리자 당첨 제외
+	    <script> document.cf_form.cf_lucky_writing_no_admin.checked = "<?=$mw_basic['cf_lucky_writing_no_admin']?>"; </script>
         </div>
     </div>
 
@@ -2420,14 +2422,16 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             </select>
             <span class="cf_info" id="cf_collect_info"></span>  
             <script>
-            $("#cf_collect").change(function () {
-                if ($(this).val() == "rss") {
+            $("#cf_collect").change(func_collect_change);
+            $(document).ready(func_collect_change);
+            function func_collect_change () {
+                if ($("#cf_collect").val() == "rss") {
                     $("#cf_collect_info").html('(<a href="http://mwt.so/0C5wZ" target="_blank">RSS 수집기 플러그인 설치 후 사용가능 ⇒ <u>다운로드 클릭!</u></a>)');
                 }
-                else if ($(this).val() == "youtube") {
+                else if ($("#cf_collect").val() == "youtube") {
                     $("#cf_collect_info").html('(<a href="http://mwt.so/0FBEw" target="_blank">Youtube 수집기 플러그인 설치 후 사용가능 ⇒ <u>다운로드 클릭!</u></a>)');
                 }
-            });
+            }
             document.cf_form.cf_collect.value = "<?=$mw_basic[cf_collect]?>";
             </script>
         </div>

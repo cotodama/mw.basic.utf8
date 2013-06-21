@@ -728,9 +728,11 @@ if ($mw_basic[cf_contents_shop] == '2' and $write[wr_contents_price]) // 배추 
         $view[file] = null;
     }
 }
+
+$view[rich_content] = mw_youtube_content($view[rich_content]);
 ?>
 <script type="text/javascript">
-document.title = "<?=get_text(addslashes($view[wr_subject]))?>";
+document.title = "<?=strip_tags(addslashes($view[wr_subject]))?>";
 </script>
 <!--
 <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
@@ -811,8 +813,11 @@ AutoSourcing.init( 'view_%id%' , true);
         <? } ?>
         <? include("$board_skin_path/mw.proc/mw.smart-alarm-config.php") ?>
         <span class=mw_basic_total>총 게시물 <?=number_format($total_count)?>건, 최근 <?=number_format($new_count)?> 건</span>
-        <? if ($is_admin && $mw_basic[cf_collect] && file_exists("$g4[path]/plugin/rss-collect/_lib.php")) {?>
+        <? if ($is_admin && $mw_basic[cf_collect] == 'rss-collect' && file_exists("$g4[path]/plugin/rss-collect/_lib.php")) {?>
         <img src="<?=$g4[path]?>/plugin/rss-collect/img/btn_collect.png" align="absmiddle" style="cursor:pointer;" onclick="win_open('<?=$g4[path]?>/plugin/rss-collect/config.php?bo_table=<?=$bo_table?>', 'rss_collect', 'width=800,height=600,scrollbars=1')">
+        <? } ?>
+        <? if ($is_admin && $mw_basic[cf_collect] == 'youtube' && file_exists("$g4[path]/plugin/youtube-collect/_lib.php")) {?>
+        <img src="<?=$g4[path]?>/plugin/youtube-collect/img/btn_collect.png" align="absmiddle" style="cursor:pointer;" onclick="win_open('<?=$g4[path]?>/plugin/youtube-collect/config.php?bo_table=<?=$bo_table?>', 'youtube_collect', 'width=800,height=600,scrollbars=1')">
         <? } ?>
         <a style="cursor:pointer" class="tooltip"
             title="읽기:<?=$board[bo_read_point]?>,

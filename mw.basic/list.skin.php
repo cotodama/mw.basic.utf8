@@ -233,8 +233,11 @@ $new_count = $row[cnt];
 
         <? include("$board_skin_path/mw.proc/mw.smart-alarm-config.php") ?>
         <span class=mw_basic_total>총 게시물 <?=number_format($total_count)?>건, 최근 <?=number_format($new_count)?> 건</span>
-        <? if ($is_admin && $mw_basic[cf_collect] && file_exists("$g4[path]/plugin/rss-collect/_lib.php")) {?>
+        <? if ($is_admin && $mw_basic[cf_collect] == 'rss' && file_exists("$g4[path]/plugin/rss-collect/_lib.php")) {?>
         <img src="<?=$g4[path]?>/plugin/rss-collect/img/btn_collect.png" align="absmiddle" style="cursor:pointer;" onclick="win_open('<?=$g4[path]?>/plugin/rss-collect/config.php?bo_table=<?=$bo_table?>', 'rss_collect', 'width=800,height=600,scrollbars=1')">
+        <? } ?>
+        <? if ($is_admin && $mw_basic[cf_collect] == 'youtube' && file_exists("$g4[path]/plugin/youtube-collect/_lib.php")) {?>
+        <img src="<?=$g4[path]?>/plugin/youtube-collect/img/btn_collect.png" align="absmiddle" style="cursor:pointer;" onclick="win_open('<?=$g4[path]?>/plugin/youtube-collect/config.php?bo_table=<?=$bo_table?>', 'youtube_collect', 'width=800,height=600,scrollbars=1')">
         <? } ?>
         <a style="cursor:pointer" class="tooltip"
             title="읽기:<?=$board[bo_read_point]?>,
@@ -490,6 +493,8 @@ elseif (in_array($list[$i][wr_id], $vote_id))
     echo "<img src=\"$board_skin_path/img/icon_vote.png\" align=absmiddle style=\"border-bottom:2px solid #fff;\">&nbsp;";
 elseif ($list[$i][wr_is_mobile])
     echo "<img src=\"$board_skin_path/img/icon_mobile.png\" align=absmiddle style=\"border-bottom:2px solid #fff;\" width=13 height=12>&nbsp;";
+elseif (strstr($list[$i]['wr_link1'], "youtu"))
+    echo "<img src=\"$board_skin_path/img/icon_youtube.png\" align=absmiddle style=\"border-bottom:2px solid #fff;\" width=13 height=12>&nbsp;";
 else
     echo "<img src=\"$board_skin_path/img/icon_subject.gif\" align=absmiddle style=\"border-bottom:2px solid #fff;\" width=13 height=12>&nbsp;";
 $write_icon = ob_get_contents();
@@ -1047,6 +1052,20 @@ if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_col
         <script type="text/javascript">
         $(document).ready(function () {
             $.get("<?=$rss_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
+        });
+        </script>
+        <?
+    }
+}
+
+// Youtube 수집기
+if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && file_exists("$youtube_collect_path/_config.php")) {
+    include_once("$youtube_collect_path/_config.php");
+    if ($mw_youtube_collect_config[cf_license]) {
+        ?>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("<?=$youtube_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
         });
         </script>
         <?
