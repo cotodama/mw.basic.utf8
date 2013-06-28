@@ -187,7 +187,7 @@ function mw_image_auto_rotate($source_file)
 
 
 // 썸네일 생성.. 080408, curlychoi
-function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_file='', $keep=false, $time='')
+function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_file='', $keep=false)
 {
     global $g4, $mw_basic;
 
@@ -254,13 +254,6 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
 
     @imagedestroy($target);
     @imagedestroy($source);
-
-    global $write;
-    if ($write['wr_datetime'] and !$time)
-        $time = $write['wr_datetime'];
-
-    if ($time)
-        @touch($thumbnail_file, strtotime($time));
 }
 
 function mw_watermark($target, $tw, $th, $source, $position, $transparency=100)
@@ -945,7 +938,6 @@ function bc_code($str, $is_content=1) {
         $str = preg_replace("/\[(h[1-9])\](.*)\[\/h[1-9]\]/iU", "<$1>$2</$1>", $str);
         $str = preg_replace("/\[file([0-9])\](.*)\[\/file[0-9]\]/iU", "<img src=\"$board_skin_path/img/icon_file_down.gif\" align=absmiddle> <span style='cursor:pointer; text-decoration:underline;' onclick=\"file_download('$g4[bbs_path]/download.php?bo_table=$bo_table&wr_id=$wr_id&no=$1', '', '$1');\">$2</span>", $str);
         $str = preg_replace("/\[red\](.*)\[\/red\]/iU", "<span style='color:#ff0000;'>$1</span>", $str);
-        $str = preg_replace("/\[link([1-2])\](.*)\[\/link[1-2]\]/iU", "<a href=\"$g4[bbs_path]/link.php?bo_table=$bo_table&wr_id=$wr_id&no=$1\" target=\"_blank\">$2</a>", $str);
     }
 
     $str = preg_replace("/\[month\]/iU", date('n', $g4[server_time]), $str);
@@ -955,8 +947,6 @@ function bc_code($str, $is_content=1) {
     for ($i=0, $m=count($matches[1]); $i<$m; $i++) {
         $str = preg_replace("/\[counting {$matches[1][$i]}\]/iU", mw_basic_counting_date($matches[1][$i]), $str);
     }
-
-    $str = mw_tag_debug($str);
     return $str;
 }
 
@@ -2040,7 +2030,7 @@ function mw_file_view($url, $write, $width=0, $height=0, $content="")
     }
 }
 
-function mw_get_youtube_thumb($wr_id, $url, $datetime='')
+function mw_get_youtube_thumb($wr_id, $url)
 {
     global $g4, $mw_basic, $thumb_path;
 
@@ -2064,8 +2054,8 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     while (!feof($fp)) $buffer .= fgets($fp,1024);
     fclose($fp);
 
-    $file = "$thumb_path/{$wr_id}";
     if ($buffer) {
+        $file = "$thumb_path/{$wr_id}";
         $fw = fopen ($file, "wb");
         fwrite($fw, trim($buffer));
         chmod ($file, 0777);
@@ -2074,14 +2064,6 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
         // 이미지가 아니면 삭제
         $size = getimagesize($file);
         if ($size[2] != 2) unlink($file);
-    }
-    if (!$datetime) {
-        global $write;
-        if ($write['wr_datetime'])
-            @touch($file, strtotime($write['wr_datetime']));
-    }
-    else if ($datetime) {
-        @touch($file, strtotime($datetime));
     }
 }
 
@@ -2135,15 +2117,11 @@ function mw_youtube($url)
 
 function mw_youtube_content($content)
 {
-    $pt1 = "/\[<a href=\"(http:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
-    $pt2 = "/\[<a href=\"(http:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
-    $pt3 = "/\[(http:\/\/youtu.be\/[^\]]+)\]/ie";
-    $pt4 = "/\[(http:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
+    $pt1 = "/\[<a href=\"(http:\/\/youtu\.be\/[^\"]+)\" target='_blank'>[^<]+<\/a>\]/ie";
+    $pt2 = "/\[<a href=\"(http:\/\/www\.youtube\.com\/[^\"]+)\" target='_blank'>[^<]+<\/a>\]/ie";
 
     $content = preg_replace($pt1, "mw_youtube('\\1')", $content);
     $content = preg_replace($pt2, "mw_youtube('\\1')", $content);
-    $content = preg_replace($pt3, "mw_youtube('\\1')", $content);
-    $content = preg_replace($pt4, "mw_youtube('\\1')", $content);
 
     return $content;
 }
