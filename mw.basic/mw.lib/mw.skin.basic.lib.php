@@ -227,7 +227,7 @@ if ($mw_basic[cf_write_notice]) {
 }
 
 if (!$mw_basic[cf_singo_id])
-    $mw_basic[cf_singo_id] = "admin,";
+    $mw_basic[cf_singo_id] = $config[cf_admin];
 
 if (!$mw_basic[cf_email])
     $mw_basic[cf_email] = "test@test.com\ntest@test.com\n";

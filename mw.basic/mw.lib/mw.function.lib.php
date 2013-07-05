@@ -1968,21 +1968,30 @@ function mw_get_noimage()
 
 function mw_jwplayer($url, $opt="")
 {
-    global $jwplayer, $jwplayer_count, $board_skin_path, $pc_skin_path;
+    global $jwplayer, $jwplayer_count, $board_skin_path, $pc_skin_path, $mw_basic;
 
     if (!$pc_skin_path) $pc_skin_path = $board_skin_path;
     if (!$jwplayer) $jwplayer = false;
     if (!$jwplayer_count) $jwplayer_count = 0;
 
+    if (!$mw_basic['cf_jwplayer_version'])
+        $mw_basic['cf_jwplayer_version'] = 'jwplayer6';
+
     $buffer = '';
     if (!$jwplayer) {
-        $buffer .= "<script src='$pc_skin_path/jwplayer/jwplayer.js'></script>";
+        $buffer .= "<script src='$pc_skin_path/{$mw_basic['cf_jwplayer_version']}/jwplayer.js'></script>";
         $buffer .= "<script>jwplayer.key='';</script>";
         $jwplayer = true;
     }
     $buffer .= "<div id='jwplayer{$jwplayer_count}'>Loading the player...</div>";
-    $buffer .= "<script> jwplayer('jwplayer{$jwplayer_count}').setup({ file: ";
-    $buffer .= "'{$url}' {$opt} }); </script>";
+    $buffer .= "<script> jwplayer('jwplayer{$jwplayer_count}').setup({ ";
+    if ($mw_basic['cf_jwplayer_version'] == 'jwplayer5') {
+        $buffer .= " flashplayer:'$pc_skin_path/jwplayer5/player.swf', ";
+        global $g4;
+        $url = str_replace("../..", $g4[url], $url);
+        $url = str_replace("..", $g4[url], $url);
+    }
+    $buffer .= " file:'{$url}' {$opt} }); </script>";
 
     $jwplayer_count++;
 
@@ -2137,7 +2146,7 @@ function mw_youtube_content($content)
 {
     $pt1 = "/\[<a href=\"(http:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
     $pt2 = "/\[<a href=\"(http:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
-    $pt3 = "/\[(http:\/\/youtu.be\/[^\]]+)\]/ie";
+    $pt3 = "/\[(http:\/\/youtu\.be\/[^\]]+)\]/ie";
     $pt4 = "/\[(http:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
 
     $content = preg_replace($pt1, "mw_youtube('\\1')", $content);

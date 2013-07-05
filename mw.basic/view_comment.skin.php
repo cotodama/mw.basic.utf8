@@ -1136,6 +1136,11 @@ function comment_box(comment_id, work)
             <? } else { ?>
                 $("#wr_content").val($("#save_comment_" + comment_id).val());
 
+                $("#wr_content").removeAttr("readonly");
+                $("#wr_content").removeAttr("onclick");
+                $("#btn_comment_submit").removeAttr("readonly");
+                $("#btn_comment_submit").removeAttr("onclick");
+
                 <? if (!$mw_basic[cf_comment_editor] && ($comment_min || $comment_max)) { ?>
                 if (typeof char_count != 'undefined')
                     check_byte('wr_content', 'char_count');

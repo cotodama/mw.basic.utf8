@@ -180,6 +180,7 @@ bo_table = '$bo_table'
 ,cf_sms_id = '$cf_sms_id'
 ,cf_sms_pw = '$cf_sms_pw'
 ,cf_hp = '$cf_hp'
+,cf_hp_reply = '$cf_hp_reply'
 ,cf_file_head = '$cf_file_head'
 ,cf_file_tail = '$cf_file_tail'
 ,cf_content_head = '$cf_content_head'
@@ -360,6 +361,7 @@ bo_table = '$bo_table'
 ,cf_image_auto_rotate = '$cf_image_auto_rotate'
 ,cf_multimedia = '$cf_multimedia'
 ,cf_youtube_size = '$cf_youtube_size'
+,cf_jwplayer_version = '$cf_jwplayer_version'
 ,cf_watermark_use = '$cf_watermark_use'
 ,cf_watermark_use_thumb = '$cf_watermark_use_thumb'
 ,cf_watermark_path = '$cf_watermark_path'
@@ -488,7 +490,7 @@ if ($chk[cf_singo]) $sql .= ", cf_singo = '$cf_singo' ";
 if ($chk[cf_singo_id]) $sql .= ", cf_singo_id = '$cf_singo_id' ";
 if ($chk[cf_memo_id]) $sql .= ", cf_memo_id = '$cf_memo_id' ";
 if ($chk[cf_email]) $sql .= ", cf_email = '$cf_email' ";
-if ($chk[cf_hp]) $sql .= ", cf_hp = '$cf_hp', cf_sms_id = '$cf_sms_id', cf_sms_pw = '$cf_sms_pw' ";
+if ($chk[cf_hp]) $sql .= ", cf_hp = '$cf_hp', cf_sms_id = '$cf_sms_id', cf_sms_pw = '$cf_sms_pw', cf_hp_reply = '$cf_hp_reply' ";
 if ($chk[cf_file_head]) $sql .= ", cf_file_head = '$cf_file_head' ";
 if ($chk[cf_file_tail]) $sql .= ", cf_file_tail = '$cf_file_tail' ";
 if ($chk[cf_content_head]) $sql .= ", cf_content_head = '$cf_content_head' ";
@@ -714,6 +716,7 @@ if ($chk[cf_good_graph]) $sql .= ", cf_good_graph = '$cf_good_graph' ";
 if ($chk[cf_image_auto_rotate]) $sql .= ", cf_image_auto_rotate = '$cf_image_auto_rotate' ";
 if ($chk[cf_multimedia]) $sql .= ", cf_multimedia = '$cf_multimedia' ";
 if ($chk[cf_youtube_size]) $sql .= ", cf_youtube_size = '$cf_youtube_size' ";
+if ($chk[cf_jwplayer_version]) $sql .= ", cf_jwplayer_version = '$cf_jwplayer_version' ";
 if ($chk[cf_watermark_use]) {
     $sql .= ", cf_watermark_use = '$cf_watermark_use' ";
     $sql .= ", cf_watermark_use_thumb = '$cf_watermark_use_thumb' ";

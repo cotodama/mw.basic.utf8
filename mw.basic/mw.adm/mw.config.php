@@ -1175,6 +1175,17 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_jwplayer_version] value=1>&nbsp; jwplayer 버전 </div>
+	<div class="cf_content" height=60>
+	    <select name="cf_jwplayer_version">
+                <option value="jwplayer6">jwplayer6</option>
+                <option value="jwplayer5">jwplayer5</option>
+	    </select>
+	    <script> document.cf_form.cf_jwplayer_version.value = "<?=$mw_basic[cf_jwplayer_version]?>"; </script>
+	</div>
+    </div>
+
     <div class="block"></div>
 
 </div>
@@ -1840,6 +1851,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_title"> <input type=checkbox name=chk[cf_hp] value=1>&nbsp; 글등록 알림문자 </div>
 	<div class="cf_content" height=140>
 	    <div>
+                회신 : <input type=text size=10 name=cf_hp_reply value="<?=$mw_basic[cf_hp_reply]?>" class=ed>
 		ID : <input type=text size=10 name=cf_sms_id value="<?=$mw_basic[cf_sms_id]?>" class=ed>
 		PW : <input type=text size=10 name=cf_sms_pw value="<?=$mw_basic[cf_sms_pw]?>" class=ed>
 		<span class="cf_info">(<a href="http://www.icodekorea.com" target=_blank>ICODEKOREA</a>,
@@ -1847,6 +1859,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    </div>
 	    <textarea name=cf_hp cols=60 rows=5 class=edarea><?=$mw_basic[cf_hp]?></textarea>
 	    <div class="cf_info">핸드폰번호 Enter 로 구분</div>
+            
 	</div>
     </div>
 

@@ -1186,4 +1186,6 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table $mw[basic_config_table] add cf_content_add text not null", false);
 
+    sql_query("alter table $mw[basic_config_table] add cf_hp_reply varchar(20) not null after cf_hp", false);
+    sql_query("alter table $mw[basic_config_table] add cf_jwplayer_version varchar(15) not null default 'jwplayer6'", false);
 
