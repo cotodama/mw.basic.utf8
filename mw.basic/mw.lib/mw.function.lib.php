@@ -406,7 +406,7 @@ function mw_set_sync_tag($content) {
 	$len = strlen($matchs[0][$i]);
 	$content = substr($content, 0, $pos + $len - 1) . ">" . substr($content, $pos + $len - 1, strlen($content));
     }
- 
+
     $content = mw_get_sync_tag($content, "div");
     $content = mw_get_sync_tag($content, "table");
     $content = mw_get_sync_tag($content, "font");
@@ -1944,6 +1944,8 @@ function mw_bomb()
 
 function mw_tag_debug($str) // 잘못된 태그교정
 {
+    $str = preg_replace("/&lt;br\/>/i", "<br/>", $str);
+
     $tags = array('td', 'tr', 'table', 'div', 'ol', 'ul', 'span');
 
     foreach ($tags as $tag) {
@@ -2183,3 +2185,10 @@ function mw_make_lightbox()
     }
 }
 
+function mw_special_tag($con)
+{
+    $con = preg_replace("/\&lt;([\/]?)(script|iframe)(.*)&gt;/iUs", "<$1$2$3>", $con);
+    $con = str_replace("&#111;&#110;", "on", $con);
+    $con = str_replace("&#115;&#99;", "sc", $con);
+    return $con;
+}

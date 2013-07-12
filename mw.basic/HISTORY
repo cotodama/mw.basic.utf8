@@ -1,3 +1,22 @@
+ver 2.1.9 (13.07.12)
+    : 이모티콘 창 열릴때 경고창 안나오게 (신비님 제안)
+    : 수정페이지 첨부파일 다운로드시 경고창 안나오게
+    : 말머리 사용 금지 기능
+    : 특수태그 사용권한 코멘트에도 적용 (제이리님 제안)
+    : 카카오스토리 퍼가기 (구름★님  제안)
+    : 그누보드 html 줄바꿈 xss 버그 보완 (csacsa님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/img/send_kakaostory.png
+    mw.basic/view.skin.php
+    mw.basic/view_comment.skin.php
+    mw.basic/write.skin.php
+    mw.basic/write_update.head.skin.php
+
 ver 2.1.8 (13.07.05)
     : jwplayer5 와 jwplayer6 선택기능 (캡틴님 제안)
     : 목록에서 추천과 조회 순서 바꿈

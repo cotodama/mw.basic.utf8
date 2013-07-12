@@ -1470,6 +1470,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <input type=checkbox name=cf_sns_google_plus value=1> 구글플러스
             <br>
 	    <input type=checkbox name=cf_sns_kakao value=1> 카카오톡 <span class="cf_info">(모바일에서만)</span>
+	    <input type=checkbox name=cf_sns_kakaostory value=1> 카카오스토리 <span class="cf_info">(모바일에서만)</span>
 	    <script>
             document.cf_form.cf_sns_twitter.checked = '<? echo strstr($mw_basic[cf_sns], '/twitter/')?'1':''; ?>';
             document.cf_form.cf_sns_me2day.checked = '<? echo strstr($mw_basic[cf_sns], '/me2day/')?'1':''; ?>';
@@ -1481,6 +1482,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             document.cf_form.cf_sns_facebook_good.checked = '<? echo strstr($mw_basic[cf_sns], '/facebook_good/')?'1':''; ?>';
             document.cf_form.cf_sns_google_plus.checked = '<? echo strstr($mw_basic[cf_sns], '/google_plus/')?'1':''; ?>';
             document.cf_form.cf_sns_kakao.checked = '<? echo strstr($mw_basic[cf_sns], '/kakao/')?'1':''; ?>';
+            document.cf_form.cf_sns_kakaostory.checked = '<? echo strstr($mw_basic[cf_sns], '/kakaostory/')?'1':''; ?>';
             </script>
 	</div>
     </div>
@@ -1776,6 +1778,15 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             document.cf_form.cf_auto_move_use.value = "<?=$mw_basic[cf_auto_move]['use']?>";
             document.cf_form.cf_auto_move_sub.checked = "<?=$mw_basic[cf_auto_move]['sub']?>";
             </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_ban_subject] value=1>&nbsp; 말머리 금지</div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_ban_subject value=1> 사용 
+	    <span class="cf_info">(제목에 말머리를 사용할 수 없게 합니다.)</span>
+	    <script> document.cf_form.cf_ban_subject.checked = '<?=$mw_basic[cf_ban_subject]?>'; </script>
 	</div>
     </div>
 

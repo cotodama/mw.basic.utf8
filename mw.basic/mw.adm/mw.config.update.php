@@ -81,6 +81,7 @@ if ($cf_sns_facebook) $cf_sns.= '/facebook/';
 if ($cf_sns_facebook_good) $cf_sns.= '/facebook_good/';
 if ($cf_sns_google_plus) $cf_sns.= '/google_plus/';
 if ($cf_sns_kakao) $cf_sns.= '/kakao/';
+if ($cf_sns_kakaostory) $cf_sns.= '/kakaostory/';
 
 $cf_include_head_page = '';
 if ($cf_include_head_list) $cf_include_head_page.= '/l/';
@@ -262,6 +263,7 @@ bo_table = '$bo_table'
 ,cf_social_commerce = '$cf_social_commerce'
 ,cf_social_commerce_hp = '$cf_social_commerce_hp'
 ,cf_google_map = '$cf_google_map'
+,cf_ban_subject = '$cf_ban_subject'
 ,cf_comment_nogood_re_point = '$cf_comment_nogood_re_point'
 ,cf_change_image_size = '$cf_change_image_size'
 ,cf_change_image_size_level = '$cf_change_image_size_level'
@@ -597,6 +599,7 @@ if ($chk[cf_social_commerce]) {
     $sql .= ", cf_social_commerce_hp = '$cf_social_commerce_hp' ";
 }
 if ($chk[cf_google_map]) $sql .= ", cf_google_map = '$cf_google_map' ";
+if ($chk[cf_ban_subject]) $sql .= ", cf_ban_subject = '$cf_ban_subject' ";
 if ($chk[cf_contents_shop]) {
     $sql .= ", cf_contents_shop = '$cf_contents_shop' ";
     $sql .= ", cf_contents_shop_download_count = '$cf_contents_shop_download_count' ";

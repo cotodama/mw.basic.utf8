@@ -200,6 +200,8 @@ if ($mw_basic[cf_comment_best]) {
     $qry = sql_query($sql);
     while ($row = sql_fetch_array($qry)) {
 
+    $mb = get_member($row[mb_id], 'mb_level');
+
     //$row = get_list($row, $board, $board_skin_path);
     //if ($is_admin == "super") echo "[$row[content]]";
     $is_comment_best[] = $row[wr_id];
@@ -318,7 +320,12 @@ if ($mw_basic[cf_comment_best]) {
     // BC코드
     $row[content] = bc_code($row[content]);
     $row[content] = mw_tag_debug($row[content]); // 잘못된 태그교정
+    $row[content] = mw_set_sync_tag($row[content]); // 잘못된 태그교정
     $row[content] = mw_youtube_content($row[content]); // 유투브 자동 재생
+
+    if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {
+        $row[content] = mw_special_tag($row[content]);
+    }
 ?>
 
 <div class="mw_basic_comment_best">
@@ -456,6 +463,8 @@ if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
 for ($i=$from_record; $i<$to_record; $i++) {
 
     @include($mw_basic[cf_include_comment_main]);
+
+    $mb = get_member($list[$i][mb_id], 'mb_level');
 
     $list[$i][name] = get_name_title($list[$i][name], $list[$i][wr_name]);
 
@@ -600,7 +609,12 @@ for ($i=$from_record; $i<$to_record; $i++) {
 
     $list[$i][content] = bc_code($list[$i][content]);
     $list[$i][content] = mw_tag_debug($list[$i][content]);
+    $list[$i][content] = mw_set_sync_tag($list[$i][content]); // 잘못된 태그교정
     $list[$i][content] = mw_youtube_content($list[$i][content]); // 유투브 자동 재생
+
+    if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {
+        $list[$i][content] = mw_special_tag($list[$i][content]);
+    }
 
     // 관리자 게시물은 IP 주소를 보이지 않습니다
     if ($list[$i][mb_id] == $config[cf_admin]) $list[$i][ip] = "";
