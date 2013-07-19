@@ -791,6 +791,12 @@ AutoSourcing.init( 'view_%id%' , true);
 </script>
 <? } ?>
 
+<? if ($mw_basic[cf_content_align] && $write[wr_align]) { ?>
+<style>
+#view_content { text-align:<?=$write[wr_align]?>; }
+</style>
+<? } ?>
+
 <!-- 게시글 보기 시작 -->
 <table width="<?=$bo_table_width?>" align="center" cellpadding="0" cellspacing="0"><tr><td id=mw_basic>
 

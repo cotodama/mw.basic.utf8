@@ -96,7 +96,7 @@ if ($mw_basic[cf_comment_write_count]) {
 
     $tmp = sql_fetch($sql);
     if ($tmp[cnt] >= $mw_basic[cf_comment_write_count]) {
-        $is_comment_write = false;
+        $is_comment_write = true;
         $write_error = "readonly onclick=\"alert('게시물당 코멘트를  {$mw_basic[cf_comment_write_count]}번만 작성하실 수 있습니다.'); return false;\"";
     }
 }
@@ -430,10 +430,18 @@ if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
     if (!$total_page) $total_page = 1;
     
     if (!is_numeric($cpage)) { // 페이지가 없으면
-        if ($board[bo_reply_order])
-            $cpage = $total_page;
-        else
-            $cpage = 1;
+        if ($board[bo_reply_order]) {
+            if ($mw_basic[cf_comment_page_first])
+                $cpage = 1;
+            else
+                $cpage = $total_page;
+        }
+        else {
+            if ($mw_basic[cf_comment_page_first])
+                $cpage = $total_page;
+            else
+                $cpage = 1;
+        }
     }
     if ($_c) { // 코멘트 페이지 찾아가기
         $t_rows = 1;
@@ -460,13 +468,12 @@ if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
     $to_record = $total_count;
 }
 
-for ($i=$from_record; $i<$to_record; $i++) {
+for ($i=0; $i<$to_record; $i++) {
 
-    @include($mw_basic[cf_include_comment_main]);
 
     $mb = get_member($list[$i][mb_id], 'mb_level');
 
-    $list[$i][name] = get_name_title($list[$i][name], $list[$i][wr_name]);
+    $list[$i][name] = get_name_title($list[$i][name], $list[$i][wr_name]); // 호칭
 
     // 멤버쉽 아이콘
     if (function_exists("mw_cash_membership_icon") && $list[$i][mb_id] != $config[cf_admin])
@@ -479,6 +486,11 @@ for ($i=$from_record; $i<$to_record; $i++) {
             $list[$i][name] = $mw_membership_icon[$list[$i][mb_id]].$list[$i][name];
         }
     }
+
+    if ($mw_basic[cf_attribute] == "anonymous") $list[$i][name] = mw_anonymous_nick($list[$i][mb_id], $list[$i][wr_ip]); 
+    if ($list[$i][wr_anonymous]) $list[$i][name] = mw_anonymous_nick($list[$i][mb_id], $list[$i][wr_ip]); 
+
+    if ($i < $from_record) continue;
 
     $html = 0;
     if (strstr($list[$i]['wr_option'], "html1")) $html = 1;
@@ -587,9 +599,6 @@ for ($i=$from_record; $i<$to_record; $i++) {
         $history_href = "javascript:btn_history({$list[$i][wr_id]})";
     }
 
-    if ($mw_basic[cf_attribute] == "anonymous") $list[$i][name] = mw_anonymous_nick($list[$i][mb_id], $list[$i][wr_ip]); 
-    if ($list[$i][wr_anonymous]) $list[$i][name] = mw_anonymous_nick($list[$i][mb_id], $list[$i][wr_ip]); 
-
     if (!$is_comment_write) {
         $list[$i][is_edit] = false;
         $list[$i][is_reply] = false;
@@ -605,7 +614,6 @@ for ($i=$from_record; $i<$to_record; $i++) {
     }
 
     $list[$i][content] = mw_reg_str($list[$i][content]); // 자동치환
-    $list[$i][name] = get_name_title($list[$i][name], $list[$i][wr_name]); // 호칭
 
     $list[$i][content] = bc_code($list[$i][content]);
     $list[$i][content] = mw_tag_debug($list[$i][content]);
@@ -619,6 +627,9 @@ for ($i=$from_record; $i<$to_record; $i++) {
     // 관리자 게시물은 IP 주소를 보이지 않습니다
     if ($list[$i][mb_id] == $config[cf_admin]) $list[$i][ip] = "";
 
+    if ($mw_basic[cf_include_comment_main] && file_exists($mw_basic[cf_include_comment_main])) {
+        include($mw_basic[cf_include_comment_main]);
+    }
 ?>
 <a name="c_<?=$comment_id?>"></a>
 

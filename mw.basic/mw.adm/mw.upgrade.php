@@ -603,6 +603,7 @@ if (is_null($mw_basic[cf_reward])) {
 if (is_null($mw_basic[cf_list_good])) {
     sql_query("alter table $mw[basic_config_table] add cf_list_good tinyint default '0' not null", false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_list_nogood tinyint default '0' not null", false);
 
 // 추천,비추천 그래프 사용
 if (is_null($mw_basic[cf_good_graph])) {
@@ -743,6 +744,7 @@ if (is_null($mw_basic[cf_comment_page])) {
     sql_query("alter table $mw[basic_config_table] add cf_comment_page char(1) not null", false);
     sql_query("alter table $mw[basic_config_table] add cf_comment_page_rows int not null", false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_comment_page_first varchar(1) not null", false);
 
 // 코멘트 html 
 if (is_null($mw_basic[cf_comment_html])) {
@@ -1054,6 +1056,7 @@ if (is_null($mw_basic[cf_umz2])) {
 if (is_null($mw_basic[cf_hot_limit])) {
     sql_query("alter table $mw[basic_config_table] add cf_hot_limit tinyint default '10' not null", false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_hot_len int default '90' not null", false);
 
 // 퀴즈 플러그인 
 if (is_null($mw_basic[cf_quiz])) {
@@ -1190,4 +1193,7 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table $mw[basic_config_table] add cf_jwplayer_version varchar(15) not null default 'jwplayer6'", false);
 
     sql_query("alter table $mw[basic_config_table] add cf_ban_subject varchar(1) not null", false);
+
+    sql_query("alter table $mw[basic_config_table] add cf_content_align varchar(1) not null", false);
+    sql_query("alter table $write_table add wr_align varchar(6) default 'left' not null", false);
 

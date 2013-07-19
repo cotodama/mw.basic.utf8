@@ -122,10 +122,6 @@ $html = 0;
 if (strstr($write['wr_option'], "html1")) $html = 1;
 if (strstr($write['wr_option'], "html2")) $html = 2;
 
-if ($w == '' && !$is_dhtml_editor && trim($board[bo_insert_content])) {
-    $content = nl2br($content);
-}
-
 if (($html == 0 || $html == 2) && $is_dhtml_editor) {
     if ($w != '' || !trim($board[bo_insert_content])) {
         $content = nl2br($content);
@@ -489,7 +485,11 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 <input type=hidden value="html1" name="html">
 <? } ?>
 
-<? if ($is_notice || ($is_html && !$is_dhtml_editor) || $is_secret || $is_mail || $mw_basic[cf_anonymous]) { ?>
+<?
+if ($is_dhtml_editor) $mw_basic[cf_content_align] = false;
+?>
+
+<? if ($is_notice || ($is_html && !$is_dhtml_editor) || $is_secret || $is_mail || $mw_basic[cf_anonymous] || $mw_basic[cf_content_align]) { ?>
 <tr>
 <td class=mw_basic_write_title>· 옵션</td>
 <td><? if ($is_notice) { ?><input type=checkbox name=notice value="1" <?=$notice_checked?>>공지&nbsp;<? } ?>
@@ -507,6 +507,15 @@ if ($is_category && $mw_basic[cf_category_tab]) {
     <? if ($is_mail) { ?><input type=checkbox value="mail" name="mail" <?=$recv_email_checked?>>답변메일받기&nbsp;<? } ?>
     <? if ($mw_basic[cf_anonymous]) {?>
     <input type="checkbox" name="wr_anonymous" value="1" <?if ($write[wr_anonymous]) echo 'checked';?>> 익명
+    <? } ?>
+    <? if ($mw_basic[cf_content_align]) { ?>
+    <select name="wr_align" id="wr_align">
+        <option value="">본문 정렬</option>
+        <option value="left">왼쪽 </option>
+        <option value="center">가운데 </option>
+        <option value="right">오른쪽 </option>
+    </select>
+    <script>$("#wr_align").val("<?=$write[wr_align]?>");</script>
     <? } ?>
 </td></tr>
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>

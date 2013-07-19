@@ -672,11 +672,20 @@ function mw_delete_editor_image($data)
 // 팝업공지
 function mw_board_popup($view, $html=0)
 {
-    global $is_admin, $bo_table, $g4, $board_skin_path, $mw_basic, $board;
+    global $is_admin, $bo_table, $g4, $board_skin_path, $mw_basic, $board, $pc_skin_path;
+
+    if (!$pc_skin_path) $pc_skin_path = $board_skin_path;
 
     $dialog_id = "mw_board_popup_$view[wr_id]";
 
     $board[bo_image_width] = 550;
+    $minWidth = 600;
+    $minHeight = 300;
+    if (strstr($_SERVER[PHP_SELF], "plugin/mobile")) {
+        $board[bo_image_width] = 300;
+        $minWidth = 300;
+        $minHeight = 300;
+    }
 
     // 파일 출력
     ob_start();
@@ -733,7 +742,7 @@ function mw_board_popup($view, $html=0)
             "팝업내림": function () {
                 var q = confirm("정말로 팝업공지를 내리시겠습니까?")
                 if (q) {
-                    $.get("$board_skin_path/mw.proc/mw.popup.php?bo_table=$bo_table&wr_id=$view[wr_id]&token=$token", function (ret) {
+                    $.get("$pc_skin_path/mw.proc/mw.popup.php?bo_table=$bo_table&wr_id=$view[wr_id]&token=$token", function (ret) {
                         alert(ret);
                     });
                 }
@@ -750,8 +759,8 @@ HEREDOC;
         $(function() {
             $("#dialog-message-$view[wr_id]").dialog({
                 modal: true,
-                minWidth: 600,
-                minHeight: 300,
+                minWidth: $minWidth,
+                minHeight: $minHeight,
                 buttons: {
                     $add_script
                     "24시간 동안 창을 띄우지 않습니다.": function () {
@@ -2068,7 +2077,7 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
 
     $fp = fsockopen ("img.youtube.com", 80, $errno, $errstr, 10);
     if (!$fp) return false;
-    fputs($fp, "GET /vi/{$v}/default.jpg HTTP/1.0\r\n");
+    fputs($fp, "GET /vi/{$v}/hqdefault.jpg HTTP/1.0\r\n");
     fputs($fp, "Host: img.youtube.com:80\r\n");
     fputs($fp, "\r\n");
     while (trim($buffer = fgets($fp,1024)) != "") $header .= $buffer;
