@@ -995,6 +995,7 @@ if (is_null($mw_basic[cf_board_member_view])) {
     $sql = "alter table $mw[basic_config_table] add cf_board_member_view char(1) not null";
     sql_query($sql, false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_board_member_comment varchar(1) not null", false);
 
 sql_query("alter table $write_table add wr_is_mobile varchar(1) not null", false);
 

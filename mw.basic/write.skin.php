@@ -636,6 +636,33 @@ if ($mw_basic[cf_category_radio]) {
                     href="#;" onclick="win_open('<?=$board_skin_path?>/mw.proc/mw.emoticon.skin.php?bo_table=<?=$bo_table?>','emo'
                     ,'width=600,height=400,scrollbars=yes')">☞ 이모티콘</a></span>
             <? } ?>
+            <a href="#;" onclick="specialchars()">☞특수문자</a>
+            <style>
+            #mw_basic_special_characters {
+                display:none;
+                border:1px solid #ddd;
+                background-color:#fff;
+                padding:10px;
+                position:absolute;
+            }
+            #mw_basic_special_characters table td {
+                padding:3px;
+                cursor:pointer;
+            }
+            </style>
+            <div id="mw_basic_special_characters">hi</div>
+            <script>
+            function specialchars() {
+                $.get("<?=$board_skin_path?>/mw.proc/mw.special.characters.php", function (str) {
+                    $("#mw_basic_special_characters").html(str);
+                    $("#mw_basic_special_characters table td").click(function () {
+                        $("#wr_content").val($("#wr_content").val()+$(this).text());
+                        $("#mw_basic_special_characters").toggle();
+                    });
+                });
+                $("#mw_basic_special_characters").toggle();
+            }
+            </script>
         </td>
         <td align=right><? if ($write_min || $write_max) { ?><span id=char_count></span>글자<?}?></td>
     </tr>

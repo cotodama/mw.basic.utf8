@@ -2347,6 +2347,16 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item">
+	<div class=cf_title> 게시판 접근코멘트 </div>
+	<div class=cf_content>
+	    <input type=checkbox name=cf_board_member_comment value=1> 사용
+	    <span class="cf_info">(접근권한이 없어도 코멘트를 작성함)</span>
+	    <script> document.cf_form.cf_board_member_comment.checked = "<?=$mw_basic[cf_board_member_comment]?>"; </script>
+	</div>
+    </div>
+
+
     <div class="block"></div>
 </div> <!-- tabs-6 -->
 

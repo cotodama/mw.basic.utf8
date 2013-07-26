@@ -948,6 +948,7 @@ function bc_code($str, $is_content=1) {
     global $g4, $bo_table, $wr_id, $board_skin_path;
 
     if ($is_content) {
+        $str = preg_replace("/\[url:\/\/(.*)\](.*)\[\/url\]/iU", "<a href='http://$1' target='_blank'>$2</a>", $str);
         $str = preg_replace("/\[s\](.*)\[\/s\]/iU", "<s>$1</s>", $str);
         $str = preg_replace("/\[b\](.*)\[\/b\]/iU", "<b>$1</b>", $str);
         $str = preg_replace("/\[u\](.*)\[\/u\]/iU", "<u>$1</u>", $str);
@@ -2095,6 +2096,9 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
         $size = getimagesize($file);
         if ($size[2] != 2) unlink($file);
     }
+
+    mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+
     if (!$datetime) {
         global $write;
         if ($write['wr_datetime'])

@@ -103,6 +103,9 @@ if ($mw_basic[cf_board_member] == '1' && !$is_admin) {
         elseif ($mw_basic[cf_board_member_view] && $mw_is_view) {
             ;
         }
+        elseif ($mw_basic[cf_board_member_comment] && $mw_is_comment) {
+            ;
+        }
         else
             alert("게시판에 접근권한이 없습니다.");
     } else {
