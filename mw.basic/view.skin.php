@@ -595,7 +595,8 @@ if ($mw_basic[cf_sns])
 
     if ($mw_basic[cf_umz] && $view[wr_umz]) $sns_url = $view[wr_umz];
     else if ($mw_basic[cf_shorten]) $sns_url = $shorten;
-    else $sns_url = $trackback_url;
+    else if ($trackback_url) $sns_url = $trackback_url;
+    else $sns_url = $view_url;
 
     $sns_url = trim($sns_url);
 
@@ -1293,7 +1294,7 @@ if ($bomb) {
         </div>
         <? } ?>
 
-        <? if ($good_href || $nogood_href) { // 추천, 비추천?>
+        <? if ($board[bo_use_good] || $board[bo_use_nogood]) { // 추천, 비추천?>
             <div id="mw_good"></div>
 
             <script type="text/javascript">

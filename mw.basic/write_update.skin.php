@@ -182,6 +182,9 @@ if ($mw_basic[cf_change_image_size] && $member[mb_level] >= $mw_basic[cf_change_
 }
 else
 {*/
+    $thumb_file = "$thumb_path/{$wr_id}";
+    unlink($thumb_file);
+
     $thumb_file = "";
     $file = mw_get_first_file($bo_table, $wr_id, true);
     if (!empty($file)) {

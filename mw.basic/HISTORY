@@ -1,3 +1,18 @@
+ver 2.2.2 (13.09.06)
+    : 본문 추천수 및 버튼 비회원에게도 보이기 (제이리님 제안)
+    : 썸네일 비율 유지 오류 (슬프다님 제안)
+    : 글 수정시 썸네일 삭제 후 재생성
+    : 코멘트 에디터 사용시 추천+댓글 안되는 현상 (메모리스토리님 제안)
+    : SNS 퍼가기 트랙백 권한 없을 경우 주소 표시안되는 문제 (nick1224님 제안)
+    : 특수문자 euc-kr 버전 글자 깨짐현상  (마루밑다락방님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.proc/mw.special.characters.php
+    mw.basic/view.skin.php
+    mw.basic/list.skin.php
+    mw.basic/write_update.skin.php
+    mw.basic/view_comment.skin.php
+
 ver 2.2.1 (13.07.26)
     : bc_code 업데이트 [ url:링크 ]내용[/url]  
     : 접근권한이 없어도 코멘트는 작성 가능하도록 (슬프다님 제안)

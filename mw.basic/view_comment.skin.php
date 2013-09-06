@@ -1066,28 +1066,29 @@ function fviewcomment_submit(f)
 
     // 양쪽 공백 없애기
     var pattern = /(^\s*)|(\s*$)/g; // \s 공백 문자
-    document.getElementById('wr_content').value = document.getElementById('wr_content').value.replace(pattern, "");
-    <? if (!$is_comment_editor && ($comment_min || $comment_max)) { ?>
-    if (char_min > 0 || char_max > 0)
-    {
-        check_byte('wr_content', 'char_count');
-        var cnt = parseInt(document.getElementById('char_count').innerHTML);
-        if (char_min > 0 && char_min > cnt)
+    if (document.getElementById('wr_content')) {
+        document.getElementById('wr_content').value = document.getElementById('wr_content').value.replace(pattern, "");
+        <? if (!$is_comment_editor && ($comment_min || $comment_max)) { ?>
+        if (char_min > 0 || char_max > 0)
         {
-            alert("코멘트는 "+char_min+"글자 이상 쓰셔야 합니다.");
-            return false;
-        } else if (char_max > 0 && char_max < cnt)
+            check_byte('wr_content', 'char_count');
+            var cnt = parseInt(document.getElementById('char_count').innerHTML);
+            if (char_min > 0 && char_min > cnt)
+            {
+                alert("코멘트는 "+char_min+"글자 이상 쓰셔야 합니다.");
+                return false;
+            } else if (char_max > 0 && char_max < cnt)
+            {
+                alert("코멘트는 "+char_max+"글자 이하로 쓰셔야 합니다.");
+                return false;
+            }
+        }
+        else <? } ?> if (!document.getElementById('wr_content').value)
         {
-            alert("코멘트는 "+char_max+"글자 이하로 쓰셔야 합니다.");
+            alert("코멘트를 입력하여 주십시오.");
             return false;
         }
     }
-    else <? } ?> if (!document.getElementById('wr_content').value)
-    {
-        alert("코멘트를 입력하여 주십시오.");
-        return false;
-    }
-
     if (typeof(f.wr_name) != 'undefined')
     {
         f.wr_name.value = f.wr_name.value.replace(pattern, "");
