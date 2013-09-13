@@ -198,7 +198,10 @@ if ($mw_basic[cf_comment_best]) {
     }
     $sql.= " order by wr_good desc, wr_datetime asc limit $mw_basic[cf_comment_best] ";
     $qry = sql_query($sql);
-    while ($row = sql_fetch_array($qry)) {
+    while ($row = sql_fetch_array($qry)) { // 베플 루프 시작
+
+    if ($mw_basic[cf_comment_best_point])
+        insert_point($row[mb_id], $mw_basic[cf_comment_best_point], '베플 선정', $bo_table, $row[wr_id], '베플');
 
     $mb = get_member($row[mb_id], 'mb_level');
 
@@ -829,6 +832,9 @@ if (($mw_basic[cf_comment_editor] && $is_comment_write) || ($mw_basic[cf_admin_d
 else
     $is_comment_editor = false;
 
+if (!$mw_basic[cf_comment_default])
+    $mw_basic[cf_comment_default] = trim($mw_basic[cf_comment_write_notice]);
+
 if ($mw_basic[cf_comment_default] && $is_comment_editor)
     $mw_basic[cf_comment_default] = nl2br($mw_basic[cf_comment_default]);
 
@@ -917,6 +923,40 @@ if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
     </td>
 </tr>
 </table>
+
+<? if (trim($mw_basic[cf_comment_write_notice])) { ?>
+<script>
+$(document).ready(function () {
+<? if ($is_comment_editor) { ?>
+    <? if ($mw_basic[cf_editor] == "cheditor") { ?>
+    ed_wr_content.editArea.blur();
+    ed_wr_content.editArea.onfocus = function () {
+        var ed = ed_wr_content.outputBodyHTML();
+        if (ed == "<?=$mw_basic[cf_comment_write_notice]?>") {
+            ed_wr_content.doc.body.innerHTML = '';
+        }
+    }
+    <? } else { ?>
+    ged = document.getElementById("geditor_wr_content_frame").contentWindow.document.body;
+    ged.onfocus = function () {
+        var ed = document.getElementById('wr_content').value;
+        if (ed == "<?=$mw_basic[cf_comment_write_notice]?>") {
+            ged.innerHTML = '';
+        }
+    }
+    <? } ?>
+<? } else { ?>
+    $("#wr_content").focus(function () {
+        if ($("#wr_content").val() == "<?=$mw_basic[cf_comment_write_notice]?>") {
+            $("#wr_content").val('');
+        }
+    });
+<? } ?>
+});
+
+</script>
+<? } ?>
+
 
 <div style="padding:2px 0 2px 0;">
     <? if (!$write_error && !$mw_basic[cf_comment_secret_no]) { ?>

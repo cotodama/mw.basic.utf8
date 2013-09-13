@@ -608,8 +608,13 @@ else if ($mw_basic[cf_type] == "gall")
     $td_width = (int)(100 / $board[bo_gallery_cols]);
 
     // 제목스타일
-    if ($mw_basic[cf_subject_style])
-        $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}'";
+    if ($mw_basic[cf_subject_style]) {
+        $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}";
+        if ($list[$i][wr_subject_bold]) {
+            $style .= "; font-weight:bold; ";
+        }
+        $style .= " '";
+    }
 
     $list[$i][subject] = "<span{$style}>{$list[$i][subject]}</span></a>";
 
@@ -705,8 +710,12 @@ else if ($mw_basic[cf_type] == "gall")
         }
 
         // 제목스타일
-        if ($mw_basic[cf_subject_style])
-            $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}'";
+        if ($mw_basic[cf_subject_style]) {
+            $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}";
+            if ($list[$i][wr_subject_bold])
+                $style .= "; font-weight:bold; ";
+            $style .= " '";
+        }
 
         echo "<span{$style}>{$list[$i][subject]}</span></a>";
 
