@@ -331,6 +331,8 @@ if ($mw_basic[cf_post_history] && $member[mb_level] >= $mw_basic[cf_post_history
     $history_href = "javascript:btn_history($wr_id)";
 }
 
+$is_singo_admin = mw_singo_admin($member[mb_id]);
+
 // 신고 버튼
 if ($mw_basic[cf_singo]) {
     $singo_href = "javascript:btn_singo($wr_id, $wr_id)";
@@ -656,11 +658,11 @@ if ($mw_basic[cf_sns])
         function kakaostorylink()
         {
             kakao.link("story").send({
-                post : "<?=set_utf8($view[wr_subject])?>\n<?=$sns_url?>",
+                post : "<?=$view[wr_subject]?>\n<?=$sns_url?>",
                 appid : "<?=$_SERVER[HTTP_HOST]?>",
-                appver : "1",
+                appver : "1.0",
                 appname : "<?=$config[cf_title]?>",
-                urlinfo : JSON.stringify({imageurl:["<?=$g4[url]?>/data/file/<?=$bo_table?>/thumbnail/<?=$wr_id?>"]})
+                urlinfo : JSON.stringify({title:"<?=$view[wr_subject]?>", desc:"<?=cut_str(str_replace("\n", " ", strip_tags($view[wr_content])),50)?>", imageurl:["<?=$g4[url]?>/data/file/<?=$bo_table?>/thumbnail/<?=$wr_id?>"], type:"article"})
             });
         }
         </script>
@@ -1093,12 +1095,16 @@ $(document).ready(function () {
 
 <? if ($mw_basic[cf_include_file_tail]) { echo "<tr><td>"; @include_once($mw_basic[cf_include_file_tail]); echo "</td></tr>"; } ?>
 
-<? if ($is_admin || $history_href) { ?>
+<? if ($is_admin || $history_href || $is_singo_admin) { ?>
 <tr><td height=1 bgcolor=#E7E7E7></td></tr>
 <tr>
     <td height=40 class="func_buttons">
         <?
         ob_start();
+        if ($is_singo_admin && $view[mb_id] != $member[mb_id]) { 
+            echo "<span><a href=\"javascript:btn_intercept('$view[mb_id]')\">";
+            echo "<img src='$board_skin_path/img/btn_intercept.gif' border='0' align='absmiddle'></a></span>"; 
+        }
         if ($history_href) {
             echo "<span><a href=\"$history_href\"><img src='$board_skin_path/img/btn_history.gif' border='0' align='absmiddle'></a></span>";
         }
@@ -1126,11 +1132,6 @@ $(document).ready(function () {
             }
 
             echo "<span><a href=\"javascript:btn_now()\"><img src='$board_skin_path/img/btn_now.gif' border='0' align='absmiddle'></a></span>";
-
-            if ($view[mb_id] != $member[mb_id]) { 
-                echo "<span><a href=\"javascript:btn_intercept('$view[mb_id]')\">";
-                echo "<img src='$board_skin_path/img/btn_intercept.gif' border='0' align='absmiddle'></a></span>"; 
-            }
 
             if ($view[is_notice]) $btn_notice = '_off'; else $btn_notice = ''; 
             echo "<span><a href=\"javascript:btn_notice()\"><img src='$board_skin_path/img/btn_notice{$btn_notice}.gif'";
@@ -1738,6 +1739,14 @@ function btn_nosecret() {
 </script>
 <? } ?>
 
+
+<? if ($is_singo_admin && $view[mb_id] != $member[mb_id]) { ?>
+<script type="text/javascript">
+function btn_intercept(mb_id) {
+    win_open("<?=$board_skin_path?>/mw.proc/mw.intercept.php?bo_table=<?=$bo_table?>&mb_id=" + mb_id, "intercept", "width=500,height=300,scrollbars=yes");
+}
+</script>
+<? } ?>
 <? if ($is_admin) { ?>
 <script type="text/javascript">
 function btn_now() {
@@ -1758,9 +1767,7 @@ function btn_now() {
             });
     }
 }
-function btn_intercept(mb_id) {
-    win_open("<?=$board_skin_path?>/mw.proc/mw.intercept.php?bo_table=<?=$bo_table?>&mb_id=" + mb_id, "intercept", "width=500,height=300,scrollbars=yes");
-}
+
 function btn_view_block() {
     <? if ($write[wr_view_block]) { ?>
     if (!confirm("이 게시물 보기차단을 해제 하시겠습니까?")) return;

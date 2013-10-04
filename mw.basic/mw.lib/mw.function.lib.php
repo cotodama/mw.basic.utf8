@@ -2079,12 +2079,75 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     elseif (preg_match("/^http:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
         $v = $mat[1];
     }
+    elseif (preg_match('/player.vimeo.com\/video\/(\d+)$/', $url, $mat)) {
+        mw_get_vimeo_thumb($wr_id, $url, $datetime);
+        return;
+    }
+
     if (!$v) return;
 
     $fp = fsockopen ("img.youtube.com", 80, $errno, $errstr, 10);
     if (!$fp) return false;
     fputs($fp, "GET /vi/{$v}/hqdefault.jpg HTTP/1.0\r\n");
     fputs($fp, "Host: img.youtube.com:80\r\n");
+    fputs($fp, "\r\n");
+    while (trim($buffer = fgets($fp,1024)) != "") $header .= $buffer;
+    while (!feof($fp)) $buffer .= fgets($fp,1024);
+    fclose($fp);
+
+    $file = "$thumb_path/{$wr_id}";
+    if ($buffer) {
+        $fw = fopen ($file, "wb");
+        fwrite($fw, trim($buffer));
+        chmod ($file, 0777);
+        fclose($fw);
+
+        // 이미지가 아니면 삭제
+        $size = getimagesize($file);
+        if ($size[2] != 2) unlink($file);
+    }
+
+    mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+
+    if (!$datetime) {
+        global $write;
+        if ($write['wr_datetime'])
+            @touch($file, strtotime($write['wr_datetime']));
+    }
+    else if ($datetime) {
+        @touch($file, strtotime($datetime));
+    }
+}
+
+function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
+{
+    global $g4, $mw_basic, $thumb_path;
+
+    preg_match('/vimeo.com\/(\d+)$/', $url, $mat);
+    $v = $mat[1];
+
+    if (!$v) return;
+
+    $fp = fsockopen ("vimeo.com", 80, $errno, $errstr, 10);
+    if (!$fp) return false;
+    fputs($fp, "GET /api/v2/video/{$v}.php HTTP/1.0\r\n");
+    fputs($fp, "Host: vimeo.com\r\n");
+    fputs($fp, "\r\n");
+    while (trim($buffer = fgets($fp,1024)) != "") $header .= $buffer;
+    while (!feof($fp)) $buffer .= fgets($fp,1024);
+    fclose($fp);
+
+    $dat = unserialize(trim($buffer)); 
+    $dat = $dat[0];
+
+    if (!trim($dat[thumbnail_large])) return;
+
+    $url = parse_url(trim($dat[thumbnail_large]));
+
+    $fp = fsockopen ("$url[host]", 80, $errno, $errstr, 10);
+    if (!$fp) return false;
+    fputs($fp, "GET $url[path] HTTP/1.0\r\n");
+    fputs($fp, "Host: $url[host]\r\n");
     fputs($fp, "\r\n");
     while (trim($buffer = fgets($fp,1024)) != "") $header .= $buffer;
     while (!feof($fp)) $buffer .= fgets($fp,1024);
@@ -2250,8 +2313,9 @@ function mw_vimeo($url)
 
 function mw_singo_admin($admin_id)
 {
-    global $g4, $mw_basic;
+    global $g4, $mw_basic, $is_admin;
 
+    if ($is_admin) return true;
     if (!$admin_id) return false;
 
     $singo_id = array();
