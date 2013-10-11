@@ -96,7 +96,7 @@ if ($mw_basic[cf_board_member] == '1' && !$is_admin) {
         array_push($mw_board_member, $row[mb_id]);
     }
     $mw_is_board_member = false;
-    if (!in_array($member[mb_id], $mw_board_member)) {
+    if (!in_array($member[mb_id], $mw_board_member) && !in_array($_SERVER[REMOTE_ADDR], $mw_board_member)) {
         if ($mw_basic[cf_board_member_list] && $mw_is_list) {
             ;
         }
@@ -123,11 +123,14 @@ if ($mw_basic[cf_board_member] == '2' && !$is_admin) {
         array_push($mw_board_member, $row[mb_id]);
     }
     $mw_is_board_member = false;
-    if (in_array($member[mb_id], $mw_board_member)) {
+    if (in_array($member[mb_id], $mw_board_member) || in_array($_SERVER[REMOTE_ADDR], $mw_board_member)) {
         if ($mw_basic[cf_board_member_list] && $mw_is_list) {
             ;
         }
         elseif ($mw_basic[cf_board_member_view] && $mw_is_view) {
+            ;
+        }
+        elseif ($mw_basic[cf_board_member_view] && $mw_is_comment) {
             ;
         }
         else

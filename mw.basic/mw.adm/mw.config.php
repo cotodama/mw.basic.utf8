@@ -1827,9 +1827,12 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_singo] value=1>&nbsp; 신고 </div>
 	<div class="cf_content">
-	    <input type=checkbox name=cf_singo value=1> 사용
-	    <span class="cf_info">(신고 통보 아이디에 쪽지로 알림)</span>
-	    <script> document.cf_form.cf_singo.checked = <?=$mw_basic[cf_singo]?>; </script>
+            <select name="cf_singo">
+                <option value=""> 사용안함 </option>
+                <option value="1"> 사용, 쪽지로 알림</option>
+                <option value="2"> 사용, 쪽지로 알리지 않음</option>
+            </select>
+	    <script> document.cf_form.cf_singo.value = <?=$mw_basic[cf_singo]?>; </script>
 	</div>
     </div>
 
