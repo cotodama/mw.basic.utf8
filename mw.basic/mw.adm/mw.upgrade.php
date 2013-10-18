@@ -1202,3 +1202,5 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table $write_table add wr_align varchar(6) default 'left' not null", false);
 
     sql_query("alter table $mw[basic_config_table] add cf_comment_write_notice text not null", false);
+
+    sql_query("alter table $write_table add wr_to_id varchar(20) default '' not null", false);
