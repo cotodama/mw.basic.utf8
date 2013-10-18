@@ -191,6 +191,7 @@ if ($board[bo_use_signature] && $view[mb_id])
     $signature = conv_content($signature, 1);
 }
 
+include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
 include_once("$board_skin_path/view_head.skin.php");
 
 // 파일 출력
