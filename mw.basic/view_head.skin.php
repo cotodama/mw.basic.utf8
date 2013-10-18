@@ -23,6 +23,8 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $mw_is_view = true;
 
+include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
+
 mw_bomb();
 mw_basic_move_cate($bo_table, $wr_id);
 

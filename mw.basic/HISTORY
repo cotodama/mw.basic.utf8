@@ -1,13 +1,3 @@
-ver 2.2.7 (13.10.18)
-    : 1:1게시판에 관리자가 특정회원에게 글작성하는 기능 (라우터님 제안)
-
-    mw.basic/HISTORY
-    mw.basic/mw.adm/mw.upgrade.php
-    mw.basic/mw.lib/mw.skin.basic.lib.php
-    mw.basic/mw.proc/mw.list.1n1.php
-    mw.basic/list.skin.php
-    mw.basic/write_update.tail.skin.php
- 
 ver 2.2.6 (13.10.11)
     : 신고 쪽지 통보 안하는 옵션추가 (슬프다님 제안)
     : 프린트 페이지 짧은글 주소 적용 (제이리님 제안)
