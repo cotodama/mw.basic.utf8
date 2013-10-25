@@ -335,3 +335,8 @@ if ($mw_basic[cf_sns] == '1') {
 $bo_table_width = $board[bo_table_width];
 $bo_table_width = $bo_table_width . ($bo_table_width > 100 ? "px" : "%");
 $width = $bo_table_width;
+
+if (!defined("_MW_MOBILE_")) {
+    $pc_skin_path = $board_skin_path;
+}
+

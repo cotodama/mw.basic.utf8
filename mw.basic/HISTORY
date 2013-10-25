@@ -1,3 +1,22 @@
+ver 2.2.8 (13.10.25)
+    : html 작성글 카카오스토리 퍼가기 오류 수정 (젬스박님 제안)
+    : 자동폭파시 폭파시점으로 게시물 등록시간 변경옵션 (행복자님 제안)
+    : 게시물 자동이동시 게시판명을 분류명으로 설정하는 옵션 (북유럽님 제안)
+    : 특수태그 사용안함 옵션 추가
+    : 재능마켓 전체주문 보기 버튼 추가
+    : 사파리, 파이어폭스 다운로드시 한글파일명 깨짐현상 해결
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/download.skin.php
+    mw.basic/list.skin.php
+    mw.basic/view.skin.php
+    mw.basic/view_head.skin.php
+ 
 ver 2.2.7 (13.10.18)
     : 1:1게시판에 관리자가 특정회원에게 글작성하는 기능 (라우터님 제안)
 

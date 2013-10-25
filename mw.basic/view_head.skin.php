@@ -98,7 +98,7 @@ for ($i=1; $i<=$g4['link_count']; $i++)
 {
     if ($mw_basic[cf_link_log])  {
         $view['link'][$i] = set_http(get_text($view["wr_link{$i}"]));
-        $view['link_href'][$i] = "$board_skin_path/link.php?bo_table=$board[bo_table]&wr_id=$view[wr_id]&no=$i" . $qstr;
+        $view['link_href'][$i] = "$pc_skin_path/link.php?bo_table=$board[bo_table]&wr_id=$view[wr_id]&no=$i" . $qstr;
         $view['link_hit'][$i] = (int)$view["wr_link{$i}_hit"];
     }
     $view['link_target'][$i] = $view["wr_link{$i}_target"];
@@ -147,6 +147,7 @@ else
 
 // 파일 출력
 if ($mw_basic[cf_social_commerce]) $file_start = 2; else $file_start = 0;
+if ($mw_basic[cf_talent_market]) $file_start = 1; else $file_start = 0;
 
 $jwplayer = false;
 $jwplayer_count = 0;
@@ -562,8 +563,8 @@ $view[rich_content] = preg_replace("/\[(http|https|ftp)\:\/\/([^[:space:]]+)\.(g
 // 최고, 그룹관리자라면 글 복사, 이동 가능
 $copy_href = $move_href = "";
 if ($write[wr_reply] == "" && ($is_admin == "super" || $is_admin == "group")) {
-    $copy_href = "javascript:win_open('$board_skin_path/move.php?sw=copy&bo_table=$bo_table&wr_id=$wr_id&page=$page".$qstr."', 'boardcopy', 'left=50, top=50, width=500, height=550, scrollbars=1');";
-    $move_href = "javascript:win_open('$board_skin_path/move.php?sw=move&bo_table=$bo_table&wr_id=$wr_id&page=$page".$qstr."', 'boardmove', 'left=50, top=50, width=500, height=550, scrollbars=1');";
+    $copy_href = "javascript:win_open('$pc_skin_path/move.php?sw=copy&bo_table=$bo_table&wr_id=$wr_id&page=$page".$qstr."', 'boardcopy', 'left=50, top=50, width=500, height=550, scrollbars=1');";
+    $move_href = "javascript:win_open('$pc_skin_path/move.php?sw=move&bo_table=$bo_table&wr_id=$wr_id&page=$page".$qstr."', 'boardmove', 'left=50, top=50, width=500, height=550, scrollbars=1');";
 }
 
 // 배추코드
@@ -625,34 +626,42 @@ if ($mw_basic[cf_sns])
     <!--<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>-->
     <? if (strstr($mw_basic[cf_sns], '/me2day/')) { ?>
     <div><a href="<?=$me2day_url?>" target="_blank" title="이 글을 미투데이로 보내기"><img 
-        src="<?=$board_skin_path?>/img/send_me2day.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_me2day.png" border="0"></a></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/twitter/')) { ?>
     <div><a href="<?=$twitter_url?>" target="_blank" title="이 글을 트위터로 보내기"><img
-        src="<?=$board_skin_path?>/img/send_twitter.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_twitter.png" border="0"></a></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/facebook/')) { ?>
     <div><a href="<?=$facebook_url?>" target="_blank" title="이 글을 페이스북으로 보내기"><img
-        src="<?=$board_skin_path?>/img/send_facebook.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_facebook.png" border="0"></a></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/yozm/') && $yozm_url) { ?>
     <div><a href="<?=$yozm_url?>" target="_blank" title="이 글을 요즘으로 보내기"><img
-        src="<?=$board_skin_path?>/img/send_yozm.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_yozm.png" border="0"></a></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/cyworld/')) { ?>
-    <div><img src="<?=$board_skin_path?>/img/send_cy.png" border="0" onclick="<?=$cy_url?>" style="cursor:pointer" title="싸이월드 공감"></div>
+    <div><img src="<?=$pc_skin_path?>/img/send_cy.png" border="0" onclick="<?=$cy_url?>" style="cursor:pointer" title="싸이월드 공감"></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/naver/')) { ?>
     <div><a href="<?=$naver_url?>" target="_blank" title="이 글을 네이버 북마크로 보내기"><img
-        src="<?=$board_skin_path?>/img/send_naver.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_naver.png" border="0"></a></div>
     <? } ?>
     <? if (strstr($mw_basic[cf_sns], '/google/')) { ?>
     <div><a href="<?=$google_url?>" target="_blank" title="이 글을 구글 북마크로 보내기"><img
-        src="<?=$board_skin_path?>/img/send_google.png" border="0"></a></div>
+        src="<?=$pc_skin_path?>/img/send_google.png" border="0"></a></div>
     <? } ?>
-    <? if (strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile")) { ?>
+    <? if (strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile") or $is_admin) { ?>
+        <?
+        $kakao_content = strip_tags($view[wr_content]);
+        $kakao_content = str_replace("\n", " ", $kakao_content);
+        $kakao_content = preg_replace("/&#?[a-z0-9]+;/i", "", $kakao_content);
+        $kakao_content = preg_replace("/\s+/", " ", $kakao_content);
+        $kakao_content = trim($kakao_content);
+        $kakao_content = cut_str($kakao_content ,50);
+        ?>
         <? if (strstr($mw_basic[cf_sns], '/kakaostory/')) { ?>
-        <script src="<?=$board_skin_path?>/mw.js/kakao.link.js"></script>
+        <script src="<?=$pc_skin_path?>/mw.js/kakao.link.js"></script>
         <script>
         function kakaostorylink()
         {
@@ -661,16 +670,16 @@ if ($mw_basic[cf_sns])
                 appid : "<?=$_SERVER[HTTP_HOST]?>",
                 appver : "1.0",
                 appname : "<?=$config[cf_title]?>",
-                urlinfo : JSON.stringify({title:"<?=$view[wr_subject]?>", desc:"<?=cut_str(str_replace("\n", " ", strip_tags($view[wr_content])),50)?>", imageurl:["<?=$g4[url]?>/data/file/<?=$bo_table?>/thumbnail/<?=$wr_id?>"], type:"article"})
+                urlinfo : JSON.stringify({title:"<?=$view[wr_subject]?>", desc:"<?=$kakao_content?>", imageurl:["<?=$g4[url]?>/data/file/<?=$bo_table?>/thumbnail/<?=$wr_id?>"], type:"article"})
             });
         }
         </script>
 
-        <!--<div><a href="<?=$kakaostory_url?>"><img src="<?=$board_skin_path?>/img/send_kakaostory.png" valign="middle"></a></div>-->
-        <div><a href="#;" onclick="kakaostorylink()"><img src="<?=$board_skin_path?>/img/send_kakaostory.png" valign="middle" style="cursor:pointer;"></a></div>
+        <!--<div><a href="<?=$kakaostory_url?>"><img src="<?=$pc_skin_path?>/img/send_kakaostory.png" valign="middle"></a></div>-->
+        <div><a href="#;" onclick="kakaostorylink()"><img src="<?=$pc_skin_path?>/img/send_kakaostory.png" valign="middle" style="cursor:pointer;"></a></div>
         <? } ?>
         <? if (strstr($mw_basic[cf_sns], '/kakao/')) { ?>
-        <div><a href="<?=$kakao_url?>"><img src="<?=$board_skin_path?>/img/send_kakaotalk.png" valign="middle"></a></div>
+        <div><a href="<?=$kakao_url?>"><img src="<?=$pc_skin_path?>/img/send_kakaotalk.png" valign="middle"></a></div>
         <? } ?>
     <? } ?>
 
@@ -705,7 +714,7 @@ if ($mw_basic[cf_google_map] && trim($write[wr_google_map])) {
     ob_start();
     ?>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&language=ko"></script>
-    <script type="text/javascript" src="<?=$board_skin_path?>/mw.js/mw.google.js"></script>
+    <script type="text/javascript" src="<?=$pc_skin_path?>/mw.js/mw.google.js"></script>
     <script type="text/javascript">
     $(document).ready(function () {
         mw_google_map("google_map", "<?=addslashes($write[wr_google_map])?>");

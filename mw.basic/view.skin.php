@@ -438,6 +438,14 @@ $(document).ready(function () {
 </tr>
 <? } ?>
 
+<? if ($mw_basic[cf_talent_market]) { ?>
+<tr>
+    <td>
+        <? include("$talent_market_path/view.skin.php") ?>
+    </td>
+</tr>
+<? } ?>
+
 <?
 $bomb = sql_fetch(" select * from $mw[bomb_table] where bo_table = '$bo_table' and wr_id = '$wr_id' ");
 if ($bomb) {
@@ -618,7 +626,7 @@ if ($bomb) {
 <? if ($mw_basic[cf_talent_market]) { ?>
 <tr>
     <td>
-        <? include("$talent_market_path/view.skin.php") ?>
+        <?php echo $talent_market_content; ?>
     </td>
 </tr>
 <? } ?>

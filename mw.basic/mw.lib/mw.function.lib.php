@@ -1557,6 +1557,9 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
                 sql_query(" update $move_write_table set wr_link1_target = '$row2[wr_link1_target]' where wr_id = '$insert_id' ", false);
                 sql_query(" update $move_write_table set wr_link2_target = '$row2[wr_link2_target]' where wr_id = '$insert_id' ", false);
                 sql_query(" update $move_write_table set wr_contents_preview = '".addslashes($row2[wr_contents_preview])."' where wr_id = '$insert_id' ", false);
+                sql_query(" update $move_write_table set wr_lightbox = '".addslashes($row2[wr_lightbox])."' where wr_id = '$insert_id' ", false);
+                sql_query(" update $move_write_table set wr_align = '".addslashes($row2[wr_align])."' where wr_id = '$insert_id' ", false);
+                sql_query(" update $move_write_table set wr_to_id = '".addslashes($row2[wr_to_id])."' where wr_id = '$insert_id' ", false);
 
                 // 첨부파일 복사
                 $sql3 = " select * from $g4[board_file_table] where bo_table = '$bo_table' and wr_id = '$row2[wr_id]' order by bf_no ";
@@ -1922,6 +1925,8 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
     }
     $sql = " update $g4[board_table] set bo_notice = '$bo_notice' where bo_table = '$bo_table' ";
     sql_query($sql);
+
+    return $insert_id;
 }
 
 function mw_bomb()
@@ -1940,11 +1945,18 @@ function mw_bomb()
 
         if ($move_table) {
             if ($row[bm_log]) {
-                mw_move($board, $row[wr_id], $move_table, 'copy');
+                $wr_id = mw_move($board, $row[wr_id], $move_table, 'copy');
                 mw_delete_row($board, $tmp, $row[bm_log], '폭파되었습니다.');
             }
             else
-                mw_move($board, $row[wr_id], $move_table, 'move');
+                $wr_id = mw_move($board, $row[wr_id], $move_table, 'move');
+
+            if ($mw_basic['cf_bomb_move_time'] && $wr_id) {
+                sql_query("update $g4[write_prefix]$move_table set wr_datetime = '$row[bm_datetime]' where wr_id = '$wr_id'");
+            }
+            if ($mw_basic['cf_bomb_move_cate'] && $wr_id) {
+                sql_query("update $g4[write_prefix]$move_table set ca_name = '".addslashes($board[bo_subject])."' where wr_id = '$wr_id'");
+            }
         } else {
             mw_delete_row($board, $tmp, $row[bm_log], '폭파되었습니다.');
         }

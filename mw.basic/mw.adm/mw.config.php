@@ -1723,6 +1723,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_title"> <input type=checkbox name=chk[cf_iframe_level] value=1>&nbsp; <strong>특수태그 사용권한</strong> </div>
 	<div class="cf_content">
             <select name="cf_iframe_level">
+            <option value="0"> 사용안함 </option>
             <? for ($i=2; $i<=10; $i++) { ?>
             <option value="<?=$i?>"> <?=$i?> </option>
             <? } ?>
@@ -1760,7 +1761,13 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             최대 <input type="text" size="3" name="cf_bomb_days_max" value="<?=$mw_basic[cf_bomb_days_max]?>" class="ed"/> 일 까지 가능
             <br/>
             폭파후 <input type="text" size="30" name="cf_bomb_move_table" value="<?=$mw_basic[cf_bomb_move_table]?>"/> 게시판으로 이동
-	    <script> document.cf_form.cf_bomb_level.value = <?=$mw_basic[cf_bomb_level]?>; </script>
+            <br><input type="checkbox" name="cf_bomb_move_time" value="1"/> 글등록시간 폭파시간으로 재설정
+            <br><input type="checkbox" name="cf_bomb_move_cate" value="1"/> 게시판명을 분류명으로 설정
+	    <script>
+            document.cf_form.cf_bomb_level.value = "<?=$mw_basic[cf_bomb_level]?>";
+            document.cf_form.cf_bomb_move_time.checked = "<?=$mw_basic[cf_bomb_move_time]?>";
+            document.cf_form.cf_bomb_move_cate.checked = "<?=$mw_basic[cf_bomb_move_cate]?>";
+            </script>
 	</div>
     </div>
 
@@ -2538,9 +2545,14 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <input type="text" class="ed" name="cf_talent_market_max_point" size="5" numeric value="<?=$mw_basic[cf_talent_market_max_point]?>">
                 포인트
             </div>
+            <div> 자동구매결정 : 발송 후 <input type="text" class="ed" size="2" name="cf_talent_market_auto" value="<?=$mw_basic[cf_talent_market_auto]?>">일 </div>
+
             <div>
                 <input type="checkbox" name="cf_talent_market_app" value="1"> 관리자 승인 후 판매개시
+                <br/><input type=checkbox name=cf_talent_market_hp value=1> 주문문자 사용
+                <span class="cf_info">(알림탭의 글등록 알림문자 옵션에서 ICODEKOREA 계정정보 입력시 사용가능)</span>
                 <script> document.cf_form.cf_talent_market_app.checked = "<?=$mw_basic[cf_talent_market_app]?>"; </script>
+                <script> document.cf_form.cf_talent_market_hp.checked = "<?=$mw_basic[cf_talent_market_hp]?>"; </script>
             </div>
             <script> document.cf_form.cf_talent_market.value = "<?=$mw_basic[cf_talent_market]?>"; </script>
         </div>

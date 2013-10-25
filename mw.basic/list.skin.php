@@ -236,6 +236,9 @@ $new_count = $row[cnt];
         <? if ($mw_basic[cf_social_commerce]) { ?>
         <span class=mw_basic_total style="cursor:pointer;" onclick="win_open('<?=$social_commerce_path?>/order_list.php?bo_table=<?=$bo_table?>', 'order_list', 'width=800,height=600,scrollbars=1');">[주문내역]</span>
         <? } ?>
+        <? if ($mw_basic[cf_talent_market] && $is_admin) { ?>
+        <span class=mw_basic_total style="cursor:pointer;" onclick="win_open('<?=$talent_market_path?>/order_list.php?bo_table=<?=$bo_table?>', 'order_list', 'width=800,height=600,scrollbars=1');">[주문내역]</span>
+        <? } ?>
 
         <? include("$board_skin_path/mw.proc/mw.smart-alarm-config.php") ?>
         <span class=mw_basic_total>총 게시물 <?=number_format($total_count)?>건, 최근 <?=number_format($new_count)?> 건</span>
@@ -587,7 +590,8 @@ if (!file_exists($thumb_file))
 
 if ($mw_basic[cf_social_commerce])
 {
-    include("$social_commerce_path/list.skin.php");    
+    $a = include("$social_commerce_path/list.skin.php");    
+    if (!$a) continue;
 }
 else if ($mw_basic[cf_type] == "gall")
 {
