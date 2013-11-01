@@ -1931,13 +1931,17 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
 
 function mw_bomb()
 {
-    global $board, $g4, $mw, $mw_basic, $config;
+    global $g4, $mw, $mw_basic, $config;
 
     $is_bomb = false;
-    $sql = " select * from $mw[bomb_table] where bo_table = '$board[bo_table]' and bm_datetime <= '$g4[time_ymdhis]' ";
+    //$sql = " select * from $mw[bomb_table] where bo_table = '$board[bo_table]' and bm_datetime <= '$g4[time_ymdhis]' ";
+    $sql = " select * from $mw[bomb_table] where bm_datetime <= '$g4[time_ymdhis]' ";
     $qry = sql_query($sql, false);
     while ($row = sql_fetch_array($qry)) {
-        $tmp = sql_fetch("select * from $g4[write_prefix]$board[bo_table] where wr_id = '$row[wr_id]'");
+        //$tmp = sql_fetch("select * from $g4[write_prefix]$board[bo_table] where wr_id = '$row[wr_id]'");
+        $tmp = sql_fetch("select * from $g4[write_prefix]$row[bo_table] where wr_id = '$row[wr_id]'");
+
+        $board = sql_fetch("select * from $g4[board_table] where bo_table = '$row[bo_table]'");
 
         $move_table = $row[bm_move_table];
         if (!$move_table)

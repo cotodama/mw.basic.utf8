@@ -1,3 +1,14 @@
+ver 2.2.9 (13.11.01)
+    : 소셜커머스 이미지 출력 오류 수정 (라우터님 제안)
+    : 1:1 게시판 목록보기 권한 무조건 2이상으로 강제 설정 (라우터님 제안)
+    : 자동폭파 작동시점 보완 (젬스박님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.list.hot.skin.php
+    mw.basic/list.skin.php
+ 
 ver 2.2.8 (13.10.25)
     : html 작성글 카카오스토리 퍼가기 오류 수정 (젬스박님 제안)
     : 자동폭파시 폭파시점으로 게시물 등록시간 변경옵션 (행복자님 제안)

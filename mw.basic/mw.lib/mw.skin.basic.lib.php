@@ -340,3 +340,6 @@ if (!defined("_MW_MOBILE_")) {
     $pc_skin_path = $board_skin_path;
 }
 
+if (!$pc_skin_path)
+    $pc_skin_path = $board_skin_path;
+

@@ -146,8 +146,15 @@ else
 }
 
 // 파일 출력
-if ($mw_basic[cf_social_commerce]) $file_start = 2; else $file_start = 0;
-if ($mw_basic[cf_talent_market]) $file_start = 1; else $file_start = 0;
+if ($mw_basic[cf_social_commerce]) {
+    $file_start = 2;
+}
+else if ($mw_basic[cf_talent_market]) {
+    $file_start = 1;
+}
+else {
+    $file_start = 0;
+}
 
 $jwplayer = false;
 $jwplayer_count = 0;
@@ -653,6 +660,8 @@ if ($mw_basic[cf_sns])
     <? } ?>
     <? if (strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile") or $is_admin) { ?>
         <?
+        if (!strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile"))
+            $kakao_url = "#;\" onclick=\"javascript:alert('모바일 기기에서만 작동합니다.');";
         $kakao_content = strip_tags($view[wr_content]);
         $kakao_content = str_replace("\n", " ", $kakao_content);
         $kakao_content = preg_replace("/&#?[a-z0-9]+;/i", "", $kakao_content);
@@ -665,6 +674,9 @@ if ($mw_basic[cf_sns])
         <script>
         function kakaostorylink()
         {
+            <? if (!strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile")) { ?>
+            alert("모바일 기기에서만 작동합니다."); return;
+            <? } ?>
             kakao.link("story").send({
                 post : "<?=$view[wr_subject]?>\n<?=$sns_url?>",
                 appid : "<?=$_SERVER[HTTP_HOST]?>",
