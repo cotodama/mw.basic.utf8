@@ -66,6 +66,8 @@ while ($write = sql_fetch_array($qry)) {
     }
     else {
         preg_match("/<img.*src=\"(.*)\"/iU", $wr_content, $match);
+        if (strstr($match[1], "mw.basic.comment.image")) $match[1] = '';
+        if (strstr($match[1], "mw.emoticon")) $match[1] = '';
         if ($match[1]) {
             $match[1] = str_replace($g4[url], "..", $match[1]);
             mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $match[1],

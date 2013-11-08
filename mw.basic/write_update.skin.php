@@ -209,6 +209,8 @@ else
     } else {
         $thumb_file = "$thumb_path/{$wr_id}";
         preg_match("/<img.*src=\\\"(.*)\\\"/iUs", stripslashes($wr_content), $match);
+        if (strstr($match[1], "mw.basic.comment.image")) $match[1] = '';
+        if (strstr($match[1], "mw.emoticon")) $match[1] = '';
         if ($match[1]) {
             //$match[1] = str_replace($g4[url], "..", $match[1]);
             $match[1] = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $match[1]);

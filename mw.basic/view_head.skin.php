@@ -31,20 +31,42 @@ $mb = get_member($view[mb_id], 'mb_level');
 // is_notice 그누보드 버그 보완
 $view[is_notice] = preg_match("/(^|[\r\n]){$wr_id}($|[\r\n])/",$board[bo_notice]); 
 
+$move_flag = false;
 // 자동이동
 if (!$view[is_notice] and !$write[wr_auto_move] and $mw_basic[cf_auto_move]['use'] and $mw_basic[cf_auto_move]['bo_table']
     and (!$mw_basic[cf_auto_move]['day'] or $mw_basic[cf_auto_move]['day'] > ($g4[server_time]-strtotime($write[wr_datetime]))/(60*60*24)))
 {
+/*
     if (($mw_basic[cf_auto_move]['hit'] and $mw_basic[cf_auto_move]['hit'] <= $write[wr_hit])
      or ($mw_basic[cf_auto_move]['good'] and $mw_basic[cf_auto_move]['good'] <= $write[wr_good] && !$mw_basic[cf_auto_move]['sub'])
      or ($mw_basic[cf_auto_move]['nogood'] and $mw_basic[cf_auto_move]['nogood'] <= $write[wr_nogood] && !$mw_basic[cf_auto_move]['sub'])
      or ($mw_basic[cf_auto_move]['sub'] and $mw_basic[cf_auto_move]['good'] <= ($write[wr_good]-$write[wr_nogood]))
      or ($mw_basic[cf_auto_move]['singo'] and $mw_basic[cf_auto_move]['singo'] <= $write[wr_singo])
      or ($mw_basic[cf_auto_move]['comment'] and $mw_basic[cf_auto_move]['comment'] <= $write[wr_comment]))
-    {
-        sql_query("update $write_table set wr_auto_move = '1' where wr_id = '$wr_id' ", false);
-        mw_move($board, $wr_id, $mw_basic[cf_auto_move]['bo_table'], $mw_basic[cf_auto_move]['use']);
+*/
+    if ($mw_basic[cf_auto_move]['sub']) {
+        if (    ($mw_basic[cf_auto_move]['hit'] <= $write[wr_hit])
+            and ($mw_basic[cf_auto_move]['good'] <= ($write[wr_good]-$write[wr_nogood]))
+            and ($mw_basic[cf_auto_move]['singo'] <= $write[wr_singo])
+            and ($mw_basic[cf_auto_move]['comment'] <= $write[wr_comment]))
+        {
+            $move_flag = true;
+        }
     }
+    else {
+        if (    ($mw_basic[cf_auto_move]['hit'] <= $write[wr_hit])
+            and ($mw_basic[cf_auto_move]['good'] <= $write[wr_good])
+            and ($mw_basic[cf_auto_move]['nogood'] <= $write[wr_nogood])
+            and ($mw_basic[cf_auto_move]['singo'] <= $write[wr_singo])
+            and ($mw_basic[cf_auto_move]['comment'] <= $write[wr_comment]))
+        {
+            $move_flag = true;
+        }
+    }
+}
+if ($move_flag) {
+    sql_query("update $write_table set wr_auto_move = '1' where wr_id = '$wr_id' ", false);
+    mw_move($board, $wr_id, $mw_basic[cf_auto_move]['bo_table'], $mw_basic[cf_auto_move]['use']);
 }
 
 // 실명인증 & 성인인증
