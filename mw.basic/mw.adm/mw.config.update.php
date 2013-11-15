@@ -72,7 +72,7 @@ if ($cf_board_week == '0,0,0,0,0,0,0' || $cf_board_week == '') {
 
 $cf_sns = '';
 if ($cf_sns_twitter) $cf_sns.= '/twitter/';
-if ($cf_sns_me2day) $cf_sns.= '/me2day/';
+//if ($cf_sns_me2day) $cf_sns.= '/me2day/';
 //if ($cf_sns_yozm) $cf_sns.= '/yozm/';
 if ($cf_sns_cyworld) $cf_sns.= '/cyworld/';
 if ($cf_sns_naver) $cf_sns.= '/naver/';

@@ -21,8 +21,6 @@
 
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$mw_is_view = true;
-
 mw_bomb();
 mw_basic_move_cate($bo_table, $wr_id);
 
@@ -262,12 +260,10 @@ ob_end_clean();
 $link_file_viewer = '';
 for ($i=1; $i<=$g4['link_count']; $i++) {
     if (strstr($mw_basic['cf_multimedia'], '/youtube/') && preg_match("/youtu/i", $view['link'][$i])) {
-        //$link_file_viewer .= mw_jwplayer($view['link'][$i])."<br><br>";
         $link_file_viewer .= mw_youtube($view['link'][$i])."<br><br>";
         $view['link'][$i] = '';
     }
     elseif (strstr($mw_basic['cf_multimedia'], '/youtube/') && preg_match("/vimeo/i", $view['link'][$i])) {
-        //$link_file_viewer .= mw_jwplayer($view['link'][$i])."<br><br>";
         $link_file_viewer .= mw_vimeo($view['link'][$i])."<br><br>";
         $view['link'][$i] = '';
     }
@@ -636,7 +632,7 @@ if ($mw_basic[cf_sns])
 
     $sns_url = trim($sns_url);
 
-    $me2day_url = "http://me2day.net/posts/new?new_post[body]=".urlencode(set_utf8($view[wr_subject])." - \"$sns_url\":$sns_url");
+    $me2day_url = '';//"http://me2day.net/posts/new?new_post[body]=".urlencode(set_utf8($view[wr_subject])." - \"$sns_url\":$sns_url");
     //$twitter_url = "http://twitter.com/home?status=".urlencode(set_utf8($view[wr_subject])." - $sns_url");
     $twitter_url = "http://twitter.com/?status=".str_replace("+", " ", urlencode(set_utf8($view[wr_subject])." - $sns_url"));
     $facebook_url = "http://www.facebook.com/share.php?u=".urlencode($view_url);

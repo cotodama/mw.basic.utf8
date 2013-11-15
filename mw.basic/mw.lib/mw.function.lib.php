@@ -1926,45 +1926,60 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
     $sql = " update $g4[board_table] set bo_notice = '$bo_notice' where bo_table = '$bo_table' ";
     sql_query($sql);
 
-    return $insert_id;
+    return $save_parent;
 }
 
 function mw_bomb()
 {
-    global $g4, $mw, $mw_basic, $config;
+    global $g4, $mw, $config;
 
     $is_bomb = false;
+
+    sql_query("lock tables $mw[bomb_table] write", false);
     //$sql = " select * from $mw[bomb_table] where bo_table = '$board[bo_table]' and bm_datetime <= '$g4[time_ymdhis]' ";
     $sql = " select * from $mw[bomb_table] where bm_datetime <= '$g4[time_ymdhis]' ";
-    $qry = sql_query($sql, false);
+    $qry = sql_query(" select * from $mw[bomb_table] where bm_datetime <= '$g4[time_ymdhis]' ", false);
+    sql_query("delete from $mw[bomb_table] where bm_datetime <= '$g4[time_ymdhis]'");
+    sql_query("unlock tables", false);
+
     while ($row = sql_fetch_array($qry)) {
-        //$tmp = sql_fetch("select * from $g4[write_prefix]$board[bo_table] where wr_id = '$row[wr_id]'");
-        $tmp = sql_fetch("select * from $g4[write_prefix]$row[bo_table] where wr_id = '$row[wr_id]'");
-
+        $write_table = $g4[write_prefix].$row[bo_table];
+        $write = sql_fetch("select * from $write_table where wr_id = '$row[wr_id]'");
         $board = sql_fetch("select * from $g4[board_table] where bo_table = '$row[bo_table]'");
+        $mw_basic = sql_fetch("select cf_bomb_move_table, cf_bomb_move_time, cf_bomb_move_cate  from $mw[basic_config_table] where bo_table = '$row[bo_table]'");
 
-        $move_table = $row[bm_move_table];
+        $move_table = trim($row[bm_move_table]);
         if (!$move_table)
-            $move_table = $mw_basic[cf_bomb_move_table];
+            $move_table = trim($mw_basic[cf_bomb_move_table]);
 
         if ($move_table) {
             if ($row[bm_log]) {
                 $wr_id = mw_move($board, $row[wr_id], $move_table, 'copy');
-                mw_delete_row($board, $tmp, $row[bm_log], '폭파되었습니다.');
+                mw_delete_row($board, $write, $row[bm_log], '폭파되었습니다.');
             }
             else
                 $wr_id = mw_move($board, $row[wr_id], $move_table, 'move');
 
+            ob_start();
+            print_r($mw_basic);
+            $log = ob_get_contents();
+            ob_end_clean();
+
+
             if ($mw_basic['cf_bomb_move_time'] && $wr_id) {
-                sql_query("update $g4[write_prefix]$move_table set wr_datetime = '$row[bm_datetime]' where wr_id = '$wr_id'");
+                $sql = "update $g4[write_prefix]$move_table set wr_datetime = '$row[bm_datetime]' where wr_id = '$wr_id'";
+                sql_query($sql);
             }
             if ($mw_basic['cf_bomb_move_cate'] && $wr_id) {
-                sql_query("update $g4[write_prefix]$move_table set ca_name = '".addslashes($board[bo_subject])."' where wr_id = '$wr_id'");
+                $sql = "update $g4[write_prefix]$move_table set ca_name = '".addslashes($board[bo_subject])."' where wr_id = '$wr_id'";
+                sql_query($sql);
             }
         } else {
-            mw_delete_row($board, $tmp, $row[bm_log], '폭파되었습니다.');
+            mw_delete_row($board, $write, $row[bm_log], '폭파되었습니다.');
         }
-        sql_query("delete from $mw[bomb_table] where bo_table = '$board[bo_table]' and wr_id = '$row[wr_id]'", false);
+        //$sql = "delete from $mw[bomb_table] where bo_table = '$board[bo_table]' and wr_id = '$row[wr_id]'";
+        //sql_query($sql, false);
+
         $is_bomb = true;
     }
     if ($is_bomb) {
@@ -2248,8 +2263,8 @@ function mw_youtube_content($content)
     $pt3 = "/\[(http:\/\/youtu\.be\/[^\]]+)\]/ie";
     $pt4 = "/\[(http:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
 
-    $pt5 = "/\[http[s]{0,1}:\/\/vimeo\.com\/([^]]+)\]/ie"; 
-    $pt6 = "/\[<a href=\"http[s]{0,1}:\/\/vimeo\.com\/([^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
+    $pt5 = "/\[(http[s]{0,1}:\/\/vimeo\.com\/[^]]+)\]/ie"; 
+    $pt6 = "/\[<a href=\"(http[s]{0,1}:\/\/vimeo\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
 
     $content = preg_replace($pt1, "mw_youtube('\\1')", $content);
     $content = preg_replace($pt2, "mw_youtube('\\1')", $content);

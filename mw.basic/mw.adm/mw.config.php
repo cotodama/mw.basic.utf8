@@ -1491,7 +1491,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_title"> <input type=checkbox name=chk[cf_sns] value=1>&nbsp; SNS 퍼가기 </div>
 	<div class="cf_content">
 	    <input type=checkbox name=cf_sns_twitter value=1> 트위터
-	    <input type=checkbox name=cf_sns_me2day value=1> 미투데이 
+	    <!--<input type=checkbox name=cf_sns_me2day value=1> 미투데이 -->
 	    <!--<input type=checkbox name=cf_sns_yozm value=1> 요즘-->
 	    <input type=checkbox name=cf_sns_cyworld value=1> 싸이월드
 	    <input type=checkbox name=cf_sns_naver value=1> 네이버 북마크
@@ -1504,7 +1504,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <input type=checkbox name=cf_sns_kakaostory value=1> 카카오스토리 <span class="cf_info">(모바일에서만)</span>
 	    <script>
             document.cf_form.cf_sns_twitter.checked = '<? echo strstr($mw_basic[cf_sns], '/twitter/')?'1':''; ?>';
-            document.cf_form.cf_sns_me2day.checked = '<? echo strstr($mw_basic[cf_sns], '/me2day/')?'1':''; ?>';
+            //document.cf_form.cf_sns_me2day.checked = '<? echo strstr($mw_basic[cf_sns], '/me2day/')?'1':''; ?>';
             //document.cf_form.cf_sns_yozm.checked = '<? echo strstr($mw_basic[cf_sns], '/yozm/')?'1':''; ?>';
             document.cf_form.cf_sns_cyworld.checked = '<? echo strstr($mw_basic[cf_sns], '/cyworld/')?'1':''; ?>';
             document.cf_form.cf_sns_naver.checked = '<? echo strstr($mw_basic[cf_sns], '/naver/')?'1':''; ?>';

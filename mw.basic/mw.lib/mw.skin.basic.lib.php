@@ -86,57 +86,46 @@ global $mw_is_list;
 global $mw_is_view;
 global $mw_is_comment;
 
-// 접근권한 : 등록하지않은 회원 접근제한
-if ($mw_basic[cf_board_member] == '1' && !$is_admin) {
-    $sql = "select mb_id from $mw[board_member_table] where bo_table = '$board[bo_table]'";
-    $qry = sql_query($sql, false);
+$mw_basic[cf_board_member] = trim($mw_basic[cf_board_member]);
+$mw_is_board_member = false;
 
-    $mw_board_member = array();
-    while ($row = sql_fetch_array($qry)) {
-        array_push($mw_board_member, $row[mb_id]);
-    }
-    $mw_is_board_member = false;
-    if (!in_array($member[mb_id], $mw_board_member) && !in_array($_SERVER[REMOTE_ADDR], $mw_board_member)) {
-        if ($mw_basic[cf_board_member_list] && $mw_is_list) {
-            ;
-        }
-        elseif ($mw_basic[cf_board_member_view] && $mw_is_view) {
-            ;
-        }
-        elseif ($mw_basic[cf_board_member_comment] && $mw_is_comment) {
-            ;
-        }
-        else
-            alert("게시판에 접근권한이 없습니다.");
-    } else {
-        $mw_is_board_member = true;
-    }
-}
+if ($mw_basic[cf_board_member] && !$is_admin)
+{
+    $ip1 = $_SERVER[REMOTE_ADDR];
+    $ip2 = preg_replace("/^([0-9]+\.[0-9]+\.[0-9]+\.)[0-9]+\$/", "$1+", $_SERVER[REMOTE_ADDR]);
+    $ip3 = preg_replace("/^([0-9]+\.[0-9]+\.)[0-9]+\.[0-9]+\$/", "$1+", $_SERVER[REMOTE_ADDR]);
+    $ip4 = preg_replace("/^([0-9]+\.)[0-9]+\.[0-9]+\.[0-9]+\$/", "$1+", $_SERVER[REMOTE_ADDR]);
 
-// 접근권한 : 등록한 회원 접근제한
-if ($mw_basic[cf_board_member] == '2' && !$is_admin) {
-    $sql = "select mb_id from $mw[board_member_table] where bo_table = '$board[bo_table]'";
-    $qry = sql_query($sql, false);
+    $sql = "select mb_id ";
+    $sql.= "  from $mw[board_member_table] ";
+    $sql.= "  where bo_table = '$board[bo_table]'";
+    $sql.= "    and (mb_id = '$member[mb_id]' or mb_id = '$ip1' or mb_id = '$ip2' or mb_id = '$ip3' or mb_id = '$ip4') ";
 
-    $mw_board_member = array();
-    while ($row = sql_fetch_array($qry)) {
-        array_push($mw_board_member, $row[mb_id]);
+    //$qry = sql_query($sql, false);
+    $row = sql_fetch($sql, false);
+
+    // 접근권한 : 등록하지않은 회원 접근제한
+    if ($mw_basic[cf_board_member] == '1') {
+        if (!$row) {
+            if ($mw_basic[cf_board_member_list] && $mw_is_list) { ; }
+            elseif ($mw_basic[cf_board_member_view] && $mw_is_view) { ; }
+            elseif ($mw_basic[cf_board_member_comment] && $mw_is_comment) { ; }
+            else alert("게시판에 접근권한이 없습니다.");
+        }
+        else {
+            $mw_is_board_member = true;
+        }
     }
-    $mw_is_board_member = false;
-    if (in_array($member[mb_id], $mw_board_member) || in_array($_SERVER[REMOTE_ADDR], $mw_board_member)) {
-        if ($mw_basic[cf_board_member_list] && $mw_is_list) {
-            ;
+    // 접근권한 : 등록한 회원 접근제한
+    else if ($mw_basic[cf_board_member] == '2') {
+        if ($row) {
+            if ($mw_basic[cf_board_member_list] && $mw_is_list) { ; }
+            elseif ($mw_basic[cf_board_member_view] && $mw_is_view) { ; }
+            elseif ($mw_basic[cf_board_member_comment] && $mw_is_comment) { ; }
+            else alert("게시판에 접근권한이 없습니다.");
+        } else {
+            $mw_is_board_member = true;
         }
-        elseif ($mw_basic[cf_board_member_view] && $mw_is_view) {
-            ;
-        }
-        elseif ($mw_basic[cf_board_member_view] && $mw_is_comment) {
-            ;
-        }
-        else
-            alert("게시판에 접근권한이 없습니다.");
-    } else {
-        $mw_is_board_member = true;
     }
 }
 
