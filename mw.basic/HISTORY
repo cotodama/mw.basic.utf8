@@ -1,3 +1,26 @@
+ver 2.3.2 (13.11.22)
+    : 링크 바로이동 기능 글 읽기 권한 따르기 (데몬님 제안)
+    : 설문항목 길이조정 (csacsa님 제안)
+    : 1:1게시판 지정회원ID 필수아님.. (슬프다님 제안)
+    : [code] 기능 보완
+    : 썸네일에 확장자 .jpg 지원, 이미지탭에서 설정
+    : 코멘트 첨부 이미지 = 이미지 폭 크기 -200px
+    : 마케팅DB 솔루션 지원
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.vote.php
+    mw.basic/mw.proc/mw.adm.thumb.remake.php
+    mw.basic/style.common.css
+    mw.basic/list.skin.php
+    mw.basic/view.skin.php
+    mw.basic/write_update.skin.php
+    mw.basic/write.skin.php
+    mw.basic/style.common.css
+ 
 ver 2.3.1 (13.11.15)
     : 비메오 본문 삽입 오류 수정 (Dae-Seok Kim님 제안)
     : 게시물 이동 후 게시물 존재하지 않는 다는 팝업 메시지 제거 (역지사지님 제안)
@@ -14,6 +37,7 @@ ver 2.3.1 (13.11.15)
     mw.basic/mw.adm/mw.board.member.php
     mw.basic/mw.adm/mw.board.member.update.php
     mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
     mw.basic/mw.proc/mw.comment.image.php
     mw.basic/mw.proc/mw.adm.thumb.remake.php
     mw.basic/move_update.php

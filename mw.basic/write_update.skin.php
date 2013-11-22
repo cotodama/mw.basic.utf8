@@ -182,8 +182,17 @@ if ($mw_basic[cf_change_image_size] && $member[mb_level] >= $mw_basic[cf_change_
 }
 else
 {*/
-    $thumb_file = "$thumb_path/{$wr_id}";
-    unlink($thumb_file);
+    $thumb_file = mw_thumb_jpg("$thumb_path/{$wr_id}");
+    $thumb2_file = mw_thumb_jpg("$thumb2_path/{$wr_id}");
+    $thumb3_file = mw_thumb_jpg("$thumb3_path/{$wr_id}");
+    $thumb4_file = mw_thumb_jpg("$thumb4_path/{$wr_id}");
+    $thumb5_file = mw_thumb_jpg("$thumb5_path/{$wr_id}");
+
+    if (file_exists($thumb_file)) unlink($thumb_file);
+    if (file_exists($thumb2_file)) unlink($thumb2_file);
+    if (file_exists($thumb3_file)) unlink($thumb3_file);
+    if (file_exists($thumb4_file)) unlink($thumb4_file);
+    if (file_exists($thumb5_file)) unlink($thumb5_file);
 
     $thumb_file = "";
     $file = mw_get_first_file($bo_table, $wr_id, true);
@@ -193,18 +202,18 @@ else
         mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $source_file, $thumb_file, $mw_basic[cf_thumb_keep]);
         if ($mw_basic[cf_thumb2_width])
             @mw_make_thumbnail($mw_basic[cf_thumb2_width], $mw_basic[cf_thumb2_height], $source_file,
-                "{$thumb2_path}/{$wr_id}", $mw_basic[cf_thumb2_keep]);
+                "{$thumb2_file}", $mw_basic[cf_thumb2_keep]);
         if ($mw_basic[cf_thumb3_width]) {
             @mw_make_thumbnail($mw_basic[cf_thumb3_width], $mw_basic[cf_thumb3_height], $source_file,
-                "{$thumb3_path}/{$wr_id}", $mw_basic[cf_thumb3_keep]);
+                "{$thumb3_file}", $mw_basic[cf_thumb3_keep]);
         }
         if ($mw_basic[cf_thumb4_width]) {
             @mw_make_thumbnail($mw_basic[cf_thumb4_width], $mw_basic[cf_thumb4_height], $source_file,
-                "{$thumb4_path}/{$wr_id}", $mw_basic[cf_thumb4_keep]);
+                "{$thumb4_file}", $mw_basic[cf_thumb4_keep]);
         }
         if ($mw_basic[cf_thumb5_width]) {
             @mw_make_thumbnail($mw_basic[cf_thumb5_width], $mw_basic[cf_thumb5_height], $source_file,
-                "{$thumb5_path}/{$wr_id}", $mw_basic[cf_thumb5_keep]);
+                "{$thumb5_file}", $mw_basic[cf_thumb5_keep]);
         }
     } else {
         $is_thumb = false;
@@ -222,27 +231,27 @@ else
                     mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $mat, $thumb_file, $mw_basic[cf_thumb_keep]);
                     if ($mw_basic[cf_thumb2_width])
                         @mw_make_thumbnail($mw_basic[cf_thumb2_width], $mw_basic[cf_thumb2_height], $mat,
-                            "{$thumb2_path}/{$wr_id}", $mw_basic[cf_thumb2_keep]);
+                            "{$thumb2_file}", $mw_basic[cf_thumb2_keep]);
                     if ($mw_basic[cf_thumb3_width])
                         @mw_make_thumbnail($mw_basic[cf_thumb3_width], $mw_basic[cf_thumb3_height], $mat,
-                            "{$thumb3_path}/{$wr_id}", $mw_basic[cf_thumb3_keep]);
+                            "{$thumb3_file}", $mw_basic[cf_thumb3_keep]);
                     if ($mw_basic[cf_thumb4_width])
                         @mw_make_thumbnail($mw_basic[cf_thumb4_width], $mw_basic[cf_thumb4_height], $mat,
-                            "{$thumb4_path}/{$wr_id}", $mw_basic[cf_thumb4_keep]);
+                            "{$thumb4_file}", $mw_basic[cf_thumb4_keep]);
                     if ($mw_basic[cf_thumb5_width])
                         @mw_make_thumbnail($mw_basic[cf_thumb5_width], $mw_basic[cf_thumb5_height], $mat,
-                            "{$thumb5_path}/{$wr_id}", $mw_basic[cf_thumb5_keep]);
+                            "{$thumb5_file}", $mw_basic[cf_thumb5_keep]);
                     $is_thumb = true;
                     break;
                 }
             } // if 
         } // for 
         if (!$is_thumb) {
-            @unlink($thumb_file);
-            @unlink("{$thumb2_path}/{$wr_id}");
-            @unlink("{$thumb3_path}/{$wr_id}");
-            @unlink("{$thumb4_path}/{$wr_id}");
-            @unlink("{$thumb5_path}/{$wr_id}");
+            if (file_exists($thumb_file)) unlink($thumb_file);
+            if (file_exists($thumb2_file)) unlink($thumb2_file);
+            if (file_exists($thumb3_file)) unlink($thumb3_file);
+            if (file_exists($thumb4_file)) unlink($thumb4_file);
+            if (file_exists($thumb5_file)) unlink($thumb5_file);
         }
     }
 //}
@@ -511,6 +520,9 @@ if ($mw_basic[cf_social_commerce]) include("$social_commerce_path/write_update.s
 
 // 재능마켓
 if ($mw_basic[cf_talent_market]) include("$talent_market_path/write_update.skin.php");
+
+// 마케팅DB
+if ($mw_basic[cf_marketdb]) include("$marketdb_path/write_update.skin.php");
 
 // 구글지도
 if ($mw_basic[cf_google_map]) {

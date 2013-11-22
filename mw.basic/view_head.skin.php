@@ -326,7 +326,10 @@ if ($mw_basic[cf_link_board] && !$is_admin && $view[mb_id] != $member[mb_id] && 
 
 // 링크게시판
 if ($write[wr_link_write] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
-    goto_url($view[link][1]);
+    if ($board[bo_rea_level] <= $member[mb_level])
+        goto_url($view[link][1]);
+    else
+        goto_url("board.php?bo_table=$bo_table$qstr");
 }
 
 $prev_wr_subject = str_replace("\"", "'", $prev_wr_subject);

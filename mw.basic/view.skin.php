@@ -578,6 +578,13 @@ if ($bomb) {
         </div>
         <? } ?>
 
+        <?php
+        if ($mw_basic['cf_marketdb'] and $write['wr_marketdb']) { 
+            if (file_exists("{$marketdb_path}/view.skin.php")) {
+                include("{$marketdb_path}/view.skin.php");
+            }
+        } ?>
+
         <!-- 테러 태그 방지용 --></xml></xmp><a href=""></a><a href=''></a>
 
         <? if ($mw_basic[cf_ccl] && $view[wr_ccl][by]) { ?>
@@ -1303,6 +1310,12 @@ $(document).ready (function() { resizeBoardImage(<?=$board[bo_image_width]?>); }
     max-width:<?=$board[bo_image_width]?>px;
     height:auto; 
 }
+
+#mw_basic .mw_basic_comment_content img {
+    max-width:<?=$board[bo_image_width]-200?>px;
+    height:auto; 
+}
+
 
 <?=$mw_basic[cf_css]?>
 </style>
