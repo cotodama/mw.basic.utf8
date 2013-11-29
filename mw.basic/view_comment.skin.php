@@ -283,6 +283,8 @@ if ($mw_basic[cf_comment_best]) {
             $img_width = $file[0][image_width];
         }
         $file[0][view] = str_replace("<img", "<img width=\"{$img_width}\"", $file[0][view]);
+        if ($mw_basic[cf_image_save_close])
+            $file[0][view] = str_replace("<img", "<img oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\" ", $file[0][view]);
 
 	if ($mw_basic[cf_exif]) {
 	    $file[0][view] = str_replace("image_window(this)", "show_exif({$row[wr_id]}, this, event)", $file[0][view]);
@@ -534,6 +536,8 @@ for ($i=0; $i<$to_record; $i++) {
             $img_width = $file[0][image_width];
         }
         $file[0][view] = str_replace("<img", "<img width=\"{$img_width}\"", $file[0][view]);
+        if ($mw_basic[cf_image_save_close])
+            $file[0][view] = str_replace("<img", "<img oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\" ", $file[0][view]);
 
         if ($mw_basic[cf_exif]) {
             $file[0][view] = str_replace("image_window(this)", "show_exif({$list[$i][wr_id]}, this, event)", $file[0][view]);
@@ -967,6 +971,34 @@ $(document).ready(function () {
     <? if ($mw_basic[cf_comment_emoticon] && !$is_comment_editor && !$write_error) {?>
     <span class=mw_basic_comment_emoticon><a href="javascript:win_open('<?=$board_skin_path?>/mw.proc/mw.emoticon.skin.php?bo_table=<?=$bo_table?>','emo','width=600,height=400,scrollbars=yes')">☞ 이모티콘</a></span>
     <? } ?>
+            <span class=mw_basic_comment_emoticon><a href="#;" onclick="specialchars()">☞특수문자</a></span>
+            <style>
+            #mw_basic_special_characters {
+                display:none;
+                border:1px solid #ddd;
+                background-color:#fff;
+                padding:10px;
+                position:absolute;
+                margin:0 0 0 100px;
+            }
+            #mw_basic_special_characters table td {
+                padding:3px;
+                cursor:pointer;
+            }
+            </style>
+            <div id="mw_basic_special_characters">hi</div>
+            <script>
+            function specialchars() {
+                $.get("<?=$board_skin_path?>/mw.proc/mw.special.characters.php", function (str) {
+                    $("#mw_basic_special_characters").html(str);
+                    $("#mw_basic_special_characters table td").click(function () {
+                        $("#wr_content").val($("#wr_content").val()+$(this).text());
+                        $("#mw_basic_special_characters").toggle();
+                    });
+                });
+                $("#mw_basic_special_characters").toggle();
+            }
+            </script>
     <? if ($mw_basic[cf_comment_file] && $mw_basic[cf_comment_file] <= $member['mb_level'] && !$write_error) { ?>
     <span class=mw_basic_comment_file onclick="$('#comment_file_layer').toggle('slow');">☞ 첨부파일</span>
     <? } ?>
@@ -974,7 +1006,7 @@ $(document).ready(function () {
 
 <? if ($mw_basic[cf_comment_file] && $mw_basic[cf_comment_file] <= $member['mb_level']) { ?>
 <div id="comment_file_layer" style="padding:5px 0 5px 5px; display:none;">
-    <input type="file" name="bf_file" size="50" title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능' class="mw_basic_text">
+    <input type="file" name="bf_file" size="50" title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능'>
     <input type="checkbox" name="bf_file_del" value="1"> 첨부파일 삭제
 </div>
 <? } ?>

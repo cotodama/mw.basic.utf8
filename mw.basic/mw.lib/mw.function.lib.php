@@ -2239,20 +2239,22 @@ function mw_youtube($url)
     $v = '';
     $l = '';
 
-    if (preg_match("/^http:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
+    if (preg_match("/^http[s]{0,1}:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
         $v = $mat[1];
     }
-    elseif (preg_match("/^http:\/\/www\.youtube\.com\/watch\?v=([^&]+)&.*&list=([^&]+)&$/i", $url.'&', $mat)) {
+    elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&.*&list=([^&]+)&$/i", $url.'&', $mat)) {
         $v = $mat[1];
         $l = $mat[2];
     }
-    elseif (preg_match("/^http:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
+    elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
         $v = $mat[1];
     }
 
     if (!$v) return;
 
-    $src = "http://www.youtube.com/embed/{$v}?fs=1&hd=1";
+    $v = trim($v);
+
+    $src = "https://www.youtube.com/embed/{$v}?fs=1&hd=1";
     if ($l)
         $src .= "&list={$l}";
 

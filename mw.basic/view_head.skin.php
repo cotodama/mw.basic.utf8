@@ -220,6 +220,10 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
         }
         $view[file][$i][view] = str_replace("<img", "<img width=\"{$img_width}\"", $view[file][$i][view]);
 
+        // 이미지 저장 방지
+        if ($mw_basic[cf_image_save_close])
+            $view[file][$i][view] = str_replace("<img", "<img oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\" ", $view[file][$i][view]);
+
         // 워터마크 이미지 출력
         if ($mw_basic[cf_watermark_use]) {
             preg_match("/src='([^']+)'/iUs", $view[file][$i][view], $match);
@@ -326,7 +330,13 @@ if ($mw_basic[cf_link_board] && !$is_admin && $view[mb_id] != $member[mb_id] && 
 
 // 링크게시판
 if ($write[wr_link_write] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
-    if ($board[bo_rea_level] <= $member[mb_level])
+    if ($mw_basic[cf_read_level] && $list[$i][wr_read_level]) {
+        if ($list[$i][wr_read_level] <= $member[mb_level])
+            goto_url($view[link][1]);
+        else
+            goto_url("board.php?bo_table=$bo_table$qstr");
+    }
+    else if ($member[mb_level] >= $board[bo_read_level])
         goto_url($view[link][1]);
     else
         goto_url("board.php?bo_table=$bo_table$qstr");
@@ -396,6 +406,11 @@ $view[rich_content] = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/ie", "mw_v
 
 if ($mw_basic[cf_no_img_ext]) { // 이미지 확대 사용 안함
     $view[rich_content] = preg_replace("/name='target_resize_image\[\]' onclick='image_window\(this\)'/iUs", "", $view[rich_content]);
+
+    if ($mw_basic[cf_image_save_close])
+        $view[rich_content] = str_replace("<img", "<img oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\" ", $view[rich_content]);
+
+
 } else {
     // 웹에디터 이미지 클릭시 원본 사이즈 조정
     $data = $view[rich_content];
@@ -422,6 +437,11 @@ if ($mw_basic[cf_no_img_ext]) { // 이미지 확대 사용 안함
             $match = str_replace("+", "\+", $match);
             $pattern = "/(onclick=[\'\"]{0,1}image_window\(this\)[\'\"]{0,1}) (.*)(src=\"$match\")/iU";
             $replacement = "onclick='mw_image_window(this, $size[0], $size[1])' $2$3";
+
+            // 이미지 저장 방지
+            if ($mw_basic[cf_image_save_close])
+                $replacement .= "oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\"";
+
             if ($size[0] > $board[bo_image_width])
                 $replacement .= " width=\"$board[bo_image_width]\"";
             $data = @preg_replace($pattern, $replacement, $data);

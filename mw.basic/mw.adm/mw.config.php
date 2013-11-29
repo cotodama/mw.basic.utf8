@@ -635,6 +635,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <!--
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_norobot_image] value=1>&nbsp; 이미지 방지코드 </div>
 	<div class="cf_content">
@@ -642,6 +643,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <script> document.cf_form.cf_norobot_image.checked = <?=$mw_basic[cf_norobot_image]?>; </script>
 	</div>
     </div>
+    -->
 
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_subject_link] value=1>&nbsp; 권한별 제목링크  </div>
@@ -2293,6 +2295,16 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <script> document.cf_form.cf_thumb_jpg.checked = '<?=$mw_basic[cf_thumb_jpg]?>'; </script>
 	</div>
     </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_image_save_close] value=1>&nbsp; 이미지 저장방지 </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_image_save_close value=1> 사용
+            <span class="cf_info">(마우스 오버, 스마트폰 클릭시 저장하는 것을 방지. 100% 막는것은 불가능)</span>
+	    <script> document.cf_form.cf_image_save_close.checked = '<?=$mw_basic[cf_image_save_close]?>'; </script>
+	</div>
+    </div>
+
 
     <div class="block"></div>
 </div> <!-- tabs-5-2 -->

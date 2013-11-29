@@ -149,7 +149,7 @@ if ($w == "u")
             if ($is_file_content)
                 //$file_script .= "<br><input type='text' class=ed size=50 name='bf_content[$i]' value='{$row[bf_content]}' title='업로드 이미지 파일에 해당 되는 내용을 입력하세요.'>";
                 // 첨부파일설명에서 ' 또는 " 입력되면 오류나는 부분 수정
-                $file_script .= "<br><input type='text' class=ed size=50 name='bf_content[$i]' value='".addslashes(get_text($row[bf_content]))."' title='업로드 이미지 파일에 해당 되는 내용을 입력하세요.'>";
+                $file_script .= "<br><input type='text' size=50 name='bf_content[$i]' value='".addslashes(get_text($row[bf_content]))."' title='업로드 이미지 파일에 해당 되는 내용을 입력하세요.'>";
             $file_script .= "\");\n";
         }
         else
@@ -1442,7 +1442,7 @@ if ($w == "") {
             objRow = objTbl.insertRow(objTbl.rows.length);
             objCell = objRow.insertCell(0);
 
-            objCell.innerHTML = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능' class=mw_basic_text>";
+            objCell.innerHTML = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능'>";
 
 	    /*
 	    str = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능' class=mw_basic_text> ";
@@ -1455,7 +1455,7 @@ if ($w == "") {
             else
             {
                 <? if ($is_file_content) { ?>
-                objCell.innerHTML += "<br><input type='text' size=50 name='bf_content[]' title='업로드 이미지 파일에 해당 되는 내용을 입력하세요.' class=mw_basic_text>";
+                objCell.innerHTML += "<br><input type='text' size=50 name='bf_content[]' title='업로드 이미지 파일에 해당 되는 내용을 입력하세요.'>";
                 <? } ?>
                 ;
             }

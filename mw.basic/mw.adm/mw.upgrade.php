@@ -1220,4 +1220,5 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table $write_table change wr_marketdb wr_marketdb varchar(1) not null", false);
 
     sql_query("alter table {$mw[basic_config_table]} add cf_thumb_jpg varchar(1) not null", false);
+    sql_query("alter table {$mw[basic_config_table]} add cf_image_save_close varchar(1) not null", false);
 

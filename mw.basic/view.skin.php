@@ -41,7 +41,7 @@ document.title = "<?=strip_tags(addslashes($view[wr_subject]))?>";
 <script type="text/javascript" src="<?=$board_skin_path?>/mw.js/syntaxhighlighter/scripts/shCore.js"></script>
 <script type="text/javascript" src="<?=$board_skin_path?>/mw.js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
 <link type="text/css" rel="stylesheet" href="<?=$board_skin_path?>/mw.js/syntaxhighlighter/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="<?=$board_skin_path?>/mw.js/syntaxhighlighter/styles/shThemeDefault.css"/>
+<link type="text/css" rel="stylesheet" href="<?=$board_skin_path?>/mw.js/syntaxhighlighter/styles/shThemeMidnight.css"/>
 <script type="text/javascript">
 SyntaxHighlighter.config.clipboardSwf = '<?=$board_skin_path?>/mw.js/syntaxhighlighter/scripts/clipboard.swf';
 SyntaxHighlighter.all();
@@ -1300,9 +1300,7 @@ function mw_move_cate_one() {
 </script>
 <? } ?>
 
-<script type="text/javascript">
-$(document).ready (function() { resizeBoardImage(<?=$board[bo_image_width]?>); });
-</script>
+<script> $(document).ready (function() { resizeBoardImage(<?=$board[bo_image_width]?>); }); </script>
 
 <style type="text/css">
 /* 본문 img */
