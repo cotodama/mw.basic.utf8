@@ -56,6 +56,21 @@ if ($mw_basic[cf_must_notice]) { // 공지 필수
     }
 }
 
+if ($mw_basic['cf_exam'] and $mw_basic['cf_exam_notice']) {
+    $tmp_notice = @explode("\n", trim($board['bo_notice']));
+    $tmp_notice = @array_map("trim", $tmp_notice);
+    $tmp_notice = @array_filter($tmp_notice, "strlen");
+
+    foreach ((array)$tmp_notice as $tmp_id) {
+        $tmp = sql_fetch(" select * from {$mw_exam['info_table']} where bo_table = '{$bo_table}' and wr_id = '{$tmp_id}' ");
+        if ($tmp) {
+            $tmp = sql_fetch(" select * from {$mw_exam['answer_table']} where ex_id = '{$tmp['ex_id']}' and mb_id = '{$member['mb_id']}' ");
+            if (!$tmp)
+                alert("공지에 등록된 시험을 모두 치루셔야 글을 작성하실 수 있습니다.");
+        }
+    }
+}
+
 // 한 사람당 글 한개만 등록가능
 if (($w == "" || $w == "r") && $mw_basic[cf_only_one] && !$is_admin) {
     if ($is_member)
@@ -971,6 +986,13 @@ if ($mw_basic[cf_category_radio]) {
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
 <? } ?>
 
+<?php
+// 시험문제
+if ($mw_basic[cf_exam] && $mw_basic[cf_exam_level] <= $member[mb_level]) {
+    include("$exam_path/write.skin.php");
+}
+?>
+
 <? if ($mw_basic[cf_quiz] && $mw_basic[cf_quiz_level] <= $member[mb_level]) { ?>
 <tr>
 <td class=mw_basic_write_title>· 퀴즈 </td>
@@ -1442,7 +1464,7 @@ if ($w == "") {
             objRow = objTbl.insertRow(objTbl.rows.length);
             objCell = objRow.insertCell(0);
 
-            objCell.innerHTML = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능'>";
+            objCell.innerHTML = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=get_filesize($board[bo_upload_size])?> 이하만 업로드 가능'>";
 
 	    /*
 	    str = "<input type='file' id=bf_file_" + flen + " name='bf_file[]' title='파일 용량 <?=$upload_max_filesize?> 이하만 업로드 가능' class=mw_basic_text> ";

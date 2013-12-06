@@ -968,6 +968,7 @@ function bc_code($str, $is_content=1) {
         $str = preg_replace("/\[file([0-9])\](.*)\[\/file[0-9]\]/iU", "<img src=\"$board_skin_path/img/icon_file_down.gif\" align=absmiddle> <span style='cursor:pointer; text-decoration:underline;' onclick=\"file_download('$g4[bbs_path]/download.php?bo_table=$bo_table&wr_id=$wr_id&no=$1', '', '$1');\">$2</span>", $str);
         $str = preg_replace("/\[red\](.*)\[\/red\]/iU", "<span style='color:#ff0000;'>$1</span>", $str);
         $str = preg_replace("/\[link([1-2])\](.*)\[\/link[1-2]\]/iU", "<a href=\"$g4[bbs_path]/link.php?bo_table=$bo_table&wr_id=$wr_id&no=$1\" target=\"_blank\">$2</a>", $str);
+        $str = preg_replace("/\[(\/\/[^\s]+)\s+([^\]]+)\]/iUs", "<a href=\"$1\">$2</a>", $str);
     }
 
     $str = preg_replace("/\[month\]/iU", date('n', $g4[server_time]), $str);
@@ -1313,6 +1314,9 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
 
         // 마케팅DB 삭제
         if (file_exists("$marketdb_path/delete.skin.php")) include("$marketdb_path/delete.skin.php");
+
+        // 시험문제 삭제
+        if (file_exists("$exam_path/delete.skin.php")) include("$exam_path/delete.skin.php");
 
         // 재능마켓 삭제
         if (file_exists("$talent_market_path/delete.skin.php")) include("$talent_market_path/delete.skin.php");
@@ -1882,6 +1886,11 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
                 // 마케팅DB
                 if (!$row2[wr_is_comment] && file_exists("$marketdb_path/move_update.skin.php")) {
                     include("$marketdb_path/move_update.skin.php");
+                }
+
+                // 시험문제
+                if (!$row2[wr_is_comment] && file_exists("$exam_path/move_update.skin.php")) {
+                    include("$exam_path/move_update.skin.php");
                 }
 
                 // 재능마켓

@@ -76,6 +76,38 @@ if (($mw_basic[cf_kcb_read] || $write[wr_kcb_use]) && !is_okname()) {
 $mw_membership = array();
 $mw_membership_icon = array();
 
+// 링크로그
+for ($i=1; $i<=$g4['link_count']; $i++)
+{
+    //if ($mw_basic[cf_link_log])  {
+        $view['link'][$i] = set_http(get_text($view["wr_link{$i}"]));
+        $view['link_href'][$i] = "$pc_skin_path/link.php?bo_table=$board[bo_table]&wr_id=$view[wr_id]&no=$i" . $qstr;
+        $view['link_hit'][$i] = (int)$view["wr_link{$i}_hit"];
+    //}
+    $view['link_target'][$i] = $view["wr_link{$i}_target"];
+    if (!$view['link_target'][$i])
+        $view['link_target'][$i] = '_blank';
+}
+
+// 링크게시판
+if ($mw_basic[cf_link_board] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
+    //goto_url("board.php?bo_table=$bo_table$qstr");
+    goto_url($view['link_href'][1]);
+}
+// 게시물별 링크
+elseif ($write[wr_link_write] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
+    if ($mw_basic[cf_read_level] && $list[$i][wr_read_level]) {
+        if ($list[$i][wr_read_level] <= $member[mb_level])
+            goto_url($view['link_href'][1]);
+        else
+            alert("글을 읽을 권한이 없습니다. ", "board.php?bo_table=$bo_table$qstr");
+    }
+    else if ($member[mb_level] >= $board[bo_read_level])
+        goto_url($view['link_href'][1]);
+    else
+        alert("글을 읽을 권한이 없습니다. ", "board.php?bo_table=$bo_table$qstr");
+}
+
 if ($mw_basic[cf_read_level] && $write[wr_read_level] && $write[wr_read_level] > $member[mb_level]) {
     alert("글을 읽을 권한이 없습니다.");
 }
@@ -111,19 +143,6 @@ if (!$is_admin && $write[wr_view_block])
 // 호칭
 if (strlen(trim($mw_basic[cf_name_title]))) {
     $view[name] = str_replace("<span class='member'>{$view[wr_name]}</span>", "<span class='member'>{$view[wr_name]} {$mw_basic[cf_name_title]}</span>", $view[name]);
-}
-
-// 링크로그
-for ($i=1; $i<=$g4['link_count']; $i++)
-{
-    if ($mw_basic[cf_link_log])  {
-        $view['link'][$i] = set_http(get_text($view["wr_link{$i}"]));
-        $view['link_href'][$i] = "$pc_skin_path/link.php?bo_table=$board[bo_table]&wr_id=$view[wr_id]&no=$i" . $qstr;
-        $view['link_hit'][$i] = (int)$view["wr_link{$i}_hit"];
-    }
-    $view['link_target'][$i] = $view["wr_link{$i}_target"];
-    if (!$view['link_target'][$i])
-        $view['link_target'][$i] = '_blank';
 }
 
 // 멤버쉽 아이콘
@@ -212,7 +231,7 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
                     where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_file = '{$view[file][$i][file]}'");
             }
         }
-         // 이미지 크기 조절
+        // 이미지 크기 조절
         if ($board[bo_image_width] < $view[file][$i][image_width]) {
             $img_width = $board[bo_image_width];
         } else {
@@ -265,11 +284,11 @@ $link_file_viewer = '';
 for ($i=1; $i<=$g4['link_count']; $i++) {
     if (strstr($mw_basic['cf_multimedia'], '/youtube/') && preg_match("/youtu/i", $view['link'][$i])) {
         $link_file_viewer .= mw_youtube($view['link'][$i])."<br><br>";
-        $view['link'][$i] = '';
+        //$view['link'][$i] = '';
     }
     elseif (strstr($mw_basic['cf_multimedia'], '/youtube/') && preg_match("/vimeo/i", $view['link'][$i])) {
         $link_file_viewer .= mw_vimeo($view['link'][$i])."<br><br>";
-        $view['link'][$i] = '';
+        //$view['link'][$i] = '';
     }
     elseif (strstr($mw_basic['cf_multimedia'], '/link_movie/') && preg_match("/\.($config[cf_movie_extension])$/i", $view['link'][$i])) {
         $link_file_viewer .= mw_jwplayer($view['link'][$i])."<br><br>";
@@ -322,25 +341,6 @@ if (function_exists("mw_cash_is_membership") && $member[mb_id] != $write[mb_id])
 $is_checkbox = false;
 if ($member[mb_id] && ($is_admin == "super" || $group[gr_admin] == $member[mb_id] || $board[bo_admin] == $member[mb_id])) 
     $is_checkbox = true;
-
-// 링크게시판
-if ($mw_basic[cf_link_board] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
-    goto_url("board.php?bo_table=$bo_table$qstr");
-}
-
-// 링크게시판
-if ($write[wr_link_write] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
-    if ($mw_basic[cf_read_level] && $list[$i][wr_read_level]) {
-        if ($list[$i][wr_read_level] <= $member[mb_level])
-            goto_url($view[link][1]);
-        else
-            goto_url("board.php?bo_table=$bo_table$qstr");
-    }
-    else if ($member[mb_level] >= $board[bo_read_level])
-        goto_url($view[link][1]);
-    else
-        goto_url("board.php?bo_table=$bo_table$qstr");
-}
 
 $prev_wr_subject = str_replace("\"", "'", $prev_wr_subject);
 $next_wr_subject = str_replace("\"", "'", $next_wr_subject);
