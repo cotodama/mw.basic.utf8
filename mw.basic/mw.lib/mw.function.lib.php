@@ -400,6 +400,7 @@ function mw_get_category_option($bo_table='')
 
 function mw_set_sync_tag($content) {
     global $member;
+    global $board;
     preg_match_all("/<([^>]*)</iUs", $content, $matchs);
     for ($i=0, $max=count($matchs[0]); $i<$max; $i++) {
 	$pos = strpos($content, $matchs[0][$i]);
@@ -410,6 +411,24 @@ function mw_set_sync_tag($content) {
     $content = mw_get_sync_tag($content, "div");
     $content = mw_get_sync_tag($content, "table");
     $content = mw_get_sync_tag($content, "font");
+
+    if ($board[bo_image_width]) {
+        preg_match_all("/width\s*:\s*([0-9]+)px/iUs", $content, $matchs);
+        for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
+            if ($matchs[1][$i] > 600) {
+                $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
+                $content = preg_replace("/{$rex}/i", "width:600px", $content);
+            }
+        }
+
+        preg_match_all("/width=[\"\']{0,1}([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
+        for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
+            if ($matchs[1][$i] > 600) {
+                $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
+                $content = preg_replace("/{$rex}/i", "width=\"600\" ", $content);
+            }
+        }
+    }
     return $content;
 }
 
@@ -2068,6 +2087,10 @@ function mw_jwplayer($url, $opt="")
         $url = str_replace("../..", $g4[url], $url);
         $url = str_replace("..", $g4[url], $url);
     }
+    if ($mw_basic['cf_player_size']) {
+        $size = explode("x", $mw_basic['cf_player_size']);
+        $opt .= ", width:'{$size[0]}', height:'{$size[1]}' ";
+    }
     $buffer .= " file:'{$url}' {$opt} }); </script>";
 
     $jwplayer_count++;
@@ -2280,6 +2303,12 @@ function mw_youtube($url)
             $width =640; $height = 394; break;
     }
 
+    if ($mw_basic['cf_player_size']) {
+        $size = explode("x", $mw_basic['cf_player_size']);
+        $width = $size[0];
+        $height = $size[1];
+    }
+
     if ($width > $board['bo_image_width']) {
         $height = floor($board['bo_image_width']/$width*$height);
         $width = $board['bo_image_width'];
@@ -2362,6 +2391,12 @@ function mw_vimeo($url)
         case "1080": $width = 1920; $height = 1123; break; 
         default: $width =640; $height = 394; break; 
     } 
+
+    if ($mw_basic['cf_player_size']) {
+        $size = explode("x", $mw_basic['cf_player_size']);
+        $width = $size[0];
+        $height = $size[1];
+    }
 
     if ($width > $board['bo_image_width']) { 
         $height = floor($board['bo_image_width']/$width*$height); 

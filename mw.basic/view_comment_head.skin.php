@@ -40,7 +40,7 @@ if (function_exists("mw_cash_membership_icon") && $row[mb_id] != $config[cf_admi
 if ($mw_basic[cf_attribute] == "anonymous") $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
 if ($row[wr_anonymous]) $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
 
-if ($i < $from_record) continue;
+if ($i < $from_record) return;
 
 $html = 0;
 if (strstr($row['wr_option'], "html1")) $html = 1;

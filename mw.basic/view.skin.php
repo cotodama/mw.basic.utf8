@@ -22,6 +22,8 @@
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $mw_is_view = true;
+$mw_is_list = false;
+$mw_is_write = false;
 
 include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
 include("view_head.skin.php");
@@ -1340,5 +1342,33 @@ while ($row = sql_fetch_array($qry)) {
     }
     $view = get_view($row2, $board, $board_skin_path, 255);
     mw_board_popup($view, $html);
+}
+
+// RSS 수집기
+if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_collect_path/_config.php")) {
+    include_once("$rss_collect_path/_config.php");
+    if ($mw_rss_collect_config[cf_license]) {
+        ?>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("<?=$rss_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
+        });
+        </script>
+        <?
+    }
+}
+
+// Youtube 수집기
+if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && file_exists("$youtube_collect_path/_config.php")) {
+    include_once("$youtube_collect_path/_config.php");
+    if ($mw_youtube_collect_config[cf_license]) {
+        ?>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("<?=$youtube_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
+        });
+        </script>
+        <?
+    }
 }
 

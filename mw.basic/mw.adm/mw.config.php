@@ -526,10 +526,18 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             </select> 개, 제목길이 :
             <input type="text" name="cf_hot_len" id="cf_hot_len" size="3" value="<?=$mw_basic[cf_hot_len]?>">
 	    <span class="cf_info">(목록상단에 인기 게시물을 출력합니다.)</span>
+            <div>
+            <input type="checkbox" name="cf_hot_list" value="1">목록 
+            <input type="checkbox" name="cf_hot_view" value="1">읽기
+            <input type="checkbox" name="cf_hot_write" value="1">쓰기
+            </div>
 	    <script>
 	    document.cf_form.cf_hot.value = "<?=$mw_basic[cf_hot]?>";
 	    document.cf_form.cf_hot_basis.value = "<?=$mw_basic[cf_hot_basis]?>";
 	    document.cf_form.cf_hot_limit.value = "<?=$mw_basic[cf_hot_limit]?>";
+	    document.cf_form.cf_hot_list.checked = "<?php echo strstr($mw_basic[cf_hot_print], "l") ? '1' : '' ?>";
+	    document.cf_form.cf_hot_view.checked = "<?php echo strstr($mw_basic[cf_hot_print], "v") ? '1' : '' ?>";
+	    document.cf_form.cf_hot_write.checked = "<?php echo strstr($mw_basic[cf_hot_print], "w") ? '1' : '' ?>";
 	    </script>
 	</div>
     </div>
@@ -1212,6 +1220,16 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <option value="jwplayer5">jwplayer5</option>
 	    </select>
 	    <script> document.cf_form.cf_jwplayer_version.value = "<?=$mw_basic[cf_jwplayer_version]?>"; </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_player_size] value=1>&nbsp; 플레이어 사이즈 </div>
+	<div class="cf_content" height=60>
+            <?php $size = explode("x", $mw_basic['cf_player_size']); ?>
+            가로 : <input type="text" size="5" name="cf_player_size_x" value="<?=$size[0]?>">px,
+            세로 : <input type="text" size="5" name="cf_player_size_y" value="<?=$size[1]?>">px
+	    <span class="cf_info">(유튜브, jwplayer 사이즈 사용자 정의)</span>
 	</div>
     </div>
 

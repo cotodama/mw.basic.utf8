@@ -50,6 +50,14 @@ if ($cf_board_sdate and $cf_board_edate and $cf_board_sdate > $cf_board_edate) {
     alert("게시판 접근가능 시작날짜와 종료날짜가 바뀐것 같습니다.");
 }
 
+$cf_hot_print = '';
+if ($cf_hot_list)
+    $cf_hot_print .= 'l';
+if ($cf_hot_view)
+    $cf_hot_print .= 'v';
+if ($cf_hot_write)
+    $cf_hot_print .= 'w';
+
 $cf_board_stime = $cf_board_etime = "";
 
 if ($cf_board_stime_hour and $cf_board_stime_minute)
@@ -102,6 +110,11 @@ if ($cf_multimedia_link_movie) $cf_multimedia.= '/link_movie/';
 if ($cf_multimedia_link_image) $cf_multimedia.= '/link_image/';
 if ($cf_multimedia_link_flash) $cf_multimedia.= '/link_flash/';
 
+$cf_player_size = '';
+if ($cf_player_size_x or $cf_player_size_y) {
+    $cf_player_size = "{$cf_player_size_x}x{$cf_player_size_y}";
+}
+
 $cf_auto_move = array();
 $cf_auto_move['use'] = $cf_auto_move_use;
 $cf_auto_move['bo_table'] = $cf_auto_move_bo_table;
@@ -150,6 +163,7 @@ bo_table = '$bo_table'
 ,cf_hot_basis = '$cf_hot_basis'
 ,cf_hot_limit = '$cf_hot_limit'
 ,cf_hot_len = '$cf_hot_len'
+,cf_hot_print = '$cf_hot_print'
 ,cf_related = '$cf_related'
 ,cf_latest = '$cf_latest'
 ,cf_sns = '$cf_sns'
@@ -385,6 +399,7 @@ bo_table = '$bo_table'
 ,cf_multimedia = '$cf_multimedia'
 ,cf_youtube_size = '$cf_youtube_size'
 ,cf_jwplayer_version = '$cf_jwplayer_version'
+,cf_player_size = '$cf_player_size'
 ,cf_watermark_use = '$cf_watermark_use'
 ,cf_watermark_use_thumb = '$cf_watermark_use_thumb'
 ,cf_watermark_path = '$cf_watermark_path'
@@ -477,7 +492,13 @@ if ($chk[cf_board_time]) {
 }
 if ($chk[cf_board_week]) $sql .= ", cf_board_week = '$cf_board_week' ";
 if ($chk[cf_age]) $sql .= ", cf_age = '$cf_age' ";
-if ($chk[cf_hot]) $sql .= ", cf_hot = '$cf_hot', cf_hot_basis = '$cf_hot_basis', cf_hot_limit = '$cf_hot_limit', cf_hot_len = '$cf_hot_len'  ";
+if ($chk[cf_hot]) {
+    $sql .= ", cf_hot = '$cf_hot' ";
+    $sql .= ", cf_hot_basis = '$cf_hot_basis' ";
+    $sql .= ", cf_hot_limit = '$cf_hot_limit' ";
+    $sql .= ", cf_hot_len = '$cf_hot_len' ";
+    $sql .= ", cf_hot_print = '$cf_hot_print' ";
+}
 if ($chk[cf_related]) $sql .= ", cf_related = '$cf_related' ";
 if ($chk[cf_latest]) $sql .= ", cf_latest = '$cf_latest' ";
 if ($chk[cf_sns]) $sql .= ", cf_sns = '$cf_sns' ";
@@ -768,6 +789,7 @@ if ($chk[cf_image_auto_rotate]) $sql .= ", cf_image_auto_rotate = '$cf_image_aut
 if ($chk[cf_multimedia]) $sql .= ", cf_multimedia = '$cf_multimedia' ";
 if ($chk[cf_youtube_size]) $sql .= ", cf_youtube_size = '$cf_youtube_size' ";
 if ($chk[cf_jwplayer_version]) $sql .= ", cf_jwplayer_version = '$cf_jwplayer_version' ";
+if ($chk[cf_player_size]) $sql .= ", cf_player_size = '$cf_player_size' ";
 if ($chk[cf_watermark_use]) {
     $sql .= ", cf_watermark_use = '$cf_watermark_use' ";
     $sql .= ", cf_watermark_use_thumb = '$cf_watermark_use_thumb' ";

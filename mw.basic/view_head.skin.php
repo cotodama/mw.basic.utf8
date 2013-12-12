@@ -820,3 +820,6 @@ if ($mw_basic[cf_contents_shop] == '2' and $write[wr_contents_price]) // 배추 
 
 $view[rich_content] = mw_youtube_content($view[rich_content]);
 
+if (function_exists("mw_moa_read"))
+    mw_moa_read($member['mb_id'], $bo_table, $wr_id);
+
