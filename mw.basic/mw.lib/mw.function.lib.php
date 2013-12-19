@@ -415,17 +415,17 @@ function mw_set_sync_tag($content) {
     if ($board[bo_image_width]) {
         preg_match_all("/width\s*:\s*([0-9]+)px/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
-            if ($matchs[1][$i] > 600) {
+            if ($matchs[1][$i] > $board[bo_image_width]) {
                 $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                $content = preg_replace("/{$rex}/i", "width:600px", $content);
+                $content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
             }
         }
 
         preg_match_all("/width=[\"\']{0,1}([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
-            if ($matchs[1][$i] > 600) {
+            if ($matchs[1][$i] > $board[bo_image_width]) {
                 $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                $content = preg_replace("/{$rex}/i", "width=\"600\" ", $content);
+                $content = preg_replace("/{$rex}/i", "width=\"{$board[bo_image_width]}\" ", $content);
             }
         }
     }
@@ -463,7 +463,7 @@ function umz_get_url($url) {
     if (!$surl)
         $surl = "umz.kr";
     $url2 = urlencode($url);
-    $fp = fsockopen ($surl, 80, $errno, $errstr, 30);
+    $fp = fsockopen ("umz.miwit.com", 80, $errno, $errstr, 30);
     if (!$fp) return false;
     fputs($fp, "POST /plugin/shorten/update.php?url=$url2 HTTP/1.0\r\n");
     fputs($fp, "Host: $surl:80\r\n");
@@ -1128,7 +1128,7 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
 
     if ($lightbox_path) {
         $files = glob("{$lightbox_path}/{$write['wr_id']}-*");
-        array_map('unlink', $files);
+        @array_map('unlink', $files);
     }
 
     // 워터마크 삭제

@@ -194,11 +194,9 @@ else
     if (file_exists($thumb4_file)) unlink($thumb4_file);
     if (file_exists($thumb5_file)) unlink($thumb5_file);
 
-    $thumb_file = "";
     $file = mw_get_first_file($bo_table, $wr_id, true);
     if (!empty($file)) {
         $source_file = "$file_path/{$file[bf_file]}";
-        $thumb_file = "$thumb_path/{$wr_id}";
         mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $source_file, $thumb_file, $mw_basic[cf_thumb_keep]);
         if ($mw_basic[cf_thumb2_width])
             @mw_make_thumbnail($mw_basic[cf_thumb2_width], $mw_basic[cf_thumb2_height], $source_file,
@@ -217,7 +215,6 @@ else
         }
     } else {
         $is_thumb = false;
-        $thumb_file = "$thumb_path/{$wr_id}";
         preg_match_all("/<img.*src=\\\"(.*)\\\"/iUs", stripslashes($wr_content), $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; ++$i) {
             $mat = $matchs[1][$i];

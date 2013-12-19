@@ -638,7 +638,20 @@ if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
 </tr>
 </table>
 
-<? if (trim($mw_basic[cf_comment_write_notice])) { ?>
+<?php
+if (trim($mw_basic[cf_comment_write_notice])) { 
+    $comment_write_notice = $mw_basic[cf_comment_write_notice];
+    $comment_write_notice = addslashes($comment_write_notice);
+
+    $comment_write_notice_html = $comment_write_notice;
+    $comment_write_notice_html = nl2br($comment_write_notice_html);
+    $comment_write_notice_html = preg_replace("/\n/", "", $comment_write_notice_html);
+    $comment_write_notice_html = preg_replace("/\r/", "", $comment_write_notice_html);
+
+    $comment_write_notice = preg_replace("/\n/", "\\n", $comment_write_notice);
+    $comment_write_notice = preg_replace("/\r/", "", $comment_write_notice);
+
+?>
 <script>
 $(document).ready(function () {
 <? if ($is_comment_editor) { ?>
@@ -646,7 +659,7 @@ $(document).ready(function () {
     ed_wr_content.editArea.blur();
     ed_wr_content.editArea.onfocus = function () {
         var ed = ed_wr_content.outputBodyHTML();
-        if (ed == "<?=$mw_basic[cf_comment_write_notice]?>") {
+        if (ed == "<?=$comment_write_notice_html?>") {
             ed_wr_content.doc.body.innerHTML = '';
         }
     }
@@ -654,14 +667,14 @@ $(document).ready(function () {
     ged = document.getElementById("geditor_wr_content_frame").contentWindow.document.body;
     ged.onfocus = function () {
         var ed = document.getElementById('wr_content').value;
-        if (ed == "<?=$mw_basic[cf_comment_write_notice]?>") {
+        if (ed == "<?$comment_write_notice_html?>") {
             ged.innerHTML = '';
         }
     }
     <? } ?>
 <? } else { ?>
     $("#wr_content").focus(function () {
-        if ($("#wr_content").val() == "<?=$mw_basic[cf_comment_write_notice]?>") {
+        if ($("#wr_content").val() == "<?=$comment_write_notice?>") {
             $("#wr_content").val('');
         }
     });
@@ -1101,6 +1114,7 @@ $(document).ready(function () {
                 old_comment_id = comment_id;
 
                 $("#comment_url_loading").remove();
+                $("#comment_url_copy").css("cursor", "pointer");
 
                 var clipBoardComment = new ZeroClipboard.Client();
                 ZeroClipboard.setMoviePath("<?=$board_skin_path?>/mw.js/ZeroClipboard.swf");
@@ -1114,6 +1128,24 @@ $(document).ready(function () {
                     $("#comment_url_popup").css("display", "none");
                 });  
                 clipBoardComment.glue("comment_url_copy");
+/*
+                var clip_comment = new ZeroClipboard(document.getElementById("comment_url_copy"), {
+                    moviePath: "<?=$board_skin_path?>/mw.js/ZeroClipboard.swf"
+                });
+
+                clip_comment.on( "load", function(client) {
+                    // alert( "movie is loaded" );
+                    clip_comment.setText($("#comment_url_result").text());
+
+                    client.on( "complete", function(client, args) {
+                    // `this` is the element that was clicked
+                        clip_comment.setText($("#comment_url_result").text());
+                        alert("클립보드에 복사되었습니다. \'Ctrl+V\'를 눌러 붙여넣기 해주세요.");
+                        $("#comment_url").html("");
+                        $("#comment_url_popup").css("display", "none");
+                    });
+                });
+*/
             });
         } else {
             $("#comment_url").html("");

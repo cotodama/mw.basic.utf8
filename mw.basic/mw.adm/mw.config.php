@@ -2502,6 +2502,8 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <span class="cf_info">(<a href="http://g4.miwit.com/plugin/product/pr_social_commerce.php" target="_blank">플러그인 설치 후 사용가능 ⇒ <u>다운로드 클릭!</u></a>)</span>  
 	    <br/><input type=checkbox name=cf_social_commerce_hp value=1> 주문문자 사용
                 <span class="cf_info">(알림탭의 글등록 알림문자 옵션에서 ICODEKOREA 계정정보 입력시 사용가능)</span>
+
+            <div><a href="#;" onclick="win_open('<?=$social_commerce_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
 	    <script>
             document.cf_form.cf_social_commerce.checked = "<?=$mw_basic[cf_social_commerce]?>";
             document.cf_form.cf_social_commerce_hp.checked = "<?=$mw_basic[cf_social_commerce_hp]?>";
@@ -2603,8 +2605,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <script> document.cf_form.cf_talent_market_hp.checked = "<?=$mw_basic[cf_talent_market_hp]?>"; </script>
             </div>
             <script> document.cf_form.cf_talent_market.value = "<?=$mw_basic[cf_talent_market]?>"; </script>
-
-
+            <div><a href="#;" onclick="win_open('<?=$talent_market_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
         </div>
     </div>
 

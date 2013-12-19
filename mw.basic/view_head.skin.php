@@ -704,6 +704,7 @@ if ($mw_basic[cf_sns])
         if (!strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile"))
             $kakao_url = "#;\" onclick=\"javascript:alert('모바일 기기에서만 작동합니다.');";
         $kakao_content = strip_tags($view[wr_content]);
+        $kakao_content = addslashes($view[wr_content]);
         $kakao_content = str_replace("\n", " ", $kakao_content);
         $kakao_content = preg_replace("/&#?[a-z0-9]+;/i", "", $kakao_content);
         $kakao_content = preg_replace("/\s+/", " ", $kakao_content);

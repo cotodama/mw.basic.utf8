@@ -49,7 +49,26 @@ SyntaxHighlighter.all();
 </script>
 <link rel="stylesheet" href="<?=$board_skin_path?>/style.common.css?<?=filemtime("$board_skin_path/style.common.css")?>" type="text/css">
 
-<script type="text/javascript" src="<?=$board_skin_path?>/mw.js/ZeroClipboard.js"></script>
+<script type="text/javascript" src="<?=$board_skin_path?>/mw.js/ZeroClipboard.js?time=<?=time()?>"></script>
+<script type="text/javascript">
+function initClipboard() {
+    clipBoardView = new ZeroClipboard.Client();
+    ZeroClipboard.setMoviePath("<?=$board_skin_path?>/mw.js/ZeroClipboard.swf");
+    clipBoardView.addEventListener('mouseOver', function (client) {
+        clipBoardView.setText($("#post_url").text());
+    });
+    clipBoardView.addEventListener('complete', function (client) {
+        alert("클립보드에 복사되었습니다. \'Ctrl+V\'를 눌러 붙여넣기 해주세요.");
+    });  
+    clipBoardView.glue("post_url_copy");
+}
+$(document).ready(function () {
+    if ($("#post_url").text()) {
+        initClipboard();
+    }
+});
+</script>
+<!--
 <script type="text/javascript">
 function initClipboard() {
     var clip = new ZeroClipboard(document.getElementById("post_url_copy"), {
@@ -73,6 +92,7 @@ $(document).ready(function () {
     }
 });
 </script>
+-->
 
 <? if ($mw_basic[cf_source_copy]) { // 출처 자동 복사 ?>
 <? $copy_url = $shorten ? $shorten : set_http("{$g4[url]}/{$g4[bbs]}/board.php?bo_table={$bo_table}&wr_id={$wr_id}"); ?>
