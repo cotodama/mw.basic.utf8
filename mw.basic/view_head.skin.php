@@ -824,3 +824,35 @@ $view[rich_content] = mw_youtube_content($view[rich_content]);
 if (function_exists("mw_moa_read"))
     mw_moa_read($member['mb_id'], $bo_table, $wr_id);
 
+$ob_exam = '';
+$ob_exam_flag = false;
+if ($mw_basic['cf_exam']) {
+    if (file_exists("{$exam_path}/view.skin.php")) {
+        ob_start();
+        include("{$exam_path}/view.skin.php");
+        $ob_exam = ob_get_contents();
+        ob_end_clean();
+
+        if (preg_match("/\[시험문제\]/i", $view[rich_content])) {
+            $ob_exam_flag = true;
+            $view[rich_content] = preg_replace("/\[시험문제\]/i", $ob_exam, $view[rich_content]);
+        }
+    }
+}
+
+$ob_marketdb = '';
+$ob_marketdb_flag = false;
+if ($mw_basic['cf_marketdb'] and $write['wr_marketdb']) { 
+    if (file_exists("{$marketdb_path}/view.skin.php")) {
+        ob_start();
+        include("{$marketdb_path}/view.skin.php");
+        $ob_marketdb = ob_get_contents();
+        ob_end_clean();
+
+        if (preg_match("/\[마케팅DB\]/i", $view[rich_content])) {
+            $ob_marketdb_flag = true;
+            $view[rich_content] = preg_replace("/\[마케팅DB\]/i", $ob_marketdb, $view[rich_content]);
+        }
+    }
+}
+

@@ -352,7 +352,7 @@ if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
     $to_record = $total_count;
 }
 
-for ($i=0; $i<$to_record; $i++) {
+for ($i=$from_record; $i<$to_record; $i++) {
     $row = $list[$i];
     include("{$board_skin_path}/view_comment_head.skin.php");
     $list[$i] = $row;

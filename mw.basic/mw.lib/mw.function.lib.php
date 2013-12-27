@@ -412,20 +412,28 @@ function mw_set_sync_tag($content) {
     $content = mw_get_sync_tag($content, "table");
     $content = mw_get_sync_tag($content, "font");
 
+    $content = preg_replace("/\(<a href=\"([^\)]+)\)\"([^>]*)>([^\)]+)\)<\/a>/i", "(<a href=\"$1\"$2>$3</a>)", $content);
+
     if ($board[bo_image_width]) {
+        if (strstr($_SERVER[PHP_SELF], "plugin/mobile")) {
+            $board[bo_image_width] = 300;
+        }
+
         preg_match_all("/width\s*:\s*([0-9]+)px/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
             if ($matchs[1][$i] > $board[bo_image_width]) {
-                $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                $content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
+                //$rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
+                //$content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
+                $content = preg_replace("/{$matchs[0][$i]}/i", "width=\"{$board[bo_image_width]}\" ", $content);
             }
         }
 
         preg_match_all("/width=[\"\']{0,1}([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
             if ($matchs[1][$i] > $board[bo_image_width]) {
-                $rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                $content = preg_replace("/{$rex}/i", "width=\"{$board[bo_image_width]}\" ", $content);
+                //$rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
+                //$content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
+                $content = preg_replace("/{$matchs[0][$i]}/i", "width=\"{$board[bo_image_width]}\" ", $content);
             }
         }
     }
@@ -1569,35 +1577,11 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
 
                 // 배추스킨 확장 필드 복사/이동
                 // 필드별로 업데이트 하는 이유 : 버전업 과정에서 누락된 필드 오류를 그냥 넘어가기 위해
-                sql_query(" update $move_write_table set wr_ccl = '$row2[wr_ccl]' where wr_id = '$insert_id' ");
-                sql_query(" update $move_write_table set wr_singo = '$row2[wr_singo]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_zzal = '$row2[wr_zzal]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_related = '$row2[wr_related]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_comment_ban = '$row2[wr_comment_ban]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_contents_price = '$row2[wr_contents_price]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_contents_domain = '$row2[wr_contents_domain]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_umz = '' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_subject_font = '$row2[wr_subject_font]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_subject_color = '$row2[wr_subject_color]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_anonymous = '$row2[wr_anonymous]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_comment_hide = '$row2[wr_comment_hide]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_no_img_ext = '$row2[wr_no_img_ext]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_read_level = '$row2[wr_read_level]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_kcb_use = '$row2[wr_kcb_use]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_qna_status = '$row2[wr_qna_status]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_qna_point = '$row2[wr_qna_point]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_qna_id = '$row2[wr_qna_id]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_is_mobile = '$row2[wr_is_mobile]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_google_map = '$row2[wr_google_map]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_link_write = '$row2[wr_link_write]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_view_block = '$row2[wr_view_block]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_auto_move = '$row2[wr_auto_move]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_link1_target = '$row2[wr_link1_target]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_link2_target = '$row2[wr_link2_target]' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_contents_preview = '".addslashes($row2[wr_contents_preview])."' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_lightbox = '".addslashes($row2[wr_lightbox])."' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_align = '".addslashes($row2[wr_align])."' where wr_id = '$insert_id' ", false);
-                sql_query(" update $move_write_table set wr_to_id = '".addslashes($row2[wr_to_id])."' where wr_id = '$insert_id' ", false);
+                $flist = mw_table_desc($bo_table);
+                foreach ((array)$flist as $key) {
+                    $val = addslashes($row2[$key]);
+                    sql_query(" update {$move_write_table} set {$key} = '{$val}' where wr_id = '{$insert_id}' ", false);
+                }
 
                 // 첨부파일 복사
                 $sql3 = " select * from $g4[board_file_table] where bo_table = '$bo_table' and wr_id = '$row2[wr_id]' order by bf_no ";
@@ -2156,10 +2140,7 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     if (preg_match("/^http:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
         $v = $mat[1];
     }
-    elseif (preg_match("/^http:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
-        $v = $mat[1];
-    }
-    elseif (preg_match("/^http:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
+    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
     elseif (preg_match('/player.vimeo.com\/video\/(\d+)$/', $url, $mat)) {
@@ -2278,7 +2259,8 @@ function mw_youtube($url)
         $v = $mat[1];
         $l = $mat[2];
     }
-    elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
+    //elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
+    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
 
@@ -2322,13 +2304,13 @@ function mw_youtube($url)
 
 function mw_youtube_content($content)
 {
-    $pt1 = "/\[<a href=\"(http:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
-    $pt2 = "/\[<a href=\"(http:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
-    $pt3 = "/\[(http:\/\/youtu\.be\/[^\]]+)\]/ie";
-    $pt4 = "/\[(http:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
+    $pt1 = "/\[<a href=\"(https?:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
+    $pt2 = "/\[<a href=\"(https?:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
+    $pt3 = "/\[(https?:\/\/youtu\.be\/[^\]]+)\]/ie";
+    $pt4 = "/\[(https?:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
 
-    $pt5 = "/\[(http[s]{0,1}:\/\/vimeo\.com\/[^]]+)\]/ie"; 
-    $pt6 = "/\[<a href=\"(http[s]{0,1}:\/\/vimeo\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
+    $pt5 = "/\[(https?:\/\/vimeo\.com\/[^]]+)\]/ie"; 
+    $pt6 = "/\[<a href=\"(https?:\/\/vimeo\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
 
     $content = preg_replace($pt1, "mw_youtube('\\1')", $content);
     $content = preg_replace($pt2, "mw_youtube('\\1')", $content);
@@ -2446,5 +2428,65 @@ function mw_thumb_jpg($file)
 
     rename($file, $jpg);
     return $jpg;
+}
+
+function mw_table_desc($bo_table)
+{
+    global $g4;
+
+    $write_table = $g4['write_prefix'] . $bo_table;
+
+    $f = array();
+    $f[] = "wr_id";
+    $f[] = "wr_num";
+    $f[] = "wr_parent";
+    $f[] = "wr_option";
+    $f[] = "wr_reply";
+    $f[] = "wr_is_comment";
+    $f[] = "wr_comment";
+    $f[] = "wr_comment_reply";
+    $f[] = "ca_name";
+    $f[] = "wr_option ";
+    $f[] = "wr_subject";
+    $f[] = "wr_content";
+    $f[] = "wr_link1";
+    $f[] = "wr_link2";
+    $f[] = "wr_link1_hit";
+    $f[] = "wr_link2_hit";
+    $f[] = "wr_trackback";
+    $f[] = "wr_hit";
+    $f[] = "wr_good";
+    $f[] = "wr_nogood";
+    $f[] = "mb_id";
+    $f[] = "wr_password";
+    $f[] = "wr_name";
+    $f[] = "wr_email";
+    $f[] = "wr_homepage";
+    $f[] = "wr_datetime";
+    $f[] = "wr_last";
+    $f[] = "wr_ip";
+    $f[] = "wr_1";
+    $f[] = "wr_2";
+    $f[] = "wr_3";
+    $f[] = "wr_4";
+    $f[] = "wr_5";
+    $f[] = "wr_6";
+    $f[] = "wr_7";
+    $f[] = "wr_8";
+    $f[] = "wr_9";
+    $f[] = "wr_10";
+    $f[] = "wr_umz";
+
+    $list = array();
+
+    $sql = " desc {$write_table} ";
+    $qry = sql_query($sql);
+    while ($row = sql_fetch_array($qry)) {
+        if (!in_array($row['Field'], $f)) {
+            $list[] = $row['Field'];
+        }
+    }
+
+    return $list;
 }
 

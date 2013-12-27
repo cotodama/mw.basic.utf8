@@ -605,17 +605,9 @@ if ($bomb) {
         <? } ?>
 
         <?php
-        if ($mw_basic['cf_exam']) {
-            if (file_exists("{$exam_path}/view.skin.php")) {
-                include("{$exam_path}/view.skin.php");
-            }
-        }
-
-        if ($mw_basic['cf_marketdb'] and $write['wr_marketdb']) { 
-            if (file_exists("{$marketdb_path}/view.skin.php")) {
-                include("{$marketdb_path}/view.skin.php");
-            }
-        } ?>
+        if (!$ob_exam_flag) echo $ob_exam;
+        if (!$ob_marketdb_flag) echo $ob_marketdb;
+        ?>
 
         <!-- 테러 태그 방지용 --></xml></xmp><a href=""></a><a href=''></a>
 
@@ -640,6 +632,23 @@ if ($bomb) {
                 });
             }
             function mw_good_act(good) {
+                if (good == "nogood") {
+                    flag = false;
+                    $.ajax({
+                        url: "<?=$board_skin_path?>/mw.proc/mw.good.confirm.php",
+                        type: "post",
+                        async: false,
+                        data: { 'bo_table':'<?=$bo_table?>', 'wr_id':'<?=$wr_id?>' },
+                        success: function (str) {
+                            if (str == 'true') {
+                                flag = true;
+                            }
+                        }
+                    });
+
+                    if (!flag && !confirm("정말 비추천하시겠습니까?")) return;
+                } 
+
                 $.get("<?=$board_skin_path?>/mw.proc/mw.good.act.php?bo_table=<?=$bo_table?>&wr_id=<?=$wr_id?>&good="+good, function (data) {
                     alert(data);
                     mw_good_load();

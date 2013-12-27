@@ -185,7 +185,7 @@ if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {
 if ($row[mb_id] == $config[cf_admin]) $row[ip] = "";
 
 $str = $row[content];
-if (strstr($list[$i][wr_option], "secret")) {
+if (strstr($row[wr_option], "secret")) {
     $str = "<span class='mw_basic_comment_secret'>* $str</span>";
 }
 $str = preg_replace("/\[\<a\s.*href\=\"(http|https|ftp|mms)\:\/\/([^[:space:]]+)\.(mp3|wma|wmv|asf|asx|mpg|mpeg)\".*\<\/a\>\]/i", "<script>doc_write(obj_movie('$1://$2.$3'));</script>", $str);
