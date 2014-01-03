@@ -101,6 +101,10 @@ if ($mw_basic[cf_comment_write_count]) {
     }
 }
 
+if (!$write_error and $mw_basic[cf_qna_enough] and $write[wr_qna_status] > 0) {
+    $write_error = "readonly onclick=\"alert('답변이 종료되었습니다.'); return false;\"";
+}
+
 // 컨텐츠샵 멤버쉽
 if (function_exists("mw_cash_is_membership")) {
     $is_membership = @mw_cash_is_membership($member[mb_id], $bo_table, "mp_comment");
@@ -127,6 +131,9 @@ if ($mw_basic[cf_comment_period] > 0) {
     }
 }
 
+
+
+echo bc_code($mw_basic[cf_comment_head]);
 ?>
 
 <? if ($mw_basic[cf_source_copy] && $cwin) { // 출처 자동 복사 ?>
@@ -352,9 +359,10 @@ if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
     $to_record = $total_count;
 }
 
-for ($i=$from_record; $i<$to_record; $i++) {
+for ($i=0; $i<$to_record; $i++) {
     $row = $list[$i];
-    include("{$board_skin_path}/view_comment_head.skin.php");
+    $res = include("{$board_skin_path}/view_comment_head.skin.php");
+    if (!$res) continue;
     $list[$i] = $row;
 
     if ($mw_basic[cf_include_comment_main] && file_exists($mw_basic[cf_include_comment_main])) {
@@ -536,6 +544,8 @@ if ($mw_basic[cf_attribute] == 'qna' && ($member[mb_id] == $write[mb_id] || $is_
     <? } ?>
 </div>
 <? } ?>
+
+<?php echo bc_code($mw_basic[cf_comment_tail]); ?>
 
 <!-- 코멘트 입력 -->
 

@@ -37,6 +37,8 @@ include_once("$g4[path]/head.sub.php");
 
 if (!$mw_basic[cf_thumb_width]) $mw_basic[cf_thumb_width] = 80;
 if (!$mw_basic[cf_thumb_height]) $mw_basic[cf_thumb_height] = 50;
+if (!$mw_basic[cf_write_width]) $mw_basic[cf_write_width] = "normal";
+if (!$mw_basic[cf_write_height]) $mw_basic[cf_write_height] = 10;
 
 set_session("ss_config_token", $token = uniqid(time()));
 ?>
@@ -374,6 +376,42 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item" id="cf_attqna" style="display:none">
+        <div class="cf_title">  <input type=checkbox name=chk[cf_qna_point_use] value=1>&nbsp;  질문 게시판 설정 </div>
+	<div class="cf_content">
+            <input type="checkbox" name="cf_qna_point_use" value="1"> 포인트 사용
+            <input type="text" class="ed" name="cf_qna_point_min" size="4" numeric value="<?=$mw_basic[cf_qna_point_min]?>"> 이상 ~
+            <input type="text" class="ed" name="cf_qna_point_max" size="4" numeric value="<?=$mw_basic[cf_qna_point_max]?>"> 이하.
+            채택자 <input type="text" class="ed" name="cf_qna_save" size="3" numeric value="<?=$mw_basic[cf_qna_save]?>"> % 적립
+            + 추가 <input type="text" class="ed" name="cf_qna_point_add" size="4" numeric value="<?=$mw_basic[cf_qna_point_add]?>"> 포인트,
+            보류시  <input type="text" class="ed" name="cf_qna_hold" size="4" numeric value="<?=$mw_basic[cf_qna_hold]?>">% 복원
+            <div style="padding:10px 0 10px 0;">
+            미해결 질문이 <input type="text" class="ed" name="cf_qna_count" size="4" numeric value="<?=$mw_basic[cf_qna_count]?>"> 개 
+            이상이면 더이상 질문을 할 수 없음. <span class="cf_info">(0으로 하면 제한 없음)</span>
+            </div>
+            <div>
+                <input type="checkbox" name="cf_qna_enough" value="1">
+                답변이 채택되면 더이상 코멘트를 작성할 수 없음
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.cf_form.cf_attribute.value = "<?=$mw_basic[cf_attribute]?>";
+    document.cf_form.cf_qna_point_use.checked = "<?=$mw_basic[cf_qna_point_use]?>";
+    document.cf_form.cf_qna_enough.checked = "<?=$mw_basic[cf_qna_enough]?>";
+
+    function attchg(v) {
+        if (v == 'qna') {
+            $("#cf_attqna").css("display", "block");
+        } else {
+            $("#cf_attqna").css("display", "none");
+        }
+    }
+    attchg(document.cf_form.cf_attribute.value);
+    </script>
+
+
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_gender] value=1>&nbsp; 접근가능 성별 </div>
 	<div class="cf_content">
@@ -467,36 +505,6 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             <? } ?>
 	</div>
     </div>
-
-    <div class="cf_item" id="cf_attqna" style="display:none">
-        <div class="cf_title">  <input type=checkbox name=chk[cf_qna_point_use] value=1>&nbsp;  질문 게시판 포인트 </div>
-	<div class="cf_content">
-            <input type="checkbox" name="cf_qna_point_use" value="1"> 사용
-            <input type="text" class="ed" name="cf_qna_point_min" size="4" numeric value="<?=$mw_basic[cf_qna_point_min]?>"> 이상 ~
-            <input type="text" class="ed" name="cf_qna_point_max" size="4" numeric value="<?=$mw_basic[cf_qna_point_max]?>"> 이하.
-            채택자 <input type="text" class="ed" name="cf_qna_save" size="3" numeric value="<?=$mw_basic[cf_qna_save]?>"> % 적립
-            + 추가 <input type="text" class="ed" name="cf_qna_point_add" size="4" numeric value="<?=$mw_basic[cf_qna_point_add]?>"> 포인트,
-            보류시  <input type="text" class="ed" name="cf_qna_hold" size="4" numeric value="<?=$mw_basic[cf_qna_hold]?>">% 복원
-            <div style="padding:10px 0 10px 0;">
-            미해결 질문이 <input type="text" class="ed" name="cf_qna_count" size="4" numeric value="<?=$mw_basic[cf_qna_count]?>"> 개 
-            이상이면 더이상 질문을 할 수 없음. <span class="cf_info">(0으로 하면 제한 없음)</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    document.cf_form.cf_attribute.value = "<?=$mw_basic[cf_attribute]?>";
-    document.cf_form.cf_qna_point_use.checked = "<?=$mw_basic[cf_qna_point_use]?>";
-
-    function attchg(v) {
-        if (v == 'qna') {
-            $("#cf_attqna").css("display", "block");
-        } else {
-            $("#cf_attqna").css("display", "none");
-        }
-    }
-    attchg(document.cf_form.cf_attribute.value);
-    </script>
 
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_hot] value=1>&nbsp; 인기 게시물 </div>
@@ -962,6 +970,22 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_head] value=1>&nbsp; 코멘트상단 </div>
+	<div class="cf_content" height=110>
+	    <textarea name=cf_comment_head cols=60 rows=5 class=edarea><?=$mw_basic[cf_comment_head]?></textarea>
+	    <div class="cf_info">코멘트 상단에 출력될 코드 </div>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_tail] value=1>&nbsp; 코멘트하단 </div>
+	<div class="cf_content" height=110>
+	    <textarea name=cf_comment_tail cols=60 rows=5 class=edarea><?=$mw_basic[cf_comment_tail]?></textarea>
+	    <div class="cf_info">코멘트 하단, 코멘트 입력창 상단에 출력될 코드 </div>
+	</div>
+    </div>
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_css] value=1>&nbsp; 사용자정의 CSS </div>
 	<div class="cf_content" height=110>
 	    <textarea name=cf_css cols=60 rows=5 class=edarea><?=$mw_basic[cf_css]?></textarea>
@@ -1196,6 +1220,16 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
+	<div class="cf_title"> <input type="checkbox" name="chk[cf_youtube_only]" value=1>&nbsp; 멀티미디어 링크전용</div>
+	<div class="cf_content">
+            <input type="checkbox" name="cf_youtube_only" value="1"> 사용 
+	    <span class="cf_info">링크주소를 멀티미디어 재생전용으로 사용합니다.</span>
+	    <script> document.cf_form.cf_youtube_only.checked = '<?=$mw_basic['cf_youtube_only']?>'; </script>
+	</div>
+    </div>
+
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_youtube_size] value=1>&nbsp; Youtube 크기 </div>
 	<div class="cf_content" height=60>
 	    <select name="cf_youtube_size">
@@ -1239,6 +1273,18 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <input type=checkbox name=cf_content_align value=1> 사용 
 	    <span class="cf_info">(글작성시 본문 정렬 옵션을 사용합니다. 에디터 미사용시 작동. 예:왼쪽, 가운데, 오른쪽)</span>
 	    <script> document.cf_form.cf_content_align.checked = '<?=$mw_basic[cf_content_align]?>'; </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"><input type=checkbox name=chk[cf_write_width] value=1>&nbsp; 글쓰기 창 크기</div>
+	<div class="cf_content">
+            가로: <select name="cf_write_width">
+                <option value="normal">보통</option>
+                <option value="large">크게</option>
+            </select>,
+            세로: <input type="text" size="3" name="cf_write_height" value="<?=$mw_basic['cf_write_height']?>">라인
+	    <script> document.cf_form.cf_write_width.value = '<?=$mw_basic[cf_write_width]?>'; </script>
 	</div>
     </div>
 
@@ -1747,6 +1793,33 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_good_level] value=1>&nbsp; 추천권한</div>
+	<div class="cf_content">
+            <select name="cf_good_level">
+            <option value="0"> 사용안함 </option>
+            <option value="1"> 비회원 </option>
+            <? for ($i=2; $i<=10; $i++) { ?>
+            <option value="<?=$i?>"> <?=$i?> </option>
+            <? } ?>
+            </select> 레벨 이상
+            <script>cf_form.cf_good_level.value = "<?=$mw_basic[cf_good_level]?>"; </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_nogood_level] value=1>&nbsp; 비추천권한</div>
+	<div class="cf_content">
+            <select name="cf_nogood_level">
+            <option value="0"> 사용안함 </option>
+            <option value="1"> 비회원 </option>
+            <? for ($i=2; $i<=10; $i++) { ?>
+            <option value="<?=$i?>"> <?=$i?> </option>
+            <? } ?>
+            </select> 레벨 이상
+            <script>cf_form.cf_nogood_level.value = "<?=$mw_basic[cf_nogood_level]?>"; </script>
+	</div>
+    </div>
 
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_iframe_level] value=1>&nbsp; <strong>특수태그 사용권한</strong> </div>

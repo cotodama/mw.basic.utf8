@@ -2252,15 +2252,15 @@ function mw_youtube($url)
     $v = '';
     $l = '';
 
-    if (preg_match("/^http[s]{0,1}:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
+    if (preg_match("/^https?:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
         $v = $mat[1];
     }
-    elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&.*&list=([^&]+)&$/i", $url.'&', $mat)) {
+    elseif (preg_match("/^https?:\/\/www\.youtube\.com\/watch\?v=([^&]+)&.*&list=([^&]+)&$/i", $url.'&', $mat)) {
         $v = $mat[1];
         $l = $mat[2];
     }
     //elseif (preg_match("/^http[s]{0,1}:\/\/www\.youtube\.com\/watch\?v=([^&]+)&/i", $url.'&', $mat)) {
-    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9]+)?/i", $url, $mat)) {
+    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9_-]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
 
@@ -2488,5 +2488,18 @@ function mw_table_desc($bo_table)
     }
 
     return $list;
+}
+
+function mw_kakao_str($content, $len=50)
+{
+    $content = strip_tags($content);
+    $content = addslashes($content);
+    $content = str_replace("\n", " ", $content);
+    $content = preg_replace("/&#?[a-z0-9]+;/i", "", $content);
+    $content = preg_replace("/\s+/", " ", $content);
+    $content = trim($content);
+    $content = cut_str($content, $len);
+
+    return $content;
 }
 

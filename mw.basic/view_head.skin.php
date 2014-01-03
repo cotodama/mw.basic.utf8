@@ -302,6 +302,9 @@ for ($i=1; $i<=$g4['link_count']; $i++) {
         $link_file_viewer .= mw_file_view($view['link'][$i], $view)."<br><br>";
         $view['link'][$i] = '';
     }
+    else if ($mw_basic['cf_youtube_only']) {
+        $view['link'][$i] = '';
+    }
 }
 $view[content] = $link_file_viewer . $view[content]; 
 
@@ -703,13 +706,14 @@ if ($mw_basic[cf_sns])
         <?
         if (!strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile"))
             $kakao_url = "#;\" onclick=\"javascript:alert('모바일 기기에서만 작동합니다.');";
-        $kakao_content = strip_tags($view[wr_content]);
-        $kakao_content = addslashes($view[wr_content]);
-        $kakao_content = str_replace("\n", " ", $kakao_content);
-        $kakao_content = preg_replace("/&#?[a-z0-9]+;/i", "", $kakao_content);
-        $kakao_content = preg_replace("/\s+/", " ", $kakao_content);
-        $kakao_content = trim($kakao_content);
-        $kakao_content = cut_str($kakao_content ,50);
+
+        $kakao_name = mw_kakao_str($config[cf_title], 50);
+        $kakao_subject = mw_kakao_str($view[wr_subject], 50);
+        $kakao_content = mw_kakao_str($view[wr_content], 50);
+
+        $kakao_thumb = "{$g4[url]}/data/file/{$bo_table}/thumbnail/{$wr_id}";
+        if ($mw_basic['cf_thumb_jpg'])
+            $kakao_thumb .= ".jpg";
         ?>
         <? if (strstr($mw_basic[cf_sns], '/kakaostory/')) { ?>
         <script src="<?=$pc_skin_path?>/mw.js/kakao.link.js"></script>
@@ -720,11 +724,11 @@ if ($mw_basic[cf_sns])
             alert("모바일 기기에서만 작동합니다."); return;
             <? } ?>
             kakao.link("story").send({
-                post : "<?=$view[wr_subject]?>\n<?=$sns_url?>",
+                post : "<?=$kakao_subject?>\n<?=$sns_url?>",
                 appid : "<?=$_SERVER[HTTP_HOST]?>",
                 appver : "1.0",
-                appname : "<?=$config[cf_title]?>",
-                urlinfo : JSON.stringify({title:"<?=$view[wr_subject]?>", desc:"<?=$kakao_content?>", imageurl:["<?=$g4[url]?>/data/file/<?=$bo_table?>/thumbnail/<?=$wr_id?>"], type:"article"})
+                appname : "<?=$kakao_name?>",
+                urlinfo : JSON.stringify({title:"<?=$kakao_subject?>", desc:"<?=$kakao_content?>", imageurl:["<?=$kakao_thumb?>"], type:"article"})
             });
         }
         </script>

@@ -238,6 +238,10 @@ else
     $total_count = $board[bo_count_write];
 }
 
+$write_height = 10;
+if ($mw_basic[cf_write_height])
+    $write_height = $mw_basic[cf_write_height];
+
 if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
     /* $g4[cheditor4_path] = "$board_skin_path/cheditor";
     include_once("$board_skin_path/mw.lib/mw.cheditor.lib.php");
@@ -245,7 +249,7 @@ if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
     echo cheditor1('wr_content', '100%', '250'); */
     include_once("$g4[path]/lib/cheditor4.lib.php");
     echo "<script src='$g4[cheditor4_path]/cheditor.js'></script>";
-    echo cheditor1('wr_content', '100%', '250');
+    echo cheditor1('wr_content', '100%', $write_height*25);
 }
 
 if ($w == '' && trim($mw_basic[cf_insert_subject])) {
@@ -651,14 +655,18 @@ if ($mw_basic[cf_category_radio]) {
 <? } ?>
 
 <tr>
+<? if ($mw_basic[cf_write_width] == "large") {?>
+<td colspan="2" style='padding:5px 0 5px 20px;'>
+<? } else { ?>
 <td class=mw_basic_write_title>· 내용</td>
-<td style='padding:5 0 5 0;'>
+<td style='padding:5px 0 5px 0;'>
+<? } ?>
     <? if (!$is_dhtml_editor) { ?>
     <table width=100%>
     <tr>
         <td align=left valign=bottom>
             <span style="cursor: pointer;" onclick="textarea_decrease('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_up.gif"></span>
-            <span style="cursor: pointer;" onclick="textarea_original('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_init.gif"></span>
+            <span style="cursor: pointer;" onclick="textarea_original('wr_content', <?=$write_height?>);"><img src="<?=$board_skin_path?>/img/btn_init.gif"></span>
             <span style="cursor: pointer;" onclick="textarea_increase('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_down.gif"></span>
             <? if ($mw_basic[cf_post_emoticon]) {?>
                 <span class=mw_basic_comment_emoticon><a 
@@ -699,7 +707,7 @@ if ($mw_basic[cf_category_radio]) {
     <? } ?>
 
     <? if (!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") { ?>
-    <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows=10 itemname="내용" required  class=mw_basic_textarea
+    <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows="<?=$write_height?>" itemname="내용" required  class=mw_basic_textarea
     <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") echo "geditor"; ?>
     <? if ($write_min || $write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?}?>><?=$content?></textarea>
     <? if (($write_min || $write_max) && !$is_dhtml_editor) { ?><script> check_byte('wr_content', 'char_count'); </script><?}?>
