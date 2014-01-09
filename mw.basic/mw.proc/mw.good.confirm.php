@@ -31,12 +31,17 @@ header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
 header("Cache-Control: pre-check=0, post-check=0, max-age=0"); // HTTP/1.1
 header("Pragma: no-cache"); // HTTP/1.0
 
-if ($good == "good" && $mw_basic[cf_good_level] && $member[mb_level] < $mw_basic[cf_good_level]) {
-    alert("추천 권한이 없습니다.");
+if ($good == "good" && !$mw_basic[cf_good_level] && !$is_member) {
+    die("회원만 가능합니다.");
 }
-
-if ($good == "nogood" && $mw_basic[cf_nogood_level] && $member[mb_level] < $mw_basic[cf_nogood_level]) {
-    alert("비추천 권한이 없습니다.");
+if ($good == "nogood" && !$mw_basic[cf_nogood_level] && !$is_member) {
+    die("회원만 가능합니다.");
+}
+if ($good == "good" && $member[mb_level] < $mw_basic[cf_good_level]) {
+    die("추천 권한이 없습니다.");
+}
+if ($good == "nogood" && $member[mb_level] < $mw_basic[cf_nogood_level]) {
+    die("비추천 권한이 없습니다.");
 }
 
 $mb_id = $member[mb_id];

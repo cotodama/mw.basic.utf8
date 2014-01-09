@@ -1,3 +1,19 @@
+ver 2.3.9 (14.01.10)
+    : 추천권한 없을경우 에러메시지에 태그 보이는 문제 (신비님 제안) 
+    : 비회원 접근차단 기능 (신비님 제안)
+    : 회원차단 글 삭제시 로그남기지 않음 (csacsa님 제안)
+    : 모바일 이미지(동영상) 사이즈 300에서 280으로 조정
+    : 추천권한 사용안함시 비회원 추천되는 문제
+
+    mw.basic/HISTORY
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.good.act.php
+    mw.basic/mw.proc/mw.good.confirm.php
+    mw.basic/mw.proc/mw.intercept.php
+    mw.basic/mw.proc/mw.intercept.update.php
+    mw.basic/view.skin.php
+    mw.basic/delete_all.skin.php
+ 
 ver 2.3.8 (14.01.03)
     : 추천/비추천 권한 설정 (마루밑다락방님 제안)
     : 질문게시판 답변선택시 더이상 코멘트 작성할 수 없는 옵션 (금광님 제안)

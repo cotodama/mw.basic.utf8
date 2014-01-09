@@ -416,7 +416,7 @@ function mw_set_sync_tag($content) {
 
     if ($board[bo_image_width]) {
         if (strstr($_SERVER[PHP_SELF], "plugin/mobile")) {
-            $board[bo_image_width] = 300;
+            $board[bo_image_width] = 280;
         }
 
         preg_match_all("/width\s*:\s*([0-9]+)px/iUs", $content, $matchs);
@@ -2140,7 +2140,7 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     if (preg_match("/^http:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
         $v = $mat[1];
     }
-    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9]+)?/i", $url, $mat)) {
+    elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9-_]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
     elseif (preg_match('/player.vimeo.com\/video\/(\d+)$/', $url, $mat)) {
