@@ -983,7 +983,7 @@ function mw_basic_counting_date($datetime, $endstr=" 남았습니다")
     return $str.$endstr; 
 }
 
-function bc_code($str, $is_content=1) {
+function bc_code($str, $is_content=1, $only_admin=0) {
     global $g4, $bo_table, $wr_id, $board_skin_path;
 
     if ($is_content) {
@@ -996,6 +996,45 @@ function bc_code($str, $is_content=1) {
         $str = preg_replace("/\[red\](.*)\[\/red\]/iU", "<span style='color:#ff0000;'>$1</span>", $str);
         $str = preg_replace("/\[link([1-2])\](.*)\[\/link[1-2]\]/iU", "<a href=\"$g4[bbs_path]/link.php?bo_table=$bo_table&wr_id=$wr_id&no=$1\" target=\"_blank\">$2</a>", $str);
         $str = preg_replace("/\[(\/\/[^\s]+)\s+([^\]]+)\]/iUs", "<a href=\"$1\">$2</a>", $str);
+
+        global $write, $config;
+        if ($write && $write[mb_id] == $config[cf_admin]) {
+            $callback = create_function ('$arg', '
+                global $g4;
+                $content = $arg[0];
+                if (file_exists($arg[1])) {
+                    ob_start();
+                    include($arg[1]);
+                    $content = ob_get_contents();
+                    ob_end_clean();
+                }
+                return $content;'
+            );
+            $str = preg_replace_callback("/include\(\"([^\"]+)\"\)/i", $callback, $str);
+
+            /*$str = preg_replace_callback("/include\(\"([^\"]+)\"\)/i",
+            function ($arg) {
+                global $g4;
+                $content = $arg[0];
+                if (file_exists($arg[1])) {
+                    ob_start();
+                    include($arg[1]);
+                    $content = ob_get_contents();
+                    ob_end_clean();
+                }
+                return $content;
+            }, $str);*/
+        }
+    }
+    if ($only_admin) {
+        $callback = create_function('$arg', 'return mw_pay_banner($arg[1], $arg[2]);');
+        $str = preg_replace_callback("/\<\?=mw_pay_banner\([\"\']?([^\"\']+)[\"\']?,[\s]*[\"\']?([^\"\']+)[\"\']?\)\?\>/i",
+            $callback, $str);
+
+        /*$str = preg_replace_callback("/\<\?=mw_pay_banner\([\"\']?([^\"\']+)[\"\']?,[\s]*[\"\']?([^\"\']+)[\"\']?\)\?\>/i",
+        function ($arg) {
+            return mw_pay_banner($arg[1], $arg[2]);
+        }, $str);*/
     }
 
     $str = preg_replace("/\[month\]/iU", date('n', $g4[server_time]), $str);
@@ -1978,7 +2017,7 @@ function mw_bomb()
         $write_table = $g4[write_prefix].$row[bo_table];
         $write = sql_fetch("select * from $write_table where wr_id = '$row[wr_id]'");
         $board = sql_fetch("select * from $g4[board_table] where bo_table = '$row[bo_table]'");
-        $mw_basic = sql_fetch("select cf_bomb_move_table, cf_bomb_move_time, cf_bomb_move_cate  from $mw[basic_config_table] where bo_table = '$row[bo_table]'");
+        $mw_basic = sql_fetch("select cf_bomb_move_table, cf_bomb_move_time, cf_bomb_move_cate, cf_bomb_item from $mw[basic_config_table] where bo_table = '$row[bo_table]'");
 
         $move_table = trim($row[bm_move_table]);
         if (!$move_table)
@@ -1992,12 +2031,6 @@ function mw_bomb()
             else
                 $wr_id = mw_move($board, $row[wr_id], $move_table, 'move');
 
-            ob_start();
-            print_r($mw_basic);
-            $log = ob_get_contents();
-            ob_end_clean();
-
-
             if ($mw_basic['cf_bomb_move_time'] && $wr_id) {
                 $sql = "update $g4[write_prefix]$move_table set wr_datetime = '$row[bm_datetime]' where wr_id = '$wr_id'";
                 sql_query($sql);
@@ -2007,7 +2040,64 @@ function mw_bomb()
                 sql_query($sql);
             }
         } else {
-            mw_delete_row($board, $write, $row[bm_log], '폭파되었습니다.');
+            if (!$mw_basic[cf_bomb_item]) {
+                mw_delete_row($board, $write, $row[bm_log], '폭파되었습니다.');
+            }
+            else {
+                if (strstr($mw_basic[cf_bomb_item], "subject")) {
+                    $sql = " update $write_table set wr_subject = '폭파되었습니다.' where wr_id = '$write[wr_id]' ";
+                    sql_query($sql);
+                }
+                if (strstr($mw_basic[cf_bomb_item], "content")) {
+                    $sql = " update $write_table set wr_content = '폭파되었습니다.' where wr_id = '$write[wr_id]' ";
+                    sql_query($sql);
+                }
+                if (strstr($mw_basic[cf_bomb_item], "file")) {
+                    // 썸네일 삭제
+                    global $thumb_path, $thumb2_path, $thumb3_path, $thumb4_path, $thumb5_path, $lightbox_path, $watermark_path;
+                    if ($thumb_path) {
+                        $thumb_file = mw_thumb_jpg("$thumb_path/$write[wr_id]");
+                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                    }
+
+                    if ($thumb2_path) {
+                        $thumb_file = mw_thumb_jpg("$thumb2_path/$write[wr_id]");
+                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                    }
+
+                    if ($thumb3_path) {
+                        $thumb_file = mw_thumb_jpg("$thumb3_path/$write[wr_id]");
+                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                    }
+
+                    if ($thumb4_path) {
+                        $thumb_file = mw_thumb_jpg("$thumb4_path/$write[wr_id]");
+                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                    }
+
+                    if ($thumb5_path) {
+                        $thumb_file = mw_thumb_jpg("$thumb5_path/$write[wr_id]");
+                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                    }
+
+                    if ($lightbox_path) {
+                        $files = glob("{$lightbox_path}/{$write['wr_id']}-*");
+                        @array_map('unlink', $files);
+                    }
+
+                    $sql = " select * from $g4[board_file_table] ";
+                    $sql.= " where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' order by bf_no";
+                    $qry = sql_query($sql);
+                    while ($row = sql_fetch_array($qry)) {
+                        @unlink("$g4[path]/data/file/$board[bo_table]/$row[bf_file]");
+                        @unlink("$watermark_path/$row[bf_file]");
+                    }
+                    sql_query("delete from $g4[board_file_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
+
+                    // 에디터 이미지 및 워터마크 삭제
+                    mw_delete_editor_image($write[wr_content]);
+                }
+            }
         }
         //$sql = "delete from $mw[bomb_table] where bo_table = '$board[bo_table]' and wr_id = '$row[wr_id]'";
         //sql_query($sql, false);
@@ -2015,7 +2105,7 @@ function mw_bomb()
         $is_bomb = true;
     }
     if ($is_bomb) {
-        ?><script type="text/javascript">location.reload();</script><?
+        ?><script>location.reload();</script><?
         exit;
     }
 }

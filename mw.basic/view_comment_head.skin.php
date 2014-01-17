@@ -28,7 +28,7 @@ $row[name] = get_name_title($row[name], $row[wr_name]); // 호칭
 // 멤버쉽 아이콘
 if (function_exists("mw_cash_membership_icon") && $row[mb_id] != $config[cf_admin])
 {
-    if (!in_array($row[mb_id], $mw_membership)) {
+    if (!in_array($row[mb_id], (array)$mw_membership)) {
         $mw_membership[] = $row[mb_id];
         $mw_membership_icon[$row[mb_id]] = mw_cash_membership_icon($row[mb_id]);
         $row[name] = $mw_membership_icon[$row[mb_id]].$row[name];

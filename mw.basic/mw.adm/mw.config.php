@@ -1856,6 +1856,17 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             </select> 레벨 이상
 	    <span class="cf_info">(지정한 시간에 게시물이 자동 삭제됩니다. 0이면 사용안함)</span> 
             <br/>
+            <select name="cf_bomb_item_select">
+                <option value="">전체삭제
+                <option value="1">부분삭제 (이동시 작동안함)
+            </select>
+            <input type="checkbox" name="cf_bomb_item[]" value="subject"
+                <? if (strstr($mw_basic[cf_bomb_item], "subject")) echo "checked"?>> 제목
+            <input type="checkbox" name="cf_bomb_item[]" value="content"
+                <? if (strstr($mw_basic[cf_bomb_item], "content")) echo "checked"?>> 내용
+            <input type="checkbox" name="cf_bomb_item[]" value="file"
+                <? if (strstr($mw_basic[cf_bomb_item], "file")) echo "checked"?>> 첨부파일
+            <br/>
             고정 <input type="text" size="3" name="cf_bomb_time" value="<?=$mw_basic[cf_bomb_time]?>" class="ed"/> 시간
 	    <span class="cf_info">(고정시간을 사용할 경우 새로작성되는 모든 게시물에 자동폭파가 적용됩니다.)</span> 
             <br/>
@@ -1867,6 +1878,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             <br><input type="checkbox" name="cf_bomb_move_cate" value="1"/> 게시판명을 분류명으로 설정
 	    <script>
             document.cf_form.cf_bomb_level.value = "<?=$mw_basic[cf_bomb_level]?>";
+            document.cf_form.cf_bomb_item_select.value = "<? echo $mw_basic[cf_bomb_item] ? '1' : '' ?>";
             document.cf_form.cf_bomb_move_time.checked = "<?=$mw_basic[cf_bomb_move_time]?>";
             document.cf_form.cf_bomb_move_cate.checked = "<?=$mw_basic[cf_bomb_move_cate]?>";
             </script>

@@ -1087,6 +1087,8 @@ if (is_null($mw_basic[cf_bomb_level])) {
     sql_query("alter table $mw[basic_config_table] add cf_bomb_move_time varchar(1) not null", false);
     sql_query("alter table $mw[basic_config_table] add cf_bomb_move_cate varchar(1) not null", false);
 
+    sql_query("alter table $mw[basic_config_table] add cf_bomb_item varchar(50) not null", false);
+
 $sql = "create table if not exists $mw[bomb_table] (
         bo_table varchar(20) not null
         ,wr_id int not null

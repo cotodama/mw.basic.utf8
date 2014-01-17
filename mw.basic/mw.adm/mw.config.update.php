@@ -133,6 +133,11 @@ if ($cf_contents_shop) {
     sql_query("alter table $write_table add wr_contents_preview text not null", false);
 }
 
+if ($cf_bomb_item_select)
+    $cf_bomb_item = implode(",", $cf_bomb_item);
+else
+    $cf_bomb_item = "";
+
 $sql = "update $mw[basic_config_table] set
 bo_table = '$bo_table'
 ,cf_type = '$cf_type'
@@ -236,6 +241,7 @@ bo_table = '$bo_table'
 ,cf_link_write = '$cf_link_write'
 ,cf_link_point = '$cf_link_point'
 ,cf_bomb_level = '$cf_bomb_level'
+,cf_bomb_item = '$cf_bomb_item'
 ,cf_bomb_days_max = '$cf_bomb_days_max'
 ,cf_bomb_days_min = '$cf_bomb_days_min'
 ,cf_bomb_time = '$cf_bomb_time'
@@ -583,6 +589,7 @@ if ($chk[cf_link_write]) $sql .= ", cf_link_write = '$cf_link_write' ";
 if ($chk[cf_link_point]) $sql .= ", cf_link_point = '$cf_link_point' ";
 if ($chk[cf_bomb_level]) {
     $sql .= ", cf_bomb_level = '$cf_bomb_level' ";
+    $sql .= ", cf_bomb_item = '$cf_bomb_item' ";
     $sql .= ", cf_bomb_time = '$cf_bomb_time' ";
     $sql .= ", cf_bomb_days_max = '$cf_bomb_days_max' ";
     $sql .= ", cf_bomb_days_min = '$cf_bomb_days_min' ";

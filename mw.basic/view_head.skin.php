@@ -575,12 +575,12 @@ else
 // 자동치환
 $view[rich_content] = mw_reg_str($view[rich_content]);
 $view[wr_subject] = mw_reg_str($view[wr_subject]);
-$view[wr_subject] = bc_code($view[wr_subject], 0);
+$view[wr_subject] = bc_code($view[wr_subject], 0, 0);
 
-$prev_wr_subject = bc_code($prev_wr_subject, 0);
+$prev_wr_subject = bc_code($prev_wr_subject, 0, 0);
 $prev_wr_subject = mw_reg_str($prev_wr_subject);
 
-$next_wr_subject = bc_code($next_wr_subject, 0);
+$next_wr_subject = bc_code($next_wr_subject, 0, 0);
 $next_wr_subject = mw_reg_str($next_wr_subject);
 
 // IP보이기 사용 여부
@@ -619,7 +619,7 @@ if ($write[wr_reply] == "" && ($is_admin == "super" || $is_admin == "group")) {
 }
 
 // 배추코드
-$view[rich_content] = bc_code($view[rich_content]);
+$view[rich_content] = bc_code($view[rich_content], 1, 0);
 $view[rich_content] = mw_tag_debug($view[rich_content]);
 
 if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {

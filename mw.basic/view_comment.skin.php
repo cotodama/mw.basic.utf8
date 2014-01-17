@@ -612,7 +612,7 @@ if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
     <span style="cursor: pointer;" onclick="textarea_decrease('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_up.gif" align=absmiddle></span>
     <span style="cursor: pointer;" onclick="textarea_original('wr_content', 5);"><img src="<?=$board_skin_path?>/img/btn_init.gif" align=absmiddle></span>
     <span style="cursor: pointer;" onclick="textarea_increase('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_down.gif" align=absmiddle></span>
-    <? if ($mw_basic[cf_comment_html]) echo "<input type=\"checkbox\" id=\"wr_html\" name=\"html\" value=\"html2\"> html"; ?>
+    <? if ($mw_basic[cf_comment_html]) echo "<input type=\"checkbox\" id=\"wr_html\" name=\"html\" value=\"html2\"> <label for='wr_html'>html</label"; ?>
     <? } ?>
 
     <? if (!$is_comment_editor && ($comment_min || $comment_max)) { ?>
@@ -697,7 +697,8 @@ $(document).ready(function () {
 
 <div style="padding:2px 0 2px 0;">
     <? if (!$write_error && !$mw_basic[cf_comment_secret_no]) { ?>
-    <input type=checkbox id="wr_secret" name="wr_secret" value="secret" <? if ($mw_basic[cf_comment_secret]) echo "checked" ?>>비밀글 (체크하면 글쓴이만 내용을 확인할 수 있습니다.)
+    <input type=checkbox id="wr_secret" name="wr_secret" value="secret" <? if ($mw_basic[cf_comment_secret]) echo "checked" ?>>
+    <label for="wr_secret">비밀글 (체크하면 글쓴이만 내용을 확인할 수 있습니다.)</label>
     <? } ?>
     <? if ($mw_basic[cf_anonymous]) {?> <input type="checkbox" name="wr_anonymous" value="1"> 익명 <? } ?>
     <? if ($mw_basic[cf_comment_emoticon] && !$is_comment_editor && !$write_error) {?>

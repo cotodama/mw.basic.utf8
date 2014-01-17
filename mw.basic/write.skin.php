@@ -524,21 +524,31 @@ if ($is_dhtml_editor) $mw_basic[cf_content_align] = false;
 <? if ($is_notice || ($is_html && !$is_dhtml_editor) || $is_secret || $is_mail || $mw_basic[cf_anonymous] || $mw_basic[cf_content_align]) { ?>
 <tr>
 <td class=mw_basic_write_title>· 옵션</td>
-<td><? if ($is_notice) { ?><input type=checkbox name=notice value="1" <?=$notice_checked?>>공지&nbsp;<? } ?>
+<td>
+    <? if ($is_notice) { ?>
+    <input type="checkbox" name="notice" id="wr_notice" value="1" <?=$notice_checked?>>
+    <label for="wr_notice">공지</label>
+    <? } ?>
     <? if ($is_html) { ?>
     <input onclick="html_auto_br(this);" type=checkbox value="<?=$html_value?>"
-        name="html" <?=$html_checked?>><span class=w_title>html</span>&nbsp;
+        name="html" id="wr_html" <?=$html_checked?>>
+    <label for="wr_html">html</label>
     <? } ?>
     <? if ($is_secret) { ?>
         <? if ($is_admin || $is_secret==1) { ?>
-        <input type=checkbox value="secret" name="secret" <?=$secret_checked?>><span class=w_title>비밀글</span>&nbsp;
+        <input type=checkbox value="secret" id="wr_secret" name="secret" <?=$secret_checked?>>
+        <label for="wr_secret">비밀글</label>
         <? } else { ?>
         <input type=hidden value="secret" name="secret">
         <? } ?>
     <? } ?>
-    <? if ($is_mail) { ?><input type=checkbox value="mail" name="mail" <?=$recv_email_checked?>>답변메일받기&nbsp;<? } ?>
+    <? if ($is_mail) { ?>
+    <input type=checkbox value="mail" id="wr_mail" name="mail" <?=$recv_email_checked?>>
+    <label for="wr_mail">답변메일받기</label>
+    <? } ?>
     <? if ($mw_basic[cf_anonymous]) {?>
-    <input type="checkbox" name="wr_anonymous" value="1" <?if ($write[wr_anonymous]) echo 'checked';?>> 익명
+    <input type="checkbox" name="wr_anonymous" id="wr_anonymous" value="1" <?if ($write[wr_anonymous]) echo 'checked';?>>
+    <label for="wr_anonymous">익명</label>
     <? } ?>
     <? if ($mw_basic[cf_content_align]) { ?>
     <select name="wr_align" id="wr_align">

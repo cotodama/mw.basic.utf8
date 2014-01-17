@@ -527,7 +527,7 @@ if ($bomb) {
 
         <? @include_once($mw_basic[cf_include_view_head])?>
 
-        <?=bc_code($mw_basic[cf_content_head])?>
+        <?=bc_code($mw_basic[cf_content_head], 1, 1)?>
 
         <div id=view_content>
 
@@ -572,7 +572,7 @@ if ($bomb) {
 
         <?echo $view[rich_content]; // {이미지:0} 과 같은 코드를 사용할 경우?>
 
-        <?=bc_code($mw_basic[cf_content_add])?>
+        <?=bc_code($mw_basic[cf_content_add], 1, 1)?>
         <? @include_once($mw_basic[cf_include_view])?>
 
         </div>
@@ -665,7 +665,7 @@ if ($bomb) {
             </script>
         <? } ?>
 
-        <?=bc_code($mw_basic[cf_content_tail])?>
+        <?=bc_code($mw_basic[cf_content_tail], 1, 1)?>
 
         <? @include_once($mw_basic[cf_include_view_tail])?>
 
