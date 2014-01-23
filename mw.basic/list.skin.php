@@ -415,6 +415,8 @@ if ($mw_basic[cf_link_board] && $list[$i][link_href][1]) {
     //if (!$is_admin && $member[mb_id] && $list[$i][mb_id] != $member[mb_id])
     if (!$list[$i][link][1] || $is_admin || ($list[$i][mb_id] && $list[$i][mb_id] == $member[mb_id]))
         ;
+    else if ($list[$i][icon_secret])
+        ;
     else if ($member[mb_level] >= $mw_basic[cf_link_board]) {
         if ($list[$i][link_target][1] == '_blank')
             $list[$i][href] = "javascript:void(window.open('{$list[$i][link_href][1]}'))";    
@@ -429,6 +431,8 @@ if ($mw_basic[cf_link_board] && $list[$i][link_href][1]) {
 // 게시물별 링크이동
 else if ($list[$i][wr_link_write] && $list[$i][link_href][1]) {
     if (!$list[$i][link][1] || $is_admin || ($list[$i][mb_id] && $list[$i][mb_id] == $member[mb_id]))
+        ;
+    else if ($list[$i][icon_secret])
         ;
     else if ($mw_basic[cf_read_level] && $list[$i][wr_read_level]) {
         if ($list[$i][wr_read_level] <= $member[mb_level]) {

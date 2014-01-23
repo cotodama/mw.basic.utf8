@@ -143,6 +143,9 @@ this.update = function() {
         case _TEXT      : ge_code = document.getElementById(ge_textarea).value; break;
         case _HTML      : ge_code = document.getElementById(ge_source).value; break;
     }
+    document.getElementById(ge_content).style.backgroundImage = '';
+    document.getElementById(ge_content).value = ge_code;
+
     if (ge_code) {
         document.getElementById(ge_content).style.backgroundImage = '';
         document.getElementById(ge_content).value = ge_code;
@@ -154,8 +157,6 @@ this.update = function() {
             case _HTML      : document.getElementById(ge_source).value = ge_code; break;
         }
     }
-
-       
 }
 
 this.eventHandler = function(event, editor, ge_name) {

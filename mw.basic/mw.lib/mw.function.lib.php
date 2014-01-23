@@ -997,10 +997,13 @@ function bc_code($str, $is_content=1, $only_admin=0) {
         $str = preg_replace("/\[link([1-2])\](.*)\[\/link[1-2]\]/iU", "<a href=\"$g4[bbs_path]/link.php?bo_table=$bo_table&wr_id=$wr_id&no=$1\" target=\"_blank\">$2</a>", $str);
         $str = preg_replace("/\[(\/\/[^\s]+)\s+([^\]]+)\]/iUs", "<a href=\"$1\">$2</a>", $str);
 
-        global $write, $config;
-        if ($write && $write[mb_id] == $config[cf_admin]) {
+        global $write, $config, $row;
+        if ($write && $write[mb_id] == $config[cf_admin] && !$row[wr_is_comment]) {
             $callback = create_function ('$arg', '
                 global $g4;
+
+                if (strstr($_SERVER[PHP_SELF], "plugin/mobile"))
+                    $arg[1] = preg_replace("/^\.\.\//", "../../", $arg[1]);
                 $content = $arg[0];
                 if (file_exists($arg[1])) {
                     ob_start();
@@ -2342,7 +2345,7 @@ function mw_youtube($url)
     $v = '';
     $l = '';
 
-    if (preg_match("/^https?:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
+    if (preg_match("/^https?:\/\/youtu.be\/([a-zA-Z0-9_-]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
     elseif (preg_match("/^https?:\/\/www\.youtube\.com\/watch\?v=([^&]+)&.*&list=([^&]+)&$/i", $url.'&', $mat)) {
@@ -2356,11 +2359,27 @@ function mw_youtube($url)
 
     if (!$v) return;
 
+    $t = null;
+    preg_match("/t=([0-9ms]+)?/i", $url, $mat);
+    if ($mat[1]) {
+        $t = $mat[1];
+
+        preg_match("/([0-9]+)m/", $t, $mat);
+        $m = $mat[1];
+
+        preg_match("/([0-9]+)s/", $t, $mat);
+        $s = $mat[1];
+
+        $t = $m*60+$s;
+    }
+
     $v = trim($v);
 
     $src = "https://www.youtube.com/embed/{$v}?fs=1&hd=1";
+    if ($t)
+        $src .= "&start=".$t;
     if ($l)
-        $src .= "&list={$l}";
+        $src .= "&list=".$l;
 
     if (!$mw_basic['cf_youtube_size'])
         $mw_basic['cf_youtube_size'] = 360;

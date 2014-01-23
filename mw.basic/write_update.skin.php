@@ -137,8 +137,10 @@ if ($mw_basic['cf_image_auto_rotate'])
         mw_image_auto_rotate("$file_path/$row[bf_file]");
 }
 
+// 원본 강제 리사이징 (첨부파일)
 if ($mw_basic[cf_resize_original]) {
-    $sql = "select * from $g4[board_file_table] where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_width > 0  order by bf_no";
+    $sql = " select * from $g4[board_file_table] ";
+    $sql.= " where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_width > 0  order by bf_no";
     $qry = sql_query($sql);
     while ($row = sql_fetch_array($qry)) {
         $file = "$file_path/$row[bf_file]";
@@ -151,7 +153,28 @@ if ($mw_basic[cf_resize_original]) {
             bf_filesize = '".filesize($file)."'
             where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_no = '$row[bf_no]'");
     }
+
+    // 원본 강제 리사이징 (에디터)
+    preg_match_all("/<img.*src=\\\"(.*)\\\"/iUs", stripslashes($wr_content), $matchs);
+    for ($i=0, $m=count($matchs[1]); $i<$m; ++$i) {
+        $mat = $matchs[1][$i];
+        if (strstr($mat, "mw.basic.comment.image")) $mat = '';
+        if (strstr($mat, "mw.emoticon")) $mat = '';
+        if (preg_match("/cheditor[0-9]\/icon/i", $mat)) $mat = '';
+        if ($mat) {
+            //$mat = str_replace($g4[url], "..", $mat);
+            $mat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
+            if (file_exists($mat)) {
+                $file = $mat;
+                $size = getImageSize($file);
+                if ($size[0] > $mw_basic[cf_resize_original] || $mw_basic[cf_resize_original] < $size[1]) {
+                    mw_make_thumbnail($mw_basic[cf_resize_original], $mw_basic[cf_resize_original], $file, $file, true);
+                }
+            }
+        }
+    }
 }
+     
 
 // 첨부이미지 사이즈 사용자 변경
 if ($mw_basic[cf_change_image_size] && $member[mb_level] >= $mw_basic[cf_change_image_size_level] && $change_image_size) {

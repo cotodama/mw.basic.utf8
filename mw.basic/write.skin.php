@@ -717,7 +717,7 @@ if ($mw_basic[cf_category_radio]) {
     <? } ?>
 
     <? if (!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") { ?>
-    <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows="<?=$write_height?>" itemname="내용" required  class=mw_basic_textarea
+    <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows="<?=$write_height?>" itemname="내용" class=mw_basic_textarea
     <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") echo "geditor"; ?>
     <? if ($write_min || $write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?}?>><?=$content?></textarea>
     <? if (($write_min || $write_max) && !$is_dhtml_editor) { ?><script> check_byte('wr_content', 'char_count'); </script><?}?>
@@ -1757,6 +1757,13 @@ function fwrite_check(f) {
         }
     }
 
+    if ($("#wr_content")) {
+        if (!trim($("#wr_content").val())) { 
+            alert('내용을 입력하십시오.'); 
+            return false;
+        }
+    }
+
     if (document.getElementById('tx_wr_content')) {
         if (!ed_wr_content.outputBodyHTML()) { 
             alert('내용을 입력하십시오.'); 
@@ -1901,7 +1908,7 @@ function mw_config() {
 
 <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") { ?>
     <script> var g4_skin_path = "<?=$board_skin_path?>"; </script>
-    <script src="<?=$board_skin_path?>/mw.geditor/geditor.js"></script>
+    <script src="<?=$board_skin_path?>/mw.geditor/geditor.js?<?=time()?>"></script>
     <? if (strstr($write[wr_option], "html2")) { ?>
 	<script> geditor_wr_content.mode_change(); </script>
     <? } ?>

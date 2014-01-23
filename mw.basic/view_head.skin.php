@@ -474,8 +474,15 @@ if ($mw_basic[cf_contents_shop]) {
 	$mw_price = $mw_cash[cf_cash_name] . " " . number_format($view[wr_contents_price]).$mw_cash[cf_cash_unit];
 }
 
+if ($mw_basic[cf_attribute] == "1:1" && !$is_admin) {
+    $prev_href = '';
+    $next_href = '';
+    $prev_wr_subject = '';
+    $next_wr_subject = '';
+}
+
 // 전체목록보이기 사용 에서도 이전글, 다음글 버튼 출력
-if (!$prev_href || !$next_href)
+if ($mw_basic[cf_attribute] != "1:1" && (!$prev_href || !$next_href))
 {
    if ($sql_search) {
         if (trim(substr($sql_search, 0, 4)) != "and") {
