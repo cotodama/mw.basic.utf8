@@ -1490,7 +1490,13 @@ this.height_increase = function(row)
     document.getElementById(ge_source).style.height = h + 'px';
 }
 
+this.set_ge_code = function (str) {
+    ge_code = str;
+}
 
+this.get_ge_code = function (str) {
+    return ge_code;
+}
 } // end class geditor
 
 

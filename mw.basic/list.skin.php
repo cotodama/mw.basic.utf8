@@ -460,12 +460,14 @@ else if ($board[bo_read_point] < 0 && $list[$i][mb_id] != $member[mb_id] && $is_
     $tmp = sql_fetch(" select * from $g4[point_table] where mb_id = '$member[mb_id]' and po_rel_table = '$bo_table' and po_rel_id = '{$list[$i][wr_id]}' and po_rel_action = '읽기'");
     if (!$tmp) {
         if (!$is_admin && $board[bo_read_point] && $board[bo_read_point] + $member[mb_point] < 0) {
-            $list[$i][href] = "javascript:alert('포인트가 부족합니다.\\n\\n";
-            $list[$i][href].= "(글읽기 포인트:$board[bo_read_point]\\n\\n현재포인트 : $member[mb_point])')";
+            $href = "javascript:alert('포인트가 부족합니다.\\n\\n";
+            $href.= "(글읽기 포인트:$board[bo_read_point]\\n\\n현재포인트 : $member[mb_point])')";
+            $list[$i][href] = $href;
         }
         else {
-            $list[$i][href] = "javascript:if (confirm('글을 읽으시면 $board[bo_read_point] 포인트 차감됩니다.";
-            $list[$i][href].= "\\n\\n(현재포인트 : $member[mb_point])')) location.href = '{$list[$i][href]}&point=1'";
+            $href = "javascript:if (confirm('글을 읽으시면 $board[bo_read_point] 포인트 차감됩니다.";
+            $href.= "\\n\\n(현재포인트 : $member[mb_point])')) location.href = '{$list[$i][href]}&point=1'";
+            $list[$i][href] = $href;
         }
     }
 } 

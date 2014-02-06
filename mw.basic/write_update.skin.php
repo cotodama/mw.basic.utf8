@@ -36,7 +36,8 @@ if ($mw_basic[cf_attribute] == 'qna')
     if ($w == '') {
         sql_query("update $write_table set wr_qna_point = '$wr_qna_point', wr_qna_status = '0' where wr_id = '$wr_id'");
         insert_point($mb_id, $wr_qna_point*-1, "질문 포인트", $bo_table, $wr_id, '@qna');
-    } else if ($is_admin && $w == 'u' && $write[wr_qna_point] != $wr_qna_point) {
+    }
+    else if ($is_admin && $w == 'u' && $write[wr_qna_point] != $wr_qna_point) {
         delete_point($mb_id, $bo_table, $wr_id, '@qna');
         sql_query("update $write_table set wr_qna_point = '$wr_qna_point', wr_qna_status = '0' where wr_id = '$wr_id'");
         insert_point($mb_id, $wr_qna_point*-1, "질문 포인트", $bo_table, $wr_id, '@qna');
@@ -44,7 +45,17 @@ if ($mw_basic[cf_attribute] == 'qna')
 
     if (!$wr_qna_status) $wr_qna_status = '0';
     if (!$wr_qna_status && $notice && $is_admin) $wr_qna_status = '1';
-    if ($is_admin) sql_query("update $write_table set wr_qna_status = '$wr_qna_status' where wr_id = '$wr_id'");
+    if ($is_admin)
+        sql_query("update $write_table set wr_qna_status = '$wr_qna_status' where wr_id = '$wr_id'");
+
+    if ($is_admin && $w == 'u' && $write[wr_qna_status] > 0 && $wr_qna_status == '0') {
+        delete_point($write[mb_id], $bo_table, $wr_id, '@qna-hold');
+        if ($write[wr_qna_id]) {
+            $tmp = sql_fetch("select mb_id from $write_table where wr_id = '$write[wr_qna_id]' ");
+            delete_point($tmp[mb_id], $bo_table, $wr_id, '@qna-choose');
+        }
+        sql_query("update $write_table set wr_qna_id = '0' where wr_id = '$wr_id'");
+    }
 }
 
 // 실명인증

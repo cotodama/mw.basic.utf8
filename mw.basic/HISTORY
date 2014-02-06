@@ -1,3 +1,25 @@
+ver 2.4.2 (14.02.07)
+    : 도메인 하위 디렉토리 사용시 댓글주소 아이콘 엑박 문제 해결 (나뭇잎님 제안)
+    : 태그 자동 교정 html 옵션사용할때만 작동
+    : 질문게시판 관리자가 해결,보류→미해결 변경시 포인트 및 선택 초기화
+    : 포인트 차감 메시지 스크립트 오류 (크레이티브님 제안)
+    : 글등록 알림쪽지 그룹적용 오류 (크레이티브님 제안)
+    : 1:1 게시판 댓글주소 오류 등 수정 (Hacurity님 제안)
+    : 코멘트 접근차단 아이콘 오류 수정 (나뭇잎님 제안)
+    : 모바일 기기 접근시 코멘트 에디터 사용안함 (크레이티브님 제안)
+    : 공지필수 설정 오류 수정 (재아님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/mw.proc/mw.get.comment.url.php
+    mw.basic/list.skin.php
+    mw.basic/view.skin.php
+    mw.basic/view_comment_head.skin.php
+    mw.basic/view_comment.skin.php
+    mw.basic/write_update.skin.php
+ 
 ver 2.4.1 (14.01.24)
     : 비밀글일 경우 목록에서 링크이동 안함 (csacsa님 제안)
     : 에디터 첨부이미지 강제리사이징 적용 (히어님 제안)

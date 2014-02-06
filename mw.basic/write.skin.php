@@ -1668,7 +1668,8 @@ $(document).ready(function () {
                 document.getElementById('tx_wr_content').value = data[1];
                 ed_wr_content.resetDoc();
                 <? } else if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") { ?>
-                geditor_wr_content.update();
+                geditor_wr_content.set_ge_code(data[1]);
+                geditor_wr_content.init();
                 <? } ?>
             }
         }
@@ -1757,17 +1758,16 @@ function fwrite_check(f) {
         }
     }
 
-    if ($("#wr_content")) {
-        if (!trim($("#wr_content").val())) { 
-            alert('내용을 입력하십시오.'); 
-            return false;
-        }
-    }
-
     if (document.getElementById('tx_wr_content')) {
         if (!ed_wr_content.outputBodyHTML()) { 
             alert('내용을 입력하십시오.'); 
             ed_wr_content.returnFalse();
+            return false;
+        }
+    }
+    else if ($("#wr_content")) {
+        if (!trim($("#wr_content").val())) { 
+            alert('내용을 입력하십시오.'); 
             return false;
         }
     }

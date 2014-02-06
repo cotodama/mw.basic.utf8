@@ -393,7 +393,7 @@ function mw_get_category_option($bo_table='')
     $str = "";
     for ($i=0; $i<count($arr); $i++)
         if (trim($arr[$i]))
-            $str .= "<option value='".urlencode($arr[$i])."'>$arr[$i]</option>\n";
+            $str .= "<option value='".urlencode($arr[$i])."'>{$arr[$i]}</option>\n";
 
     return $str;
 }
@@ -401,6 +401,8 @@ function mw_get_category_option($bo_table='')
 function mw_set_sync_tag($content) {
     global $member;
     global $board;
+    global $write;
+
     preg_match_all("/<([^>]*)</iUs", $content, $matchs);
     for ($i=0, $max=count($matchs[0]); $i<$max; $i++) {
 	$pos = strpos($content, $matchs[0][$i]);

@@ -1678,6 +1678,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             document.cf_form.cf_must_notice.checked = '<?=$mw_basic[cf_must_notice]?>';
             document.cf_form.cf_must_notice_read.checked = '<?=$mw_basic[cf_must_notice_read]?>';
             document.cf_form.cf_must_notice_comment.checked = '<?=$mw_basic[cf_must_notice_comment]?>';
+            document.cf_form.cf_must_notice_down.checked = '<?=$mw_basic[cf_must_notice_down]?>';
             </script>
 	</div>
     </div>
@@ -2028,7 +2029,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
-	<div class="cf_title"> <input type=checkbox name=chk[cf_hp] value=1>&nbsp; 글등록 알림쪽지 </div>
+	<div class="cf_title"> <input type=checkbox name=chk[cf_memo_id] value=1>&nbsp; 글등록 알림쪽지 </div>
 	<div class="cf_content" height=140>
 	    <input type=text size=60 name=cf_memo_id class=ed value="<?=$mw_basic[cf_memo_id]?>">
 	    <div class="cf_info">아이디 , (컴마) 로 구분</div>

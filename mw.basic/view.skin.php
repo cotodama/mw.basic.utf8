@@ -1064,10 +1064,11 @@ function btn_nosecret() {
 <? } ?>
 
 
-<? if ($is_singo_admin && $view[mb_id] != $member[mb_id]) { ?>
-<script type="text/javascript">
-function btn_intercept() {
-    mb_id = "<? echo $view[mb_id]?$view[mb_id]:$view[wr_ip]; ?>";
+<? if ($is_singo_admin) { ?>
+<script>
+function btn_intercept(mb_id) {
+    if (mb_id == undefined)
+        mb_id = "<? echo $view[mb_id]?$view[mb_id]:$view[wr_ip]; ?>";
     win_open("<?=$board_skin_path?>/mw.proc/mw.intercept.php?bo_table=<?=$bo_table?>&mb_id=" + mb_id, "intercept", "width=500,height=300,scrollbars=yes");
 }
 </script>

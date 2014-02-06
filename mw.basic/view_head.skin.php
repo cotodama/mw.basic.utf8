@@ -456,7 +456,6 @@ if ($mw_basic[cf_no_img_ext]) { // 이미지 확대 사용 안함
 // 추천링크 방지
 $view[rich_content] = preg_replace("/bbs\/good\.php\?/i", "#", $view[rich_content]);
 
-$view[rich_content] = mw_set_sync_tag($view[rich_content]);
 
 // 조회수, 추천수, 비추천수 컴마
 if ($mw_basic[cf_comma]) {
@@ -627,7 +626,10 @@ if ($write[wr_reply] == "" && ($is_admin == "super" || $is_admin == "group")) {
 
 // 배추코드
 $view[rich_content] = bc_code($view[rich_content], 1, 0);
-$view[rich_content] = mw_tag_debug($view[rich_content]);
+if (strstr($row[wr_option], "html")) {
+    $view[rich_content] = mw_set_sync_tag($view[rich_content]);
+    $view[rich_content] = mw_tag_debug($view[rich_content]);
+}
 
 if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {
     $view[rich_content] = mw_special_tag($view[rich_content]);

@@ -556,6 +556,11 @@ if (($mw_basic[cf_comment_editor] && $is_comment_write) || ($mw_basic[cf_admin_d
 else
     $is_comment_editor = false;
 
+// 모바일 접근시 에디터 사용안함
+if (preg_match("/(iphone|samsung|lgte|mobile|BlackBerry|android|windows ce|mot|SonyEricsson)/i", $_SERVER[HTTP_USER_AGENT])) {
+    $is_comment_editor = false;
+}
+
 if (!$mw_basic[cf_comment_default])
     $mw_basic[cf_comment_default] = trim($mw_basic[cf_comment_write_notice]);
 
