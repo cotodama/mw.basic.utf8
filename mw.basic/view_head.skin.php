@@ -626,7 +626,7 @@ if ($write[wr_reply] == "" && ($is_admin == "super" || $is_admin == "group")) {
 
 // 배추코드
 $view[rich_content] = bc_code($view[rich_content], 1, 0);
-if (strstr($row[wr_option], "html")) {
+if (strstr($write[wr_option], "html")) {
     $view[rich_content] = mw_set_sync_tag($view[rich_content]);
     $view[rich_content] = mw_tag_debug($view[rich_content]);
 }
