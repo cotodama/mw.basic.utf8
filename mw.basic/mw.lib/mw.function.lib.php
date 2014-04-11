@@ -473,7 +473,7 @@ function umz_get_url($url) {
     if (!$surl)
         $surl = "umz.kr";
     $url2 = urlencode($url);
-    $fp = fsockopen ("umz.miwit.com", 80, $errno, $errstr, 30);
+    $fp = @fsockopen ("umz.miwit.com", 80, $errno, $errstr, 30);
     if (!$fp) return false;
     fputs($fp, "POST /plugin/shorten/update.php?url=$url2 HTTP/1.0\r\n");
     fputs($fp, "Host: $surl:80\r\n");
@@ -719,13 +719,19 @@ function mw_board_popup($view, $html=0)
 
     $dialog_id = "mw_board_popup_$view[wr_id]";
 
-    $board[bo_image_width] = 550;
+    $board['bo_image_width'] = 550;
     $minWidth = 600;
     $minHeight = 300;
-    if (strstr($_SERVER[PHP_SELF], "plugin/mobile")) {
-        $board[bo_image_width] = 300;
-        $minWidth = 300;
-        $minHeight = 300;
+
+    $is_mobile = false;
+    if (strstr($_SERVER['PHP_SELF'], "plugin/mobile")) {
+        $is_mobile = true;
+    }
+
+    if ($is_mobile) {
+        $board[bo_image_width] = 250;
+        $minWidth = 250;
+        $minHeight = 250;
     }
 
     /*
@@ -776,6 +782,10 @@ function mw_board_popup($view, $html=0)
     $subject = bc_code($subject);
     $content = $file_viewer.$view[rich_content];
     */
+    $subject = get_text($view[subject]);
+    $subject = mw_reg_str($subject);
+    $subject = bc_code($subject);
+
     global $write_table, $wr_id, $mw, $member;
 
     $html = 0;
@@ -785,30 +795,92 @@ function mw_board_popup($view, $html=0)
         $html = 2;
 
     $view[content] = conv_content($view[wr_content], $html);
-    include("$board_skin_path/view_head.skin.php");
+    include("$pc_skin_path/view_head.skin.php");
 
     set_session("ss_popup_token", $token = uniqid(time()));
 
-    $add_script = "";
-    if ($is_admin && $view[wr_id]) {
-        $add_script = <<<HEREDOC
-            "팝업내림": function () {
-                var q = confirm("정말로 팝업공지를 내리시겠습니까?")
-                if (q) {
-                    $.get("$pc_skin_path/mw.proc/mw.popup.php?bo_table=$bo_table&wr_id=$view[wr_id]&token=$token", function (ret) {
-                        alert(ret);
-                    });
-                }
-            },
-HEREDOC;
-    }
     if ($_COOKIE[$dialog_id]) return false;
 
-    echo <<<HEREDOC
+    $add_script = "";
+    $add_button = "";
+
+    if ($is_mobile) {
+        // -----------------------------------------------------------
+        // bootstrap modal
+        // -----------------------------------------------------------
+        if ($is_admin && $view[wr_id]) {
+            $add_button = <<<HEREDOC
+                <button type="button" class="btn btn-default" onclick="">내림</button>
+                
+HEREDOC;
+            $add_script = <<<HEREDOC
+                function mw_board_popup_del() {
+                    var q = confirm("정말로 팝업공지를 내리시겠습니까?")
+                    if (q) {
+                        $.get("$pc_skin_path/mw.proc/mw.popup.php?bo_table=$bo_table&wr_id=$view[wr_id]&token=$token", function (ret) {
+                            alert(ret);
+                        });
+                    }
+                }
+HEREDOC;
+        }
+
+        echo <<<HEREDOC
+
+        <div class="modal fade" id="dialog-message-$view[wr_id]" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">$subject</h4>
+                    </div>
+                    <div class="modal-body">
+                    $view[rich_content]
+                    </div>
+                    <div class="modal-footer">
+                        $add_button
+                        <button type="button" class="btn btn-default" onclick="mw_board_popup_24">24시간</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        $add_script
+        function mw_board_popup_24() {
+            set_cookie("mw_board_popup_$view[wr_id]", "1", 24, "$g4[cookie_domain]");
+            $("#dialog-message-$view[wr_id]").modal('hide');
+        }
+        $(document).ready(function () {
+            $("#dialog-message-$view[wr_id]").modal('show');
+        });
+        </script>
+HEREDOC;
+    }
+    else {
+        // -----------------------------------------------------------
+        // jquery modal
+        // -----------------------------------------------------------
+        if ($is_admin && $view[wr_id]) {
+            $add_script = <<<HEREDOC
+                "팝업내림": function () {
+                    var q = confirm("정말로 팝업공지를 내리시겠습니까?")
+                    if (q) {
+                        $.get("$pc_skin_path/mw.proc/mw.popup.php?bo_table=$bo_table&wr_id=$view[wr_id]&token=$token", function (ret) {
+                            alert(ret);
+                        });
+                    }
+                },
+HEREDOC;
+        }
+
+        echo <<<HEREDOC
         <div id="dialog-message-$view[wr_id]" class="dialog-content" title="$subject">
             <div>$view[rich_content]</div>
         </div>
-        <script type="text/javascript">
+
+        <script>
         $(function() {
             $("#dialog-message-$view[wr_id]").dialog({
                 modal: true,
@@ -820,17 +892,19 @@ HEREDOC;
                         set_cookie("mw_board_popup_$view[wr_id]", "1", 24, "$g4[cookie_domain]");
                         $(this).dialog("close");
                     },
-                    Ok: function() {
+                    "확인": function() {
                         $(this).dialog("close");
                     }
                 }
             });
         });
         </script>
-        <style type="text/css">
+
+        <style>
         .ui-dialog .ui-dialog-buttonpane button { font-size:.8em; }
         </style>
 HEREDOC;
+    }
 }
 
 function is_okname()
@@ -1581,6 +1655,10 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
                     $row2[wr_content] .= "\n\n[이 게시물은 {$nick}님에 의해 $g4[time_ymdhis] {$board[bo_subject]}에서 " . ($sw == 'copy' ? '복사' : '이동') ." 됨]";
                     if ($sw == 'copy')
                         $row2[wr_content] .= "\n\n".set_http($g4[url])."/$g4[bbs]/board.php?bo_table=$board[bo_table]&wr_id=$row2[wr_id]";
+                }
+
+                if ($sw == 'copy') {
+                    $row2['wr_content'] = mw_editor_image_copy($row2['wr_content']);
                 }
 
                 $sql = " insert into $move_write_table
@@ -2378,6 +2456,9 @@ function mw_youtube($url)
     elseif (preg_match("/\/\/.*youtube\.com\/.*v[=\/]([a-zA-Z0-9_-]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
+    elseif (preg_match("/\/\/.*youtube\.com\/embed\/([a-zA-Z0-9_-]+)?/i", $url, $mat)) {
+        $v = $mat[1];
+    }
 
     if (!$v) return;
 
@@ -2630,6 +2711,51 @@ function mw_kakao_str($content, $len=50)
     $content = preg_replace("/\s+/", " ", $content);
     $content = trim($content);
     $content = cut_str($content, $len);
+
+    return $content;
+}
+
+function mw_editor_image_copy($content)
+{
+    global $g4;
+
+    preg_match_all("/<img src=\"http:\/\/.*\/(data\/cheditor[0-9]\/[^\"]+)\"[^>]+>/iUs", $content, $match1);
+    preg_match_all("/<img src=\"http:\/\/.*\/(data\/geditor\/[^\"]+)\"[^>]+>/iUs", $content, $match2);
+
+    $matchs = array();
+    $matchs[0] = array_merge($match1[0], $match2[0]);
+    $matchs[1] = array_merge($match1[1], $match2[1]);
+
+    for ($i=0, $m=count($matchs[0]); $i<$m; ++$i)
+    {
+        $source = $matchs[1][$i];
+
+        if (!$source) continue;
+
+        preg_match("/^(.*)\.(jpe?g|png|gif)$/i", $source, $match);
+        if ($match[2]) {
+            $file = $match[1];
+            $ext = $match[2];
+        }
+        else {
+            continue;
+        }
+
+        $k = 1;
+        while (1) {
+            $copy = "{$file}-{$k}.{$ext}";
+
+            if (!file_exists("{$g4['path']}/{$copy}"))
+                break;
+            else
+                ++$k;
+
+        }
+
+        $res = @copy("{$g4['path']}/{$source}", "{$g4['path']}/{$copy}");
+        if ($res)
+            $content = str_replace($source, $copy, $content);
+    }
 
     return $content;
 }
