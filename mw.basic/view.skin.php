@@ -897,6 +897,10 @@ if ($mw_basic[cf_attribute] == 'qna' && !$view[is_notice]) {
         <? if ($mw_basic[cf_sns]) { ?>
         <div class="sns"> <?=$view_sns?> </div>
         <? } ?>
+
+        <div class="jump">
+        <?php require($board_skin_path."/mw.proc/mw.jump.php") ?>
+        </div>
     </td>
 </tr>
 <? } ?>

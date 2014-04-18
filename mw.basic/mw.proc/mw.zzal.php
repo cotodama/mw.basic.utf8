@@ -10,5 +10,5 @@ $view = get_view($write, $board, $board_skin_path, 255);
 
 include_once("{$board_skin_path}/view_head.skin.php");
 
-echo $file_viewer;
+echo str_replace("../../../../", "../", $file_viewer);
 
