@@ -262,7 +262,10 @@ bo_table = '$bo_table'
 ,cf_download_date = '$cf_download_date'
 ,cf_auto_move = '$cf_auto_move'
 ,cf_list_shuffle = '$cf_list_shuffle'
-,cf_sns_datetime = '$cf_sns_datetime'
+,cf_time_list = '$cf_time_list'
+,cf_time_view = '$cf_time_view'
+,cf_time_comment = '$cf_time_comment'
+,cf_sns_datetime = ''
 ,cf_content_align = '$cf_content_align'
 ,cf_write_width = '$cf_write_width'
 ,cf_write_height = '$cf_write_height'
@@ -623,7 +626,12 @@ if ($chk[cf_auto_move]) $sql .= ", cf_auto_move = '$cf_auto_move' ";
 if ($chk[cf_comment_default]) $sql .= ", cf_comment_default = '$cf_comment_default' ";
 if ($chk[cf_default_category]) $sql .= ", cf_default_category = '$cf_default_category' ";
 if ($chk[cf_list_shuffle]) $sql .= ", cf_list_shuffle = '$cf_list_shuffle' ";
-if ($chk[cf_sns_datetime]) $sql .= ", cf_sns_datetime = '$cf_sns_datetime' ";
+if ($chk[cf_time_list]) {
+    $sql .= ", cf_time_list = '$cf_time_list' ";
+    $sql .= ", cf_time_view = '$cf_time_view' ";
+    $sql .= ", cf_time_comment = '$cf_time_comment' ";
+    $sql .= ", cf_sns_datetime = '' ";
+}
 if ($chk[cf_content_align]) $sql .= ", cf_content_align = '$cf_content_align' ";
 if ($chk[cf_write_width]) {
     $sql .= ", cf_write_width = '$cf_write_width' ";

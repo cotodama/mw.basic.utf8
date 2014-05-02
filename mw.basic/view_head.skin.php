@@ -872,3 +872,8 @@ if ($mw_basic['cf_marketdb'] and $write['wr_marketdb']) {
     }
 }
 
+if (!$mw_basic['cf_time_view'])
+    $mw_basic['cf_time_view'] = "Y-m-d (w) H:i";
+
+$view['datetime2'] = mw_get_date($write['wr_datetime'], $mw_basic['cf_time_view']);
+

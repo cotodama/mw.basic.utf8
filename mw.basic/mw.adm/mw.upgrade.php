@@ -1279,4 +1279,7 @@ if (is_null($mw_basic[cf_talent_market])) {
         primary key (jp_id)) ".$default_charset;
     sql_query($sql, false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_time_list varchar(20) not null default '' ", false);
+    sql_query("alter table {$mw['basic_config_table']} add cf_time_view varchar(20) not null default '' ", false);
+    sql_query("alter table {$mw['basic_config_table']} add cf_time_comment varchar(20) not null default '' ", false);
 

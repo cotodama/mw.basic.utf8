@@ -2453,7 +2453,7 @@ function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
     }
 }
 
-function mw_youtube($url)
+function mw_youtube($url, $q=0)
 {
     global $g4, $board, $mw_basic;
 
@@ -2502,14 +2502,20 @@ function mw_youtube($url)
     if (!$mw_basic['cf_youtube_size'])
         $mw_basic['cf_youtube_size'] = 360;
 
+    if ($q) {
+        $mw_basic['cf_youtube_size'] = $q;
+        $mw_basic['cf_player_size'] = null;
+    }
+
     switch ($mw_basic['cf_youtube_size']) {
+        case "144": $width = 320; $height = 180; break;
         case "240": $width = 560; $height = 315; break;
         case "360": $width = 640; $height = 394; break;
         case "480": $width = 854; $height = 516; break;
         case "720": $width = 1280; $height = 759; break;
         case "1080": $width = 1920; $height = 1123; break;
         default:
-            $width =640; $height = 394; break;
+            $width = 640; $height = 394; break;
     }
 
     if ($mw_basic['cf_player_size']) {
@@ -2529,7 +2535,7 @@ function mw_youtube($url)
     return $you;
 }
 
-function mw_youtube_content($content)
+function mw_youtube_content($content, $q='')
 {
     $pt1 = "/\[<a href=\"(https?:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
     $pt2 = "/\[<a href=\"(https?:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
@@ -2539,13 +2545,13 @@ function mw_youtube_content($content)
     $pt5 = "/\[(https?:\/\/vimeo\.com\/[^]]+)\]/ie"; 
     $pt6 = "/\[<a href=\"(https?:\/\/vimeo\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
 
-    $content = preg_replace($pt1, "mw_youtube('\\1')", $content);
-    $content = preg_replace($pt2, "mw_youtube('\\1')", $content);
-    $content = preg_replace($pt3, "mw_youtube('\\1')", $content);
-    $content = preg_replace($pt4, "mw_youtube('\\1')", $content);
+    $content = preg_replace($pt1, "mw_youtube('\\1', '$q')", $content);
+    $content = preg_replace($pt2, "mw_youtube('\\1', '$q')", $content);
+    $content = preg_replace($pt3, "mw_youtube('\\1', '$q')", $content);
+    $content = preg_replace($pt4, "mw_youtube('\\1', '$q')", $content);
 
-    $content = preg_replace($pt5, "mw_vimeo('\\1')", $content); 
-    $content = preg_replace($pt6, "mw_vimeo('\\1')", $content); 
+    $content = preg_replace($pt5, "mw_vimeo('\\1', '$q')", $content); 
+    $content = preg_replace($pt6, "mw_vimeo('\\1', '$q')", $content); 
 
     return $content;
 }
@@ -2585,14 +2591,20 @@ function mw_special_tag($con)
 }
 
 // Dae-Seok Kim님 제안
-function mw_vimeo($url) 
+function mw_vimeo($url, $q)
 { 
     global $board, $mw_basic; 
 
     if (!$mw_basic['cf_youtube_size']) 
-    $mw_basic['cf_youtube_size'] = 360; 
+        $mw_basic['cf_youtube_size'] = 360; 
+
+    if ($q) {
+        $mw_basic['cf_youtube_size'] = $q;
+        $mw_basic['cf_player_size'] = null;
+    }
 
     switch ($mw_basic['cf_youtube_size']) { 
+        case "144": $width = 320; $height = 180; break;
         case "240": $width = 560; $height = 315; break; 
         case "360": $width = 640; $height = 394; break; 
         case "480": $width = 854; $height = 516; break; 
@@ -2939,5 +2951,22 @@ function mw_board_cache_write($cache_file, $content)
     $f = fopen($cache_file, "w");
     fwrite($f, $content);
     fclose($f);
+}
+
+function mw_get_date($datetime, $val)
+{
+    if (!$val)
+        return $datetime;
+
+    $init = date(str_replace("w", get_yoil($datetime), "Y-m-d (w) H:i:s"), strtotime($datetime));
+
+    if ($val == "sns") {
+        $date = "<span style='font-size:11px;' title='{$init}'>".mw_basic_sns_date($datetime)."</span>";
+    }
+    else {
+        $date = date(str_replace("w", get_yoil($datetime), $val), strtotime($datetime));
+        $date = "<span title='{$init}'>{$date}</span>";
+    }
+    return $date;
 }
 

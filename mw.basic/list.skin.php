@@ -410,6 +410,9 @@ if ($mw_basic[cf_sns_datetime]) {
     $list[$i][datetime2] = "<span style='font-size:11px;'>".mw_basic_sns_date($list[$i][wr_datetime])."</span>";
 }
 
+if ($mw_basic['cf_time_list'])
+    $list[$i]['datetime2'] = mw_get_date($list[$i]['wr_datetime'], $mw_basic['cf_time_list']);
+
 // 공지사항 출력 항목
 if ($mw_basic[cf_post_name]) $list[$i][name] = "";
 if ($mw_basic[cf_post_date]) $list[$i][datetime2] = "";
@@ -569,7 +572,7 @@ else if ($mw_basic[cf_type] == "gall")
 {
     if ($list[$i][is_notice]) continue;
 
-    if (!file_exists($thumb_file) || $list[$i][icon_secret]) {
+    if (!file_exists($thumb_file) || $list[$i][icon_secret] || $list[$i][wr_view_block]) {
         $thumb_file = mw_get_noimage();
         $thumb_width = "width='$mw_basic[cf_thumb_width]'";
         $thumb_height = "height='$mw_basic[cf_thumb_height]'";
@@ -648,7 +651,7 @@ else if ($mw_basic[cf_type] == "gall")
     <? } ?>
 
     <? if ($mw_basic[cf_type] == "thumb") { ?>
-    <? if (!file_exists($thumb_file) || $list[$i][icon_secret]) $thumb_file = mw_get_noimage(); ?>
+    <? if (!file_exists($thumb_file) || $list[$i][icon_secret] || $list[$i][wr_view_block]) $thumb_file = mw_get_noimage(); ?>
 
     <!-- 썸네일 -->
     <td class=mw_basic_list_thumb><!-- 여백제거
