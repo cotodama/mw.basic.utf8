@@ -1340,11 +1340,11 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             if (!$mw_basic['cf_time_view_manual']) $mw_basic['cf_time_view_manual'] = "Y-m-d (w) H:i:s";
             if (!$mw_basic['cf_time_comment_manual']) $mw_basic['cf_time_comment_manual'] = "Y-m-d (w) H:i:s";
             ?>
-            $("#cf_time_list").val('<?php echo $mw_basic['cf_time_list']?>');
-            $("#cf_time_view").val('<?php echo $mw_basic['cf_time_view']?>');
-            $("#cf_time_comment").val('<?php echo $mw_basic['cf_time_comment']?>');
-
             $(document).ready(function () {
+                $("#cf_time_list").val('<?php echo $mw_basic['cf_time_list']?>');
+                $("#cf_time_view").val('<?php echo $mw_basic['cf_time_view']?>');
+                $("#cf_time_comment").val('<?php echo $mw_basic['cf_time_comment']?>');
+
                 $("#cf_time_list").change(function () {
                     if ($(this).val() == "manual") {
                         $("#cf_time_list_manual").css("display", "inline");
@@ -1352,23 +1352,26 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                     }
                     else
                         $("#cf_time_list_manual").css("display", "none");
-                });
+                }).change();
+
                 $("#cf_time_view").change(function () {
                     if ($(this).val() == "manual") {
                         $("#cf_time_view_manual").css("display", "inline");
                         $("#cf_time_view_manual").val("<?php echo $mw_basic['cf_time_view_manual']?>");
                     }
                     else
-                        $("#cf_time_list_manual").css("display", "none");
-                });
+                        $("#cf_time_view_manual").css("display", "none");
+                }).change();
+
                 $("#cf_time_comment").change(function () {
                     if ($(this).val() == "manual") {
                         $("#cf_time_comment_manual").css("display", "inline");
                         $("#cf_time_comment_manual").val("<?php echo $mw_basic['cf_time_comment_manual']?>");
                     }
                     else
-                        $("#cf_time_list_manual").css("display", "none");
-                });
+                        $("#cf_time_comment_manual").css("display", "none");
+                }).change();
+
             });
             </script>
 	</div>
@@ -1618,6 +1621,10 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_content">
 	    <input type=text size=10 name=cf_write_day class=ed value="<?=$mw_basic[cf_write_day]?>"> 일에
 	    <input type=text size=10 name=cf_write_day_count class=ed value="<?=$mw_basic[cf_write_day_count]?>"> 번 이하 
+            (<input type="checkbox" name="cf_write_day_ip" id="cf_write_day_ip" value="1"> IP체크)
+            <?php if ($mw_basic['cf_write_day_ip']) { ?>
+            <script> $("#cf_write_day_ip").attr("checked", "checked"); </script>
+            <?php } ?>
 	</div>
     </div>
 
@@ -1636,6 +1643,10 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <input type=text size=10 name=cf_comment_day_count class=ed value="<?=$mw_basic[cf_comment_day_count]?>"> 번 이하, 
             게시물당
 	    <input type=text size=10 name=cf_comment_write_count class=ed value="<?=$mw_basic[cf_comment_write_count]?>"> 번 이하 
+            (<input type="checkbox" name="cf_comment_day_ip" id="cf_comment_day_ip" value="1"> IP체크)
+            <?php if ($mw_basic['cf_comment_day_ip']) { ?>
+            <script> $("#cf_comment_day_ip").attr("checked", "checked"); </script>
+            <?php } ?>
 	</div>
     </div>
 

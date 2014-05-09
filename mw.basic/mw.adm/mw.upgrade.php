@@ -491,6 +491,7 @@ if (is_null($mw_basic[cf_write_point])) {
     sql_query("alter table $mw[basic_config_table] add cf_write_day int not null", false);
     sql_query("alter table $mw[basic_config_table] add cf_write_day_count int not null", false);
 }
+    sql_query("alter table $mw[basic_config_table] add cf_write_day_ip varchar(1) not null", false);
 
 // 댓글작성조건
 if (is_null($mw_basic[cf_comment_point])) {
@@ -500,6 +501,7 @@ if (is_null($mw_basic[cf_comment_point])) {
     sql_query("alter table $mw[basic_config_table] add cf_comment_day_count int not null", false);
 }
     sql_query("alter table $mw[basic_config_table] add cf_comment_write_count int not null", false);
+    sql_query("alter table $mw[basic_config_table] add cf_comment_day_ip varchar(1) not null", false);
 
 // 글작성자의 최신글
 if (is_null($mw_basic[cf_latest])) {

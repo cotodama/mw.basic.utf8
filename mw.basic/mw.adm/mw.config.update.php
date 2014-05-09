@@ -25,6 +25,15 @@ include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
 if ($is_admin != "super")
     alert_close("접근 권한이 없습니다.");
 
+if ($cf_time_list == 'manual')
+    $cf_time_list = $cf_time_list_manual;
+
+if ($cf_time_view == 'manual')
+    $cf_time_view = $cf_time_view_manual;
+
+if ($cf_time_comment == 'manual')
+    $cf_time_comment = $cf_time_comment_manual;
+
 if (!$mw_basic[cf_thumb_width]) $mw_basic[cf_thumb_width] = 80;
 if (!$mw_basic[cf_thumb_height]) $mw_basic[cf_thumb_height] = 50;
 
@@ -384,10 +393,12 @@ bo_table = '$bo_table'
 ,cf_write_register = '$cf_write_register'
 ,cf_write_day = '$cf_write_day'
 ,cf_write_day_count = '$cf_write_day_count'
+,cf_write_day_ip = '$cf_write_day_ip'
 ,cf_comment_point = '$cf_comment_point'
 ,cf_comment_register = '$cf_comment_register'
 ,cf_comment_day = '$cf_comment_day'
 ,cf_comment_day_count = '$cf_comment_day_count'
+,cf_comment_day_ip = '$cf_comment_day_ip'
 ,cf_comment_write_count = '$cf_comment_write_count'
 ,cf_read_point = '$cf_read_point'
 ,cf_read_register = '$cf_read_register'
@@ -831,6 +842,7 @@ if ($chk[cf_write_register]) {
 if ($chk[cf_write_day]) {
     $sql .= ", cf_write_day = '$cf_write_day' ";
     $sql .= ", cf_write_day_count = '$cf_write_day_count' ";
+    $sql .= ", cf_write_day_ip = '$cf_write_day_ip' ";
 }
 if ($chk[cf_comment_register]) {
     $sql .= ", cf_comment_point = '$cf_comment_point' ";
@@ -839,6 +851,7 @@ if ($chk[cf_comment_register]) {
 if ($chk[cf_comment_day]) {
     $sql .= ", cf_comment_day = '$cf_comment_day' ";
     $sql .= ", cf_comment_day_count = '$cf_comment_day_count' ";
+    $sql .= ", cf_comment_day_ip = '$cf_comment_day_ip' ";
     $sql .= ", cf_comment_write_count = '$cf_comment_write_count' ";
 }
 if ($chk[cf_read_register]) {

@@ -291,10 +291,6 @@ function mw_watermark($target, $tw, $th, $source, $position, $transparency=100)
         default: $wi = "";
     }
     switch($position) {
-        case "center":
-            $wx = (int)($tw/2 - $ws[0]/2);
-            $wy = (int)($th/2 - $ws[1]/2);
-            break;
         case "left_top":
             $wx = $wy = 0;
             break;
@@ -310,16 +306,48 @@ function mw_watermark($target, $tw, $th, $source, $position, $transparency=100)
             $wx = $tw - $ws[0];
             $wy = $th - $ws[1];
             break;
+        case "center":
         default:
-            $wx = (int)($tw/2 - $ws[0]/2);
-            $wy = (int)($th/2 - $ws[1]/2);
+            if ($ws[0] > $tw || $ws[1] > $th) {
+                $keep_size = mw_thumbnail_keep($ws, $tw, $th);
+                $set_width = $get_width = $keep_size[0];
+                $set_height = $get_height = $keep_size[1];
+
+                $target2 = imagecreatetruecolor($set_width, $set_height);
+                if ($ws[2] == 1 || $ws[2] == 3) {
+                    imagealphablending($target2, false);
+                    imagesavealpha($target2, true);
+                    $transparent = imagecolorallocatealpha($target2, 255, 255, 255, 127);
+                    imagefilledrectangle($target2, 0, 0, $set_width, $set_height, $transparent);
+                }
+                else {
+                    $white = imagecolorallocate($target2, 255, 255, 255);
+                    imagefilledrectangle($target2, 0, 0, $set_width, $set_height, $white);
+                }
+                imagecopyresampled($target2, $wi, 0, 0, 0, 0, $get_width, $get_height, $ws[0], $ws[1]);
+
+                imagedestroy($wi);
+                $wi = $target2;
+
+                $ws[0] = $set_width;
+                $ws[1] = $set_height;
+
+                $wx = (int)($tw/2 - $ws[0]/2);
+                $wy = (int)($th/2 - $ws[1]/2);
+
+            }
+            else {
+                $wx = (int)($tw/2 - $ws[0]/2);
+                $wy = (int)($th/2 - $ws[1]/2);
+            }
             break;
     }
-    if ($ws[2] == 3) {
+    if ($ws[2] == 1 || $ws[2] == 3) {
         imagealphablending($wi, TRUE);
         imagealphablending($target, TRUE);
         imagecopy($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1]);
-    } else {
+    }
+    else {
         imagecopymerge($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1], $transparency);
     }
     @imagedestroy($wi);
