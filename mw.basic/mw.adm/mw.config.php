@@ -1440,6 +1440,14 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_post_specialchars] value=1>&nbsp; 글작성시 특수문자 </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_post_specialchars value=1> 사용
+	    <script> document.cf_form.cf_post_specialchars.checked = "<?=$mw_basic[cf_post_specialchars]?>"; </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_html] value=1>&nbsp; 코멘트 html </div>
 	<div class="cf_content">
 	    <input type=checkbox name=cf_comment_html value=1> 허용 
@@ -1482,6 +1490,14 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_specialchars] value=1>&nbsp; 코멘트 특수문자 </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_comment_specialchars value=1> 사용
+	    <script> document.cf_form.cf_comment_specialchars.checked = <?=$mw_basic[cf_comment_specialchars]?>; </script>
+	</div>
+    </div>
+ 
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_comment_ban] value=1>&nbsp; 코멘트 허락 </div>
 	<div class="cf_content">
@@ -2452,7 +2468,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
             <option value="<?=$i?>"><?=$i?></option>
             <? } ?> 
             </select>
-            <span class="cf_info">(png 제외)</span>
+            <span class="cf_info">(jpg, gif, png 지원)</span>
 	    <script>
             document.cf_form.cf_watermark_transparency.value = '<?=$mw_basic[cf_watermark_transparency]?>';
             </script>

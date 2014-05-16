@@ -1,3 +1,17 @@
+ver 2.5.6 (14.05.16)
+    : png, gif 선명도 설정 가능 (재아님 제안)
+    : 특수문자 사용유무 (재아님 제안)
+    : vimeo 링크 오류 수정 (젬스박님 제안)
+    : 모바일 width 조정시 height 제거 (takeone님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/write.skin.php
+    mw.basic/view_comment.skin.php
+ 
 ver 2.5.5 (14.05.09)
     : 워터마크가 이미지 보다 클경우 자동 리사이징 (텔리님 제안)
     : 이모티콘+워터마크 사용시 새창 오류 수정 (흰발톱님 제안)

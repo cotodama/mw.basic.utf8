@@ -343,15 +343,68 @@ function mw_watermark($target, $tw, $th, $source, $position, $transparency=100)
             break;
     }
     if ($ws[2] == 1 || $ws[2] == 3) {
-        imagealphablending($wi, TRUE);
-        imagealphablending($target, TRUE);
-        imagecopy($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1]);
+        //imagealphablending($wi, TRUE);
+        //imagealphablending($target, TRUE);
+        //imagecopy($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1]);
+        imagecopymerge_alpha($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1], $transparency);
     }
     else {
         imagecopymerge($target, $wi, $wx, $wy, 0, 0, $ws[0], $ws[1], $transparency);
     }
     @imagedestroy($wi);
 }
+
+// http://stackoverflow.com/questions/11291868/merge-transparent-images-in-php
+function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
+{ 
+    if (!isset($pct)) return false; 
+
+    $pct /= 100; 
+
+    // Get image width and height 
+    $w = imagesx($src_im); 
+    $h = imagesy($src_im); 
+
+    // Turn alpha blending off 
+    imagealphablending ($src_im, false); 
+
+    // Find the most opaque pixel in the image (the one with the smallest alpha value) 
+    $minalpha = 127; 
+    for ($x = 0; $x<$w; $x++) 
+    for ($y = 0; $y<$h; $y++) { 
+        $alpha = (imagecolorat($src_im, $x, $y) >> 24 ) & 0xFF; 
+        if($alpha < $minalpha) { 
+            $minalpha = $alpha; 
+        } 
+    } 
+
+    //loop through image pixels and modify alpha for each 
+    for ($x = 0; $x<$w; $x++) { 
+        for ($y = 0; $y < $h; $y++) { 
+            //get current alpha value (represents the TANSPARENCY!) 
+            $colorxy = imagecolorat($src_im, $x, $y); 
+            $alpha = ($colorxy >> 24) & 0xFF; 
+
+            //calculate new alpha 
+            if ($minalpha !== 127) { 
+                $alpha = 127 + 127 * $pct * ($alpha - 127) / (127 - $minalpha); 
+            }   
+            else { 
+                $alpha += 127 * $pct; 
+            }
+
+            //get the color index with new alpha 
+            $alphacolorxy = imagecolorallocatealpha($src_im, ($colorxy >> 16) & 0xFF, ($colorxy >> 8) & 0xFF, $colorxy & 0xFF, $alpha);
+            //set pixel with the new color + opacity 
+            if (!imagesetpixel($src_im, $x, $y, $alphacolorxy)) { 
+                return false; 
+            }
+        }
+    }
+
+    // The image copy 
+    imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
+} 
 
 function mw_watermark_file($source_file)
 {
@@ -467,17 +520,20 @@ function mw_set_sync_tag($content) {
         preg_match_all("/width\s*:\s*([0-9]+)px/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
             if ($matchs[1][$i] > $board[bo_image_width]) {
-                //$rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                //$content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
+                $content = preg_replace("/{$matchs[0][$i]}/i", "width:{$board[bo_image_width]}px ", $content);
+            }
+        }
+
+        preg_match_all("/width=[\"\']?([0-9]+)[\"\']?\s.*height=[\"\']?([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
+        for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
+            if ($matchs[1][$i] > $board[bo_image_width]) {
                 $content = preg_replace("/{$matchs[0][$i]}/i", "width=\"{$board[bo_image_width]}\" ", $content);
             }
         }
 
-        preg_match_all("/width=[\"\']{0,1}([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
+        preg_match_all("/width=[\"\']?([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
             if ($matchs[1][$i] > $board[bo_image_width]) {
-                //$rex = preg_replace("/[\.\"\/]/i", "$1", $matchs[0][$i]);
-                //$content = preg_replace("/{$rex}/i", "width:{$board[bo_image_width]}px", $content);
                 $content = preg_replace("/{$matchs[0][$i]}/i", "width=\"{$board[bo_image_width]}\" ", $content);
             }
         }
@@ -2619,7 +2675,7 @@ function mw_special_tag($con)
 }
 
 // Dae-Seok Kim님 제안
-function mw_vimeo($url, $q)
+function mw_vimeo($url, $q=0)
 { 
     global $board, $mw_basic; 
 

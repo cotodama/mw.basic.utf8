@@ -1285,3 +1285,6 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table {$mw['basic_config_table']} add cf_time_view varchar(20) not null default '' ", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_time_comment varchar(20) not null default '' ", false);
 
+    sql_query("alter table $mw[basic_config_table] add cf_post_specialchars varchar(1) not null default '1'", false);
+    sql_query("alter table $mw[basic_config_table] add cf_comment_specialchars varchar(1) not null default '1'", false);
+

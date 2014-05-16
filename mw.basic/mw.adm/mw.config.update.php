@@ -207,6 +207,8 @@ bo_table = '$bo_table'
 ,cf_comment_html = '$cf_comment_html'
 ,cf_comment_emoticon = '$cf_comment_emoticon'
 ,cf_post_emoticon = '$cf_post_emoticon'
+,cf_comment_specialchars = '$cf_comment_specialchars'
+,cf_post_specialchars = '$cf_post_specialchars'
 ,cf_comment_write = '$cf_comment_write'
 ,cf_comment_level = '$cf_comment_level'
 ,cf_search_level = '$cf_search_level'
@@ -570,6 +572,8 @@ if ($chk[cf_comment_page]) {
 }
 if ($chk[cf_comment_emoticon]) $sql .= ", cf_comment_emoticon = '$cf_comment_emoticon' ";
 if ($chk[cf_post_emoticon]) $sql .= ", cf_post_emoticon = '$cf_post_emoticon' ";
+if ($chk[cf_comment_specialchars]) $sql .= ", cf_comment_specialchars = '$cf_comment_specialchars' ";
+if ($chk[cf_post_specialchars]) $sql .= ", cf_post_specialchars = '$cf_post_specialchars' ";
 if ($chk[cf_comment_write]) $sql .= ", cf_comment_write = '$cf_comment_write' ";
 if ($chk[cf_comment_level]) $sql .= ", cf_comment_level = '$cf_comment_level' ";
 if ($chk[cf_jump_level]) {
