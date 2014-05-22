@@ -222,7 +222,7 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
             if ($view[file][$i][image_width] > $mw_basic[cf_original_width] || $view[file][$i][image_height] > $mw_basic[cf_original_height]) {
                 $file = "$file_path/{$view[file][$i][file]}";
                 mw_make_thumbnail($mw_basic[cf_original_width], $mw_basic[cf_original_height], $file, $file, true);
-                if ($mw_basic[cf_watermark_use]) mw_watermark_file($file);
+                if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path])) mw_watermark_file($file);
                 $size = getImageSize($file);
                 $view[file][$i][image_width] = $size[0];
                 $view[file][$i][image_height] = $size[1];
@@ -237,14 +237,14 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
         } else {
             $img_width = $view[file][$i][image_width];
         }
-        $view[file][$i][view] = str_replace("<img", "<img width=\"{$img_width}\"", $view[file][$i][view]);
+        $view[file][$i][view] = str_replace("<img", "<img class=\"content-image\" width=\"{$img_width}\"", $view[file][$i][view]);
 
         // 이미지 저장 방지
         if ($mw_basic[cf_image_save_close])
             $view[file][$i][view] = str_replace("<img", "<img oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\" ", $view[file][$i][view]);
 
         // 워터마크 이미지 출력
-        if ($mw_basic[cf_watermark_use]) {
+        if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path])) {
             preg_match("/src='([^']+)'/iUs", $view[file][$i][view], $match);
             $watermark_file = mw_watermark_file($match[1]);
             $view[file][$i][view] = str_replace($match[1], $watermark_file, $view[file][$i][view]);
@@ -309,7 +309,7 @@ for ($i=1; $i<=$g4['link_count']; $i++) {
 $view[content] = $link_file_viewer . $view[content]; 
 
 // 웹에디터 첨부 이미지 워터마크 처리
-if ($mw_basic[cf_watermark_use])
+if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path]))
     $view[content] = mw_create_editor_image_watermark($view[content]);
 
 if (!$mw_basic[cf_zzal] && !strstr($view[content], "{이미지:") && !$write['wr_lightbox'])// 파일 출력  
@@ -448,7 +448,7 @@ else {
                 $replacement .= "oncontextmenu=\"return false\" style=\"-webkit-touch-callout:none\"";
 
             if ($size[0] > $board[bo_image_width])
-                $replacement .= " width=\"$board[bo_image_width]\"";
+                $replacement .= " class=\"content-image\" width=\"$board[bo_image_width]\"";
             $data = @preg_replace($pattern, $replacement, $data);
         }
     }
