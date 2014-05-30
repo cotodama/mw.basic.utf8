@@ -234,10 +234,12 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
         // 이미지 크기 조절
         if ($board[bo_image_width] < $view[file][$i][image_width]) {
             $img_width = $board[bo_image_width];
+            $img_class = " class=\"content-image\" ";
         } else {
             $img_width = $view[file][$i][image_width];
+            $img_class = "";
         }
-        $view[file][$i][view] = str_replace("<img", "<img class=\"content-image\" width=\"{$img_width}\"", $view[file][$i][view]);
+        $view[file][$i][view] = str_replace("<img", "<img {$img_class} width=\"{$img_width}\"", $view[file][$i][view]);
 
         // 이미지 저장 방지
         if ($mw_basic[cf_image_save_close])
@@ -247,6 +249,7 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
         if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path])) {
             preg_match("/src='([^']+)'/iUs", $view[file][$i][view], $match);
             $watermark_file = mw_watermark_file($match[1]);
+echo "1234";
             $view[file][$i][view] = str_replace($match[1], $watermark_file, $view[file][$i][view]);
         }
 

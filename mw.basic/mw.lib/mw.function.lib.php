@@ -303,6 +303,8 @@ function mw_hex_to_rgb($hex)
 
 function mw_image_outline($source, $size=null, $color="#cccccc")
 {
+    global $mw_basic;
+
     if (!preg_match("/(jpe?g|gif|png)$/i", $source)) return;
 
     $source_file = $source;
@@ -321,13 +323,13 @@ function mw_image_outline($source, $size=null, $color="#cccccc")
 
     switch ($size[2]) {
         case 1:
-            imagegif($source, $source_file, $mw_basic[cf_resize_quality]);
+            imagegif($source, $source_file);
             break;
         case 2:
             imagejpeg($source, $source_file, $mw_basic[cf_resize_quality]);
             break;
         case 3:
-            imagepng($source, $source_file, $mw_basic[cf_resize_quality]);
+            imagepng($source, $source_file);
             break;
     }
     @chmod($source_file, 0606);
@@ -2946,7 +2948,7 @@ function mw_editor_image_copy($content)
 
 function mw_write_icon($row)
 {
-    global $board_skin_path, $pc_skin_path, $is_singo;
+    global $board_skin_path, $pc_skin_path, $is_singo, $quiz_path;
     global $quiz_id, $bomb_id, $vote_id;
 
     $write_icon = '';
