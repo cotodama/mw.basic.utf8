@@ -1240,6 +1240,7 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table $mw[basic_config_table] add cf_exam varchar(1) not null", false);
     sql_query("alter table $mw[basic_config_table] add cf_exam_level tinyint not null default '2'", false);
     sql_query("alter table $mw[basic_config_table] add cf_exam_notice varchar(1) not null default ''", false);
+    sql_query("alter table $mw[basic_config_table] add cf_exam_download varchar(1) not null default ''", false);
 
     sql_query("alter table $mw[basic_config_table] add cf_player_size varchar(10) not null default ''", false);
 

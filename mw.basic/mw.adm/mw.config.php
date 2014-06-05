@@ -2895,6 +2895,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <span class="cf_info">(시험문제를 등록할 수 있는 레벨)</span>
             </div>
 	    <input type=checkbox name=cf_exam_notice value=1> 공지에 있는 시험문제를 모두 치뤄야 글 등록 가능
+	    <input type=checkbox name=cf_exam_download value=1> 공지에 있는 시험문제를 모두 치뤄야 다운로드 가능
 
             <!--<div> 시험문제참여 가능레벨
                 <select name=cf_exam_join_level>
@@ -3155,10 +3156,10 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 <div id="tabs-10" class="tabs"> <!-- 버전확인 -->
 
     <div style="font-weight:bold; font-size:15px; margin:0 0 5px 0;"> -버전확인 </div>
-    <div><textarea cols="130" rows="10" readonly><?@include("../HISTORY")?></textarea></div>
+    <div><textarea cols="130" rows="10" readonly><?php echo mw_read_file("../HISTORY")?></textarea></div>
 
     <div style="font-weight:bold; font-size:15px; margin:10px 0 5px 0;"> - 라이센스 </div>
-    <div><textarea cols="130" rows="10" readonly><?@include("../LICENSE")?></textarea></div>
+    <div><textarea cols="130" rows="10" readonly><?php echo mw_read_file("../LICENSE")?></textarea></div>
 
 </div> <!-- tabs-10 -->
 

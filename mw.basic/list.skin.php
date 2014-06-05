@@ -211,10 +211,11 @@ $new_count = $row[cnt];
 <!-- 게시판 목록 시작 -->
 <table width="<?=$bo_table_width?>" align="center" cellpadding="0" cellspacing="0"><tr><td id=mw_basic>
 
-<?  if ($mw_basic['cf_include_head'] && file_exists($mw_basic['cf_include_head']) && strstr($mw_basic[cf_include_head_page], '/l/'))
-    include_once($mw_basic[cf_include_head]); ?>
-
 <?php
+if ($mw_basic[cf_include_head] && is_file($mw_basic[cf_include_head]) && strstr($mw_basic[cf_include_head_page], '/l/')) {
+    include_once($mw_basic[cf_include_head]);
+}
+
 if ($mw_basic['cf_bbs_banner']) include_once("$bbs_banner_path/list.skin.php"); // 게시판 배너
 
 include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
@@ -248,7 +249,7 @@ include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
         <span class=mw_basic_total style="cursor:pointer;" onclick="win_open('<?=$talent_market_path?>/order_list.php?bo_table=<?=$bo_table?>', 'order_list', 'width=800,height=600,scrollbars=1');">[주문내역]</span>
         <? } ?>
 
-        <? include("$board_skin_path/mw.proc/mw.smart-alarm-config.php") ?>
+        <?php include("$board_skin_path/mw.proc/mw.smart-alarm-config.php") ?>
         <span class=mw_basic_total>총 게시물 <?=number_format($total_count)?>건, 최근 <?=number_format($new_count)?> 건</span>
         <? if ($is_admin && $mw_basic[cf_collect] == 'rss' && file_exists("$g4[path]/plugin/rss-collect/_lib.php")) {?>
         <img src="<?=$g4[path]?>/plugin/rss-collect/img/btn_collect.png" align="absmiddle" style="cursor:pointer;" onclick="win_open('<?=$g4[path]?>/plugin/rss-collect/config.php?bo_table=<?=$bo_table?>', 'rss_collect', 'width=800,height=600,scrollbars=1')">
@@ -336,7 +337,7 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 $line_number = 0;
 for ($i=0; $i<count($list); $i++) {
 
-if (file_exists($mw_basic[cf_include_list_main])) {
+if ($mw_basic[cf_include_list_main] && is_file($mw_basic[cf_include_list_main])) {
     include($mw_basic[cf_include_list_main]);
 }
 
@@ -861,8 +862,11 @@ else if ($mw_basic[cf_type] == "gall")
 </tr>
 </table>
 
-<?  if ($mw_basic['cf_include_tail'] && file_exists($mw_basic['cf_include_tail']) && strstr($mw_basic[cf_include_tail_page], '/l/'))
-    include_once($mw_basic[cf_include_tail]); ?>
+<?php
+if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr($mw_basic[cf_include_tail_page], '/l/')) {
+    include_once($mw_basic[cf_include_tail]);
+}
+?>
 
 </td></tr></table>
 

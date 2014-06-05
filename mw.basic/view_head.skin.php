@@ -249,7 +249,6 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
         if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path])) {
             preg_match("/src='([^']+)'/iUs", $view[file][$i][view], $match);
             $watermark_file = mw_watermark_file($match[1]);
-echo "1234";
             $view[file][$i][view] = str_replace($match[1], $watermark_file, $view[file][$i][view]);
         }
 
@@ -331,7 +330,9 @@ if ($write[wr_singo] && $write[wr_singo] >= $mw_basic[cf_singo_number] && $mw_ba
     $view[content] = $content;
 }
 
-@include($mw_basic[cf_include_view_top]);
+if ($mw_basic[cf_include_view_top] && is_file($mw_basic[cf_include_view_top])) {
+    include($mw_basic[cf_include_view_top]);
+}
 
 // 컨텐츠샵 멤버쉽
 if (function_exists("mw_cash_is_membership") && $member[mb_id] != $write[mb_id]) {
@@ -848,11 +849,10 @@ if (function_exists("mw_moa_read"))
 $ob_exam = '';
 $ob_exam_flag = false;
 if ($mw_basic['cf_exam']) {
-    if (file_exists("{$exam_path}/view.skin.php")) {
+    if (is_file("{$exam_path}/view.skin.php")) {
         ob_start();
         include("{$exam_path}/view.skin.php");
-        $ob_exam = ob_get_contents();
-        ob_end_clean();
+        $ob_exam = ob_get_clean();
 
         if (preg_match("/\[시험문제\]/i", $view[rich_content])) {
             $ob_exam_flag = true;
@@ -864,11 +864,10 @@ if ($mw_basic['cf_exam']) {
 $ob_marketdb = '';
 $ob_marketdb_flag = false;
 if ($mw_basic['cf_marketdb'] and $write['wr_marketdb']) { 
-    if (file_exists("{$marketdb_path}/view.skin.php")) {
+    if (is_file("{$marketdb_path}/view.skin.php")) {
         ob_start();
         include("{$marketdb_path}/view.skin.php");
-        $ob_marketdb = ob_get_contents();
-        ob_end_clean();
+        $ob_marketdb = ob_get_clean();
 
         if (preg_match("/\[마케팅DB\]/i", $view[rich_content])) {
             $ob_marketdb_flag = true;

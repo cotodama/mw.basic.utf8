@@ -416,6 +416,7 @@ bo_table = '$bo_table'
 ,cf_exam = '$cf_exam'
 ,cf_exam_level = '$cf_exam_level'
 ,cf_exam_notice = '$cf_exam_notice'
+,cf_exam_download = '$cf_exam_download'
 ,cf_bbs_banner = '$cf_bbs_banner'
 ,cf_bbs_banner_page = '$cf_bbs_banner_page'
 ,cf_collect = '$cf_collect'
@@ -813,6 +814,7 @@ if ($chk[cf_exam]) {
     $sql .= ", cf_exam = '$cf_exam' ";
     $sql .= ", cf_exam_level = '$cf_exam_level' ";
     $sql .= ", cf_exam_notice = '$cf_exam_notice' ";
+    $sql .= ", cf_exam_download = '$cf_exam_download' ";
 }
 if ($chk[cf_bbs_banner]) {
     $sql .= ", cf_bbs_banner = '$cf_bbs_banner' ";

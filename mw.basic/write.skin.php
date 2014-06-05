@@ -376,11 +376,13 @@ jQuery(function($){
 <!-- 글작성 시작 -->
 <table width="<?=$bo_table_width?>" align="center" cellpadding="0" cellspacing="0"><tr><td id=mw_basic>
 
-<?  if ($mw_basic['cf_include_head'] && file_exists($mw_basic['cf_include_head']) && strstr($mw_basic[cf_include_head_page], '/w/'))
-    include_once($mw_basic[cf_include_head]); ?>
-
 <?php
-if ($mw_basic['cf_bbs_banner']) include_once("$bbs_banner_path/list.skin.php"); // 게시판 배너
+if ($mw_basic[cf_include_head] && is_file($mw_basic[cf_include_head] ) && strstr($mw_basic[cf_include_head_page], '/w/')) {
+    include_once($mw_basic[cf_include_head]);
+}
+
+if ($mw_basic['cf_bbs_banner'])
+    include_once("$bbs_banner_path/list.skin.php"); // 게시판 배너
 
 include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
 ?>
@@ -393,7 +395,7 @@ var char_max = parseInt(<?=$write_max?>); // 최대
 
 <script src="<?=$board_skin_path?>/mw.js/tooltip.js"></script>
 
-<? include_once("$board_skin_path/mw.proc/mw.cash.membership.skin.php") ?>
+<?php include_once("$board_skin_path/mw.proc/mw.cash.membership.skin.php") ?>
 
 <!-- 분류 셀렉트 박스, 게시물 몇건, 관리자화면 링크 -->
 <table width="100%">
@@ -437,11 +439,11 @@ if ($mw_basic[cf_contents_shop_write]) { echo " ($mw_cash[cf_cash_name]$mw_basic
 <tr><td height=5></td></tr>
 </table>
 
-<? include_once("$board_skin_path/mw.proc/mw.notice.top.php") ?>
-
-<? include_once("$board_skin_path/mw.proc/mw.search.top.php") ?>
-
-<? include_once("$board_skin_path/mw.proc/mw.cash.membership.skin.php") ?>
+<?php
+include_once("$board_skin_path/mw.proc/mw.notice.top.php");
+include_once("$board_skin_path/mw.proc/mw.search.top.php");
+include_once("$board_skin_path/mw.proc/mw.cash.membership.skin.php");
+?>
 
 
 <!--<form name="fwrite" method="post" action="javascript:fwrite_check(document.fwrite);" enctype="multipart/form-data">-->
@@ -608,7 +610,7 @@ if ($mw_basic[cf_category_radio]) {
         ?> <input type="radio" name="ca_name" value="공지" id="ca_name_1000"> <label for="ca_name_1000">공지 </label> <?
     }
     for ($i=0, $m=sizeof($category_list); $i<$m; $i++) { 
-        ?> <input type="radio" name="ca_name" value="<?=$category_list[$i]?>" id="ca_name_<?$i?>"> <label for="ca_name_<?=$i?>"><?=$category_list[$i]?> </label> <?
+        ?> <input type="radio" name="ca_name" value="<?=$category_list[$i]?>" id="ca_name_<?=$i?>"> <label for="ca_name_<?=$i?>"><?=$category_list[$i]?> </label> <?
     } 
     if ($w == "u") {
         ?>
@@ -1647,8 +1649,11 @@ if ($mw_basic['cf_bbs_banner']) {
 </table>
 </form>
 
-<?  if ($mw_basic['cf_include_tail'] && file_exists($mw_basic['cf_include_tail']) && strstr($mw_basic[cf_include_tail_page], '/w/'))
-    include_once($mw_basic[cf_include_tail]); ?>
+<?php
+if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr($mw_basic[cf_include_tail_page], '/w/')) {
+    include_once($mw_basic[cf_include_tail]);
+}
+?>
 
 </td></tr></table>
 

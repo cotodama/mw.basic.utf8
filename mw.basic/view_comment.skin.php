@@ -365,7 +365,7 @@ for ($i=0; $i<$to_record; $i++) {
     if (!$res) continue;
     $list[$i] = $row;
 
-    if ($mw_basic[cf_include_comment_main] && file_exists($mw_basic[cf_include_comment_main])) {
+    if ($mw_basic[cf_include_comment_main] && is_file($mw_basic[cf_include_comment_main])) {
         include($mw_basic[cf_include_comment_main]);
     }
 ?>

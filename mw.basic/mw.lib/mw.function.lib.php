@@ -2619,6 +2619,8 @@ function mw_youtube($url, $q=0)
     $v = '';
     $l = '';
 
+    if (strstr($url, "youtube.com/feeds")) return;
+
     if (preg_match("/^https?:\/\/youtu.be\/([a-zA-Z0-9_-]+)?/i", $url, $mat)) {
         $v = $mat[1];
     }
@@ -3127,5 +3129,16 @@ function mw_get_date($datetime, $val)
         $date = "<span title='{$init}'>{$date}</span>";
     }
     return $date;
+}
+
+function mw_readfile($file)
+{
+    $content = '';
+    if (file_exists($file)) {
+        ob_start();
+        readfile($file);
+        $content = ob_get_clean();
+    }
+    return $content;
 }
 
