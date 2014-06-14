@@ -26,7 +26,7 @@ define("_MW_BOARD_", TRUE);
 // 디렉토리 생성
 function mw_mkdir($path, $permission=0707) {
     //if (is_dir($path)) return;
-    if (file_exists($path)) @unlink($path);
+    if (is_file($path)) @unlink($path);
 
     @mkdir($path, $permission);
     @chmod($path, $permission);
@@ -255,7 +255,7 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
     @imagecopyresampled($target, $source, 0, 0, $src_x, $src_y, $get_width, $get_height, $size[0], $size[1]);
 
     if ($source_file != $thumbnail_file && $mw_basic[cf_watermark_use_thumb]
-        && file_exists("$g4[bbs_path]/$mw_basic[cf_watermark_path]")) { // watermark
+        && is_file("$g4[bbs_path]/$mw_basic[cf_watermark_path]")) { // watermark
         mw_watermark($target, $set_width, $set_height
             , "$g4[bbs_path]/$mw_basic[cf_watermark_path]"
             , $mw_basic[cf_watermark_position]
@@ -485,13 +485,13 @@ function mw_watermark_file($source_file)
 {
     global $watermark_path, $mw_basic, $g4;
 
-    if (!file_exists($source_file)) return;
+    if (!is_file($source_file)) return;
 
     $pathinfo = pathinfo($source_file);
     $basename = md5(basename($source_file)).'.'.$pathinfo[extension];
     $watermark_file = "$watermark_path/$basename";
 
-    if (file_exists($watermark_file)) return $watermark_file;
+    if (is_file($watermark_file)) return $watermark_file;
 
     $size = @getimagesize($source_file);
     switch ($size[2]) {
@@ -878,8 +878,8 @@ function mw_delete_editor_image($data)
         $size = @getimagesize($path);
         if ($size[0] > 0) {
             $watermark_file = "$watermark_path/".basename($path);
-            if (file_exists($path)) @unlink($path); // 에디터 이미지 삭제
-            if (file_exists($watermark_file)) @unlink($watermark_file); // 에디터 워터마크 삭제
+            if (is_file($path)) @unlink($path); // 에디터 이미지 삭제
+            if (is_file($watermark_file)) @unlink($watermark_file); // 에디터 워터마크 삭제
         }
     }
 }
@@ -1121,7 +1121,7 @@ function check_okname()
     else
         $req_file = "$board_skin_path/mw.proc/mw.okname.php"; // 실명인증
 
-    if (file_exists($req_file)) require($req_file);
+    if (is_file($req_file)) require($req_file);
 }
 
 // 자동치환
@@ -1188,7 +1188,7 @@ function mw_basic_write_config_file()
     fclose($f);
     @chmod($mw_basic_config_file, 0600);
 
-    if (!file_exists("$mw_basic_config_path/.htaccess")) {
+    if (!is_file("$mw_basic_config_path/.htaccess")) {
         $f = fopen("$mw_basic_config_path/.htaccess", "w");
         fwrite($f, "Deny from All");
         fclose($f);
@@ -1267,7 +1267,7 @@ function bc_code($str, $is_content=1, $only_admin=0) {
                 if (strstr($_SERVER[PHP_SELF], "plugin/mobile"))
                     $arg[1] = preg_replace("/^\.\.\//", "../../", $arg[1]);
                 $content = $arg[0];
-                if (file_exists($arg[1])) {
+                if (is_file($arg[1])) {
                     ob_start();
                     include($arg[1]);
                     $content = ob_get_contents();
@@ -1281,7 +1281,7 @@ function bc_code($str, $is_content=1, $only_admin=0) {
             function ($arg) {
                 global $g4;
                 $content = $arg[0];
-                if (file_exists($arg[1])) {
+                if (is_file($arg[1])) {
                     ob_start();
                     include($arg[1]);
                     $content = ob_get_contents();
@@ -1321,7 +1321,7 @@ function mw_spelling($str)
     return $str;
 
     $path = "$board_skin_path/mw.lib/mw.spelling";
-    if (file_exists($path)) {
+    if (is_file($path)) {
         $tmp = mw_read_file($path);
         $list = explode(",", $tmp);
         for ($i=0, $m=count($list); $i<$m; $i++) {
@@ -1407,7 +1407,7 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
 
     $board_skin_path = "$g4[path]/skin/board/$board[bo_skin]";
     $lib_file_path = "$board_skin_path/mw.lib/mw.skin.basic.lib.php";
-    if (file_exists($lib_file_path)) include($lib_file_path);
+    if (is_file($lib_file_path)) include($lib_file_path);
 
     $count_write = 0;
     $count_comment = 0;
@@ -1415,27 +1415,27 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
     // 썸네일 삭제
     if ($thumb_path) {
         $thumb_file = mw_thumb_jpg("$thumb_path/$write[wr_id]");
-        if (file_exists($thumb_file)) @unlink($thumb_file);
+        if (is_file($thumb_file)) @unlink($thumb_file);
     }
 
     if ($thumb2_path) {
         $thumb_file = mw_thumb_jpg("$thumb2_path/$write[wr_id]");
-        if (file_exists($thumb_file)) @unlink($thumb_file);
+        if (is_file($thumb_file)) @unlink($thumb_file);
     }
 
     if ($thumb3_path) {
         $thumb_file = mw_thumb_jpg("$thumb3_path/$write[wr_id]");
-        if (file_exists($thumb_file)) @unlink($thumb_file);
+        if (is_file($thumb_file)) @unlink($thumb_file);
     }
 
     if ($thumb4_path) {
         $thumb_file = mw_thumb_jpg("$thumb4_path/$write[wr_id]");
-        if (file_exists($thumb_file)) @unlink($thumb_file);
+        if (is_file($thumb_file)) @unlink($thumb_file);
     }
 
     if ($thumb5_path) {
         $thumb_file = mw_thumb_jpg("$thumb5_path/$write[wr_id]");
-        if (file_exists($thumb_file)) @unlink($thumb_file);
+        if (is_file($thumb_file)) @unlink($thumb_file);
     }
 
     if ($lightbox_path) {
@@ -1633,7 +1633,7 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
         sql_query(" delete from $g4[scrap_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
 
         // 퀴즈삭제
-        if ($mw_basic[cf_quiz] && file_exists("$quiz_path/_config.php")) {
+        if ($mw_basic[cf_quiz] && is_file("$quiz_path/_config.php")) {
             include("$quiz_path/_config.php");
             $row = sql_fetch(" select * from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
             sql_query(" delete from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
@@ -1641,19 +1641,19 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
         }
 
         // 소셜커머스 삭제
-        if (file_exists("$social_commerce_path/delete.skin.php")) include("$social_commerce_path/delete.skin.php");
+        if (is_file("$social_commerce_path/delete.skin.php")) @include("$social_commerce_path/delete.skin.php");
 
         // 마케팅DB 삭제
-        if (file_exists("$marketdb_path/delete.skin.php")) include("$marketdb_path/delete.skin.php");
+        if (is_file("$marketdb_path/delete.skin.php")) @include("$marketdb_path/delete.skin.php");
 
         // 시험문제 삭제
-        if (file_exists("$exam_path/delete.skin.php")) include("$exam_path/delete.skin.php");
+        if (is_file("$exam_path/delete.skin.php")) @include("$exam_path/delete.skin.php");
 
         // 게시판배너 삭제
-        if (file_exists("$bbs_banner_path/delete.skin.php")) include("$bbs_banner_path/delete.skin.php");
+        if (is_file("$bbs_banner_path/delete.skin.php")) @include("$bbs_banner_path/delete.skin.php");
 
         // 재능마켓 삭제
-        if (file_exists("$talent_market_path/delete.skin.php")) include("$talent_market_path/delete.skin.php");
+        if (is_file("$talent_market_path/delete.skin.php")) @include("$talent_market_path/delete.skin.php");
 
         // 모아보기 삭제
         if (function_exists('mw_moa_delete')) mw_moa_delete($write[wr_id]);
@@ -2193,34 +2193,34 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
                 }
 
                 // 소셜커머스
-                if (!$row2[wr_is_comment] && file_exists("$social_commerce_path/move_update.skin.php")) {
-                    include("$social_commerce_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$social_commerce_path/move_update.skin.php")) {
+                    @include("$social_commerce_path/move_update.skin.php");
                 }
 
                 // 마케팅DB
-                if (!$row2[wr_is_comment] && file_exists("$marketdb_path/move_update.skin.php")) {
-                    include("$marketdb_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$marketdb_path/move_update.skin.php")) {
+                    @include("$marketdb_path/move_update.skin.php");
                 }
 
                 // 시험문제
-                if (!$row2[wr_is_comment] && file_exists("$exam_path/move_update.skin.php")) {
-                    include("$exam_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$exam_path/move_update.skin.php")) {
+                    @include("$exam_path/move_update.skin.php");
                 }
 
                 // 게시판배너
-                if (!$row2[wr_is_comment] && file_exists("$bbs_banner_path/move_update.skin.php")) {
-                    include("$bbs_banner_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$bbs_banner_path/move_update.skin.php")) {
+                    @include("$bbs_banner_path/move_update.skin.php");
                 }
 
                 // 재능마켓
-                if (!$row2[wr_is_comment] && file_exists("$talent_market_path/move_update.skin.php")) {
-                    include("$talent_market_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$talent_market_path/move_update.skin.php")) {
+                    @include("$talent_market_path/move_update.skin.php");
                 }
 
                 // 퀴즈
-                if (!$row2[wr_is_comment] && file_exists("$quiz_path/move_update.skin.php")) {
-                    include("$quiz_path/_config.php");
-                    include("$quiz_path/move_update.skin.php");
+                if (!$row2[wr_is_comment] && is_file("$quiz_path/move_update.skin.php")) {
+                    @include("$quiz_path/_config.php");
+                    @include("$quiz_path/move_update.skin.php");
                 }
 
                 $cnt++;
@@ -2334,27 +2334,27 @@ function mw_bomb()
                     global $thumb_path, $thumb2_path, $thumb3_path, $thumb4_path, $thumb5_path, $lightbox_path, $watermark_path;
                     if ($thumb_path) {
                         $thumb_file = mw_thumb_jpg("$thumb_path/$write[wr_id]");
-                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                        if (is_file($thumb_file)) @unlink($thumb_file);
                     }
 
                     if ($thumb2_path) {
                         $thumb_file = mw_thumb_jpg("$thumb2_path/$write[wr_id]");
-                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                        if (is_file($thumb_file)) @unlink($thumb_file);
                     }
 
                     if ($thumb3_path) {
                         $thumb_file = mw_thumb_jpg("$thumb3_path/$write[wr_id]");
-                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                        if (is_file($thumb_file)) @unlink($thumb_file);
                     }
 
                     if ($thumb4_path) {
                         $thumb_file = mw_thumb_jpg("$thumb4_path/$write[wr_id]");
-                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                        if (is_file($thumb_file)) @unlink($thumb_file);
                     }
 
                     if ($thumb5_path) {
                         $thumb_file = mw_thumb_jpg("$thumb5_path/$write[wr_id]");
-                        if (file_exists($thumb_file)) @unlink($thumb_file);
+                        if (is_file($thumb_file)) @unlink($thumb_file);
                     }
 
                     if ($lightbox_path) {
@@ -2407,7 +2407,7 @@ function mw_get_noimage()
 {
     global $g4, $mw_basic, $board_skin_path;
 
-    if (trim($mw_basic[cf_noimage_path]) && file_exists($mw_basic[cf_noimage_path]) and !is_dir($mw_basic[cf_noimage_path]))
+    if (trim($mw_basic[cf_noimage_path]) && is_file($mw_basic[cf_noimage_path]) and !is_dir($mw_basic[cf_noimage_path]))
         return $mw_basic[cf_noimage_path];
 
     return "$board_skin_path/img/noimage.gif";
@@ -2736,7 +2736,7 @@ function mw_make_lightbox()
 
         $lightbox_file = "{$lightbox_path}/{$view['wr_id']}-{$i}";
 
-        if (!file_exists($lightbox_file)) {
+        if (!is_file($lightbox_file)) {
             $source_file = "{$view['file'][$i]['path']}/{$view['file'][$i]['file']}";
             mw_make_thumbnail($mw_basic['cf_lightbox_x'], $mw_basic['cf_lightbox_y'], $source_file, $lightbox_file, 0);
         }
@@ -2824,7 +2824,7 @@ function mw_thumb_jpg($file)
 
     if (!$mw_basic['cf_thumb_jpg']) return $file;
     if (preg_match("/\.jpg$/i", $file)) return $file;
-    if (!file_exists($file)) return $jpg;
+    if (!is_file($file)) return $jpg;
 
     rename($file, $jpg);
     return $jpg;
@@ -2933,7 +2933,7 @@ function mw_editor_image_copy($content)
         while (1) {
             $copy = "{$file}-{$k}.{$ext}";
 
-            if (!file_exists("{$g4['path']}/{$copy}"))
+            if (!is_file("{$g4['path']}/{$copy}"))
                 break;
             else
                 ++$k;
@@ -3134,11 +3134,26 @@ function mw_get_date($datetime, $val)
 function mw_readfile($file)
 {
     $content = '';
-    if (file_exists($file)) {
+    if (is_file($file)) {
         ob_start();
         readfile($file);
         $content = ob_get_clean();
     }
     return $content;
+}
+
+function mw_ie()
+{
+    $agent = $_SERVER['HTTP_USER_AGENT'];
+
+    if (preg_match("/msie/i", $agent)) {
+        return true;
+    }
+    else if (preg_match("/rv:1/i", $agent)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 

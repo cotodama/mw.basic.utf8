@@ -544,6 +544,15 @@ if ($mw_basic[cf_reward])
 // 익명
 if ($mw_basic[cf_anonymous]) {
     sql_query(" update $write_table set wr_anonymous = '$wr_anonymous' where wr_id = '$wr_id' ");
+
+    if ($mw_basic[cf_anonymous_nopoint] && $wr_anonymous) {
+        if ($w == '') {
+            delete_point($member[mb_id], $bo_table, $wr_id, '쓰기');
+        }
+        else if ($w == 'r') {
+            delete_point($member[mb_id], $bo_table, $wr_id, '쓰기');
+        }
+    }
 }
 
 // 글읽기 레벨

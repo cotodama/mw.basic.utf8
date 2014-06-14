@@ -716,7 +716,10 @@ $(document).ready(function () {
     <input type=checkbox id="wr_secret" name="wr_secret" value="secret" <? if ($mw_basic[cf_comment_secret]) echo "checked" ?>>
     <label for="wr_secret">비밀글 (체크하면 글쓴이만 내용을 확인할 수 있습니다.)</label>
     <? } ?>
-    <? if ($mw_basic[cf_anonymous]) {?> <input type="checkbox" name="wr_anonymous" value="1"> 익명 <? } ?>
+    <? if ($mw_basic[cf_anonymous]) {?>
+    <input type="checkbox" name="wr_anonymous" id="wr_anonymous" value="1">
+    <label for="wr_anonymous">익명</label>
+    <? } ?>
     <? if ($mw_basic[cf_comment_emoticon] && !$is_comment_editor && !$write_error) {?>
     <span class=mw_basic_comment_emoticon><a href="javascript:win_open('<?=$board_skin_path?>/mw.proc/mw.emoticon.skin.php?bo_table=<?=$bo_table?>','emo','width=600,height=400,scrollbars=yes')">☞ 이모티콘</a></span>
     <? } ?>

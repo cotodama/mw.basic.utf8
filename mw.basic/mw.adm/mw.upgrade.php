@@ -766,8 +766,11 @@ if (is_null($mw_basic[cf_name_title])) {
 
 // 선택익명
 if (is_null($mw_basic[cf_anonymous])) {
-    sql_query("alter table $mw[basic_config_table] add cf_anonymous char(1) not null", false);
+    sql_query("alter table $mw[basic_config_table] add cf_anonymous varchar(1) not null", false);
 }
+
+    sql_query("alter table $mw[basic_config_table] add cf_anonymous_nopoint varchar(1) not null", false);
+
 if (is_null($write[wr_anonymous])) {
     sql_query("alter table $write_table add wr_anonymous char(1) not null", false);
 }
@@ -1293,4 +1296,7 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table {$mw[basic_config_table]} add cf_image_outline varchar(1) not null", false);
     sql_query("alter table {$mw[basic_config_table]} add cf_image_outline_color varchar(7) not null default '#cccccc'", false);
+
+    sql_query("alter table {$mw['basic_config_table']} add cf_include_write_head varchar(255) not null", false);
+    sql_query("alter table {$mw['basic_config_table']} add cf_include_write_tail varchar(255) not null", false);
 

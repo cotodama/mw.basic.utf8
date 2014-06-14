@@ -205,10 +205,12 @@ if ($mw_basic[cf_download_log]) { // 다운로드 기록
 
 $g4[title] = "$group[gr_subject] > $board[bo_subject] > " . conv_subject($write[wr_subject], 255) . " > 다운로드";
 
-if (preg_match("/^utf/i", $g4[charset]) && preg_match("/msie/i", $_SERVER[HTTP_USER_AGENT]))
+if (preg_match("/^utf/i", $g4[charset]) && mw_ie()) {
     $original = urlencode($file[bf_source]);
-else
+}
+else {
     $original = $file[bf_source];
+}
 
 @include_once("$board_skin_path/download.tail.skin.php");
 

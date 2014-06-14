@@ -1099,6 +1099,22 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_head] value=1>&nbsp; 글쓰기 상단</div>
+	<div class="cf_content">
+	    <input type="text" size="60" name="cf_include_write_head" class="ed" value="<?=$mw_basic[cf_include_write_head]?>"> 
+	    <div class="cf_info">글작성 페이지 제목 상단 부분에 포함될 파일입니다.</div>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_tail] value=1>&nbsp; 글쓰기 하단</div>
+	<div class="cf_content">
+	    <input type="text" size="60" name="cf_include_write_tail" class="ed" value="<?=$mw_basic[cf_include_write_tail]?>"> 
+	    <div class="cf_info">글작성 페이지 내용 아래 부분에 포함될 파일입니다.</div>
+	</div>
+    </div>
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_download_popup] value=1>&nbsp; 다운로드 팝업 </div>
 	<div class="cf_content">
             <input type=checkbox name=cf_download_popup value=1> 사용
@@ -1154,9 +1170,18 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_anonymous] value=1>&nbsp; 선택익명 </div>
 	<div class="cf_content" height=60>
-            <input type="checkbox" name="cf_anonymous" value="1">
-	    <span class="cf_info">(글작성시 익명을 선택할 수 있습니다.)</span>
-	    <script> document.cf_form.cf_anonymous.checked = "<?=$mw_basic[cf_anonymous]?>"; </script>
+            <div>
+                <input type="checkbox" name="cf_anonymous" value="1"> 사용
+                <span class="cf_info">(글작성시 익명을 선택할 수 있습니다.)</span>
+            </div>
+            <div>
+                <input type="checkbox" name="cf_anonymous_nopoint" value="1"> 포인트 적립안함
+                <span class="cf_info">(선택익명 사용시 쓰기 포인트를 적립하지 않습니다.)</span>
+            </div>
+	    <script>
+            document.cf_form.cf_anonymous.checked = "<?=$mw_basic[cf_anonymous]?>";
+            document.cf_form.cf_anonymous_nopoint.checked = "<?=$mw_basic[cf_anonymous_nopoint]?>";
+            </script>
 	</div>
     </div>
  
