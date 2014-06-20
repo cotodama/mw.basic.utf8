@@ -1300,3 +1300,16 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_head varchar(255) not null", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_tail varchar(255) not null", false);
 
+    $sql = "create table if not exists {$mw['category_table']} (
+        bo_table varchar(20) not null,
+        ca_id int not null auto_increment,
+        ca_name varchar(50) not null,
+        ca_type varchar(10) not null,
+        ca_level_list tinyint not null,
+        ca_level_view tinyint not null,
+        ca_level_write tinyint not null,
+        ca_color varchar(6) not null,
+        primary key (ca_id)) ".$default_charset;
+    sql_query($sql, false);
+
+

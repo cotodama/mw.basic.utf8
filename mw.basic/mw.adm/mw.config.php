@@ -2252,6 +2252,110 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox disabled>&nbsp; 분류 설정 </div>
+	<div class="cf_content" height=80>
+            <style>
+            .mw_category { background-color:#ccc; }
+            .mw_category td { background-color:#eee; text-align:center; }
+            </style>
+            <table border="0" cellpadding="3" cellspacing="1" class="mw_category">
+            <tr>
+                <td width="120">분류명</td>
+                <td>출력형태</td>
+                <td>목록권한</td>
+                <td>읽기권한</td>
+                <td>쓰기권한</td>
+                <td>색상</td>
+                <td>-</td>
+            </tr>
+            <?php
+            $ca_list = array_filter(explode("|", $board['bo_category_list']), "trim");
+            $db_list = implode("','", $ca_list);
+            sql_query("delete from {$mw['category_table']} where bo_table = '{$bo_table}' and ca_name not in ('$db_list')");
+
+            foreach ((array)$ca_list as $ca_name) {
+                $row = mw_category_info($ca_name);
+                if (!$row) {
+                    sql_query("insert into {$mw['category_table']} set bo_table = '{$bo_table}', ca_name = '{$ca_name}' ");
+                    $row['ca_id'] = mysql_insert_id();
+                }
+                ?>
+                <tr>
+                    <td><?php echo $ca_name?></td>
+                    <td>
+                        <select id="ca_type_<?php echo $row['ca_id']?>" name="ca_type_<?php echo $row['ca_id']?>">
+                            <option value="">기본</option>
+                            <option value="list">목록형</option>
+                            <option value="thumb">썸네일형</option>
+                            <option value="gall">갤러리형</option>
+                            <option value="desc">요약형</option>
+                        </select>
+                        <script> $("#ca_type_<?php echo $row['ca_id']?>").val("<?php echo $row['ca_type']?>"); </script>
+                    </td>
+                    <td>
+                        <select id="ca_level_list_<?php echo $row['ca_id']?>" name="ca_level_list_<?php echo $row['ca_id']?>">
+                            <option value="">기본</option>
+                            <?php for ($i=$board['bo_list_level']; $i<=10; ++$i) { ?>
+                            <option value="<?php echo $i?>"><?php echo $i?></option>
+                            <?php } ?>
+                        </select>
+                        <script> $("#ca_level_list_<?php echo $row['ca_id']?>").val("<?php echo $row['ca_level_list']?>"); </script>
+                    </td>
+                    <td>
+                        <select id="ca_level_view_<?php echo $row['ca_id']?>" name="ca_level_view_<?php echo $row['ca_id']?>">
+                            <option value="">기본</option>
+                            <?php for ($i=$board['bo_read_level']; $i<=10; ++$i) { ?>
+                            <option value="<?php echo $i?>"><?php echo $i?></option>
+                            <?php } ?>
+                        </select>
+                        <script> $("#ca_level_view_<?php echo $row['ca_id']?>").val("<?php echo $row['ca_level_view']?>"); </script>
+                    </td>
+                    <td>
+                        <select id="ca_level_write_<?php echo $row['ca_id']?>" name="ca_level_write_<?php echo $row['ca_id']?>">
+                            <option value="">기본</option>
+                            <?php for ($i=$board['bo_write_level']; $i<=10; ++$i) { ?>
+                            <option value="<?php echo $i?>"><?php echo $i?></option>
+                            <?php } ?>
+                        </select>
+                        <script> $("#ca_level_write_<?php echo $row['ca_id']?>").val("<?php echo $row['ca_level_write']?>"); </script>
+                    </td>
+                    <td>
+                        <input type="text" size="10" id="ca_color_<?php echo $row['ca_id']?>" name="ca_color_<?php echo $row['ca_id']?>" value="<?php echo $row['ca_color']?>">
+                    </td>
+                    <td>
+                        <input type="button" class="bt" value="글삭제" onclick="mw_category_action('<?php echo $ca_name?>', 'del')">
+                        <input type="button" class="bt" value="글이동" onclick="mw_category_action('<?php echo $ca_name?>', 'move')">
+                        <input type="button" class="bt" value="글복사" onclick="mw_category_action('<?php echo $ca_name?>', 'copy')">
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </table>
+            <script>
+            function mw_category_action(ca_name, act)
+            {
+                if (act == 'del') {
+                    if (!confirm("정말 '" + ca_name + "' 분류의 게시물을 모두 삭제하시겠습니까?")) return;
+                    $.get("<?php echo $board_skin_path?>/mw.adm/mw.category.delete.php", {
+                        "bo_table" : "<?php echo $bo_table?>",
+                        "ca_name" : ca_name
+                    }, function (str) {
+                        alert(str);
+                    });
+                    return;
+                }
+                var url = "<?php echo $board_skin_path?>/mw.adm/mw.category.move.php";
+                url += "?bo_table=<?php echo $bo_table?>";
+                url += "&ca_name=" + ca_name;
+                url += "&sw=" + act;
+                var sub_win = window.open(url, "move", "left=50, top=50, width=500, height=550, scrollbars=1");
+            }
+            </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_download_log] value=1>&nbsp; 다운로드 로그 </div>
 	<div class="cf_content">
 	    <input type=checkbox name=cf_download_log value=1> 사용

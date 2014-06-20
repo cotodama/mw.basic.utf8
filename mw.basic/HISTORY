@@ -1,3 +1,26 @@
+ver 2.6.1 (14.06.20)
+    : 분류별 게시판 타입 (스타일디비님 제안)
+    : 분류별 복사, 이동, 삭제 (재아님 제안)
+    : 분류별 색상 (연탄님 제안)
+    : 게시판 분류 권한별 사용권한
+    : 요약형 전용 요약정보를 따로 입력 (역지사지님 제안)
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.adm/mw.category.delete.php
+    mw.basic/mw.adm/mw.category.move.php
+    mw.basic/mw.adm/mw.category.move.update.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/list.skin.php
+    mw.basic/write.head.skin.php
+    mw.basic/write.skin.php
+    mw.basic/write_update.head.skin.php
+    mw.basic/write_update.skin.php
+    mw.basic/move.php
+ 
 ver 2.6.0 (14.06.13)
     : 다운로드시 파일명 인코딩 익스11 적용 (라우터님 제안)
     : 링크권한 없는 경우 글쓰기 에러 수정 (한글닷컴님 제안)

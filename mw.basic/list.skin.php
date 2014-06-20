@@ -343,6 +343,21 @@ if ($mw_basic[cf_include_list_main] && is_file($mw_basic[cf_include_list_main]))
 
 mw_basic_move_cate($bo_table, $list[$i][wr_id]);
 
+$ca_color = '';
+if ($sca && $mw_category) {
+    $ca_color = $mw_category['ca_color'];
+}
+else {
+    if (!$mw_category_list[$list[$i]['ca_name']])
+        $mw_category_list[$list[$i]['ca_name']] = mw_category_info($list[$i]['ca_name']);
+
+    $ca_color = $mw_category_list[$list[$i]['ca_name']]['ca_color'];
+}
+
+$ca_color_style = '';
+if ($ca_color)
+    $ca_color_style = " style='color:{$ca_color}' ";
+
 // 댓글감춤
 if ($list[$i][wr_comment_hide])
     $list[$i][comment_cnt] = 0;
@@ -616,7 +631,7 @@ else if ($mw_basic[cf_type] == "gall")
             <? if (!$mw_basic[cf_thumb_keep]) echo "style='width:".($set_width+10)."px; text-align:left;'"; ?>>
         <? if ($is_category && $list[$i][ca_name]) { ?>
             <div style="margin:0 0 5px 0;"><a href="<?=$list[$i][ca_name_href]?>"
-                class=mw_basic_list_category>[<?=$list[$i][ca_name]?>]</a></div>
+                class=mw_basic_list_category <?php echo $ca_color_style?>>[<?=$list[$i][ca_name]?>]</a></div>
         <? } ?>
         <?=$write_icon?><a href="<?=$list[$i][href]?>"><?=$list[$i][subject]?></a>
         <? if ($list[$i][comment_cnt]) { ?>
@@ -674,7 +689,7 @@ else if ($mw_basic[cf_type] == "gall")
         echo $list[$i][reply];
         echo $list[$i][icon_reply];
         if ($is_category && $list[$i][ca_name]) {
-            echo "<a href=\"{$list[$i][ca_name_href]}\" class=mw_basic_list_category>[{$list[$i][ca_name]}]</a>&nbsp;";
+            echo "<a href=\"{$list[$i][ca_name_href]}\" class=mw_basic_list_category {$ca_color_style}>[{$list[$i][ca_name]}]</a>&nbsp;";
         }
 
         if ($mw_basic[cf_read_level] && $list[$i][wr_read_level])
@@ -720,6 +735,8 @@ else if ($mw_basic[cf_type] == "gall")
         if ($mw_basic[cf_type] == "desc") {
             echo "</div>";
             $desc = strip_tags($list[$i][wr_content]);
+            if ($list[$i][wr_contents_preview])
+                $desc = get_text($list[$i][wr_contents_preview], 1);
             $desc = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/i", "", $desc);
             $desc = mw_reg_str($desc);
             $desc = cut_str($desc, $mw_basic[cf_desc_len]);

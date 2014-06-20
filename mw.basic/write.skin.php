@@ -21,12 +21,6 @@
 
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$mw_is_list = false;
-$mw_is_view = false;
-$mw_is_write = true;
-
-include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
-
 // 실명인증 & 성인인증
 if ($mw_basic[cf_kcb_write] && !is_okname()) {
     check_okname();
@@ -212,7 +206,7 @@ if ($board[bo_use_category])
 {
     $is_category = true;
     $category_location = "./board.php?bo_table=$bo_table&sca=";
-    $category_option = get_category_option($bo_table); // SELECT OPTION 태그로 넘겨받음
+    $category_option = mw_category_option($bo_table); // SELECT OPTION 태그로 넘겨받음
 
     if ($mw_basic[cf_default_category] && !$sca) $sca = $mw_basic[cf_default_category];
 }
@@ -625,12 +619,17 @@ if ($mw_basic['cf_include_write_head'] && is_file($mw_basic['cf_include_write_he
 <td>
 <?
 if ($mw_basic[cf_category_radio]) {
-    $category_list = explode("|", $board[bo_category_list]);
+    $category_list = array_filter(explode("|", $board[bo_category_list]), "trim");
     if ($is_admin) {
         ?> <input type="radio" name="ca_name" value="공지" id="ca_name_1000"> <label for="ca_name_1000">공지 </label> <?
     }
     for ($i=0, $m=sizeof($category_list); $i<$m; $i++) { 
-        ?> <input type="radio" name="ca_name" value="<?=$category_list[$i]?>" id="ca_name_<?=$i?>"> <label for="ca_name_<?=$i?>"><?=$category_list[$i]?> </label> <?
+        $row = sql_fetch(" select * from {$mw['category_table']} where bo_table = '{$bo_table}' and ca_name = '{$category_list[$i]}'");
+        if ($row['ca_level_write'] && $row['ca_level_write'] > $member['mb_level']) continue;
+        ?>
+        <input type="radio" name="ca_name" value="<?=$category_list[$i]?>" id="ca_name_<?=$i?>">
+        <label for="ca_name_<?=$i?>"><?=$category_list[$i]?> </label>
+        <?
     } 
     if ($w == "u") {
         ?>
@@ -785,7 +784,7 @@ if ($mw_basic[cf_category_radio]) {
 </tr>
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
 
-<? if ($mw_basic[cf_contents_shop] == '2') { ?>
+<? if ($mw_basic[cf_type] == 'desc' or $mw_basic[cf_contents_shop] == '2') { ?>
 <tr>
 <td class=mw_basic_write_title>· 컨텐츠 요약</td>
 <td class=mw_basic_write_content>
@@ -807,7 +806,8 @@ if ($mw_basic[cf_category_radio]) {
     ><?=$write[wr_contents_preview]?></textarea>
     <? } // if (!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") ?>
     <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") echo cheditor2('wr_contents_preview', $write[wr_contents_preview]); ?>
-    <div> ※ 유료컨텐츠 홍보 내용을 간략히 작성해주세요. 무료컨텐츠의 경우 입력하실 필요가 없습니다.</div>
+    <!--<div> ※ 유료컨텐츠 홍보 내용을 간략히 작성해주세요. 무료컨텐츠의 경우 입력하실 필요가 없습니다.</div>-->
+    <div> ※  컨텐츠 내용을 간략히 작성해주세요.</div>
 </td>
 </tr>
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>

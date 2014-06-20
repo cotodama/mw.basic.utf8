@@ -49,6 +49,7 @@ $mw['temp_table']         = $g4['table_prefix']."mw_temp";
 $mw['bomb_table']         = $g4['table_prefix']."mw_bomb";
 $mw['move_table']         = $g4['table_prefix']."mw_move";
 $mw['jump_log_table']     = $g4['table_prefix']."mw_jump_log";
+$mw['category_table']     = $g4['table_prefix']."mw_category";
 
 $default_charset = '';
 if (preg_match("/^utf/i", $g4['charset']))
@@ -351,4 +352,25 @@ if (!$pc_skin_path)
     $pc_skin_path = $board_skin_path;
 
 $ss_key_name = "ss_key_{$bo_table}";
+
+$mw_category_list = array();
+$mw_category = array();
+if ($sca) {
+    $mw_category = mw_category_info($sca);
+
+    if ($mw_category['ca_type'])
+        $mw_basic['cf_type'] = $mw_category['ca_type'];
+
+    if ($mw_category['ca_level_list'] && $mw_is_list && $mw_category['ca_level_list'] > $member['mb_level']) {
+        alert("{$sca} 분류의 목록을 볼 권한이 없습니다.");
+    }
+
+    if ($mw_category['ca_level_view'] && $mw_is_view && $mw_category['ca_level_view'] > $member['mb_level']) {
+        alert("{$sca} 분류의 내용을 볼 권한이 없습니다.");
+    }
+
+    if ($mw_category['ca_level_write'] && $mw_is_write && $mw_category['ca_level_write'] > $member['mb_level']) {
+        alert("{$sca} 분류의 글작성 권한이 없습니다.");
+    }
+}
 

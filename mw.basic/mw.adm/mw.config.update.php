@@ -152,6 +152,26 @@ if ($cf_bomb_item_select)
 else
     $cf_bomb_item = "";
 
+$sql = " select * from {$mw['category_table']} where bo_table = '{$bo_table}' ";
+$qry = sql_query($sql);
+while ($row = sql_fetch_array($qry))
+{
+    $ca_type = "ca_type_".$row['ca_id'];
+    $ca_level_list = "ca_level_list_".$row['ca_id'];
+    $ca_level_view = "ca_level_view_".$row['ca_id'];
+    $ca_level_write = "ca_level_write_".$row['ca_id'];
+    $ca_color = "ca_color_".$row['ca_id'];
+
+    $sql = " update {$mw['category_table']} set ";
+    $sql.= "  ca_type = '".$$ca_type."' ";
+    $sql.= " ,ca_level_list = '".$$ca_level_list."' ";
+    $sql.= " ,ca_level_view = '".$$ca_level_view."' ";
+    $sql.= " ,ca_level_write = '".$$ca_level_write."' ";
+    $sql.= " ,ca_color = '".$$ca_color."' ";
+    $sql.= "  where ca_id = '{$row['ca_id']}' ";
+    sql_query($sql);
+}
+
 $sql = "update $mw[basic_config_table] set
 bo_table = '$bo_table'
 ,cf_type = '$cf_type'

@@ -1153,12 +1153,13 @@ function mw_write_file($file, $contents)
 
 function mw_read_file($file)
 {
-    ob_start();
-    @readfile($file);
-    $contents = ob_get_contents();
-    ob_end_clean();
-
-    return $contents;
+    $content = '';
+    if (is_file($file)) {
+        ob_start();
+        readfile($file);
+        $content = ob_get_clean();
+    }
+    return $content;
 }
 
 function mw_basic_read_config_file()
@@ -3131,17 +3132,6 @@ function mw_get_date($datetime, $val)
     return $date;
 }
 
-function mw_readfile($file)
-{
-    $content = '';
-    if (is_file($file)) {
-        ob_start();
-        readfile($file);
-        $content = ob_get_clean();
-    }
-    return $content;
-}
-
 function mw_ie()
 {
     $agent = $_SERVER['HTTP_USER_AGENT'];
@@ -3155,5 +3145,36 @@ function mw_ie()
     else {
         return false;
     }
+}
+
+function mw_category_option($bo_table='')
+{
+    global $mw, $g4, $board, $member;
+
+    $arr = array_filter(explode("|", $board['bo_category_list']), "trim");
+    $str = "";
+    for ($i=0; $i<count($arr); $i++) {
+        $sql = " select * from {$mw['category_table']} where bo_table = '{$bo_table}' and ca_name = '{$arr[$i]}'";
+        $row = sql_fetch($sql);
+        if ($row['ca_level_write'] && $row['ca_level_write'] > $member['mb_level']) continue;
+        if (trim($arr[$i])) {
+            $str .= "<option value='{$arr[$i]}'>{$arr[$i]}</option>\n";
+        }
+    }
+
+    return $str;
+}
+
+function mw_category_info($ca_name)
+{
+    global $bo_table, $g4, $mw;
+
+    if (!$bo_table) return;
+    if (!$ca_name) return;
+
+    $sql = " select * from {$mw['category_table']} where bo_table = '{$bo_table}' and ca_name = '{$ca_name}' ";
+    $row = sql_fetch($sql);
+
+    return $row;
 }
 

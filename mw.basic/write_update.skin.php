@@ -409,6 +409,13 @@ if ($w == "" && trim($mw_basic[cf_memo_id]) && $is_admin != "super")
     }
 }
 
+if ($mw_basic[cf_type] == 'desc') {
+    $sql = " update $write_table set ";
+    $sql.= " wr_contents_preview = '$wr_contents_preview' ";
+    $sql.= " where wr_id = '$wr_id' ";
+    sql_query($sql);
+}
+
 //컨텐츠 가격 및 사용도메인
 if ($mw_basic[cf_contents_shop]) {
     $sql = " update $write_table set ";
