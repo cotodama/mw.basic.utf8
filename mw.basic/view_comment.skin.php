@@ -733,6 +733,7 @@ $(document).ready(function () {
                 padding:10px;
                 position:absolute;
                 margin:0 0 0 100px;
+                z-index:99999999;
             }
             #mw_basic_special_characters table td {
                 padding:3px;

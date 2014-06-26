@@ -312,6 +312,14 @@ mw_mkdir($thumb3_path);
 mw_mkdir($thumb4_path);
 mw_mkdir($thumb5_path);
 
+if ($wr_id) {
+    $thumb_file = mw_thumb_jpg($thumb_path.'/'.$wr_id);
+    $thumb2_file = mw_thumb_jpg($thumb2_path.'/'.$wr_id);
+    $thumb3_file = mw_thumb_jpg($thumb3_path.'/'.$wr_id);
+    $thumb4_file = mw_thumb_jpg($thumb4_path.'/'.$wr_id);
+    $thumb5_file = mw_thumb_jpg($thumb5_path.'/'.$wr_id);
+}
+
 $watermark_path = "{$file_path}/watermark";
 mw_mkdir($watermark_path);
 

@@ -482,84 +482,18 @@ $thumb5_file = mw_thumb_jpg("$thumb5_path/{$list[$i][wr_id]}");
 $set_width = $mw_basic[cf_thumb_width];
 $set_height = $mw_basic[cf_thumb_height];
 
-//if ($mw_basic[cf_type] != "list")
 if (!file_exists($thumb_file))
 {
-    $file = mw_get_first_file($bo_table, $list[$i][wr_id], true);
-    if (!empty($file)) {
-        $source_file = "$file_path/{$file[bf_file]}";
+    $is_thumb = mw_make_thumbnail_row($bo_table, $list[$i]['wr_id'], $list[$i]['wr_content']);
 
-        //if ($mw_basic[cf_img_1_noview])
-        //    $thumb_file = "$file_path/{$file[bf_file]}";
-        //else
-
-        if (!file_exists($thumb_file)) {
-            mw_make_thumbnail($set_width, $set_height, $source_file, $thumb_file, $mw_basic[cf_thumb_keep]);
-        } else {
-            //if (!$mw_basic[cf_img_1_noview]) {
-            if ($mw_basic[cf_thumb_keep]) {
-                $size = @getImageSize($source_file);
-                $size = mw_thumbnail_keep($size, $set_width, $set_height);
-                $set_width = $size[0];
-                $set_height = $size[1];
-            } else
-                $size = @getImageSize($thumb_file);
-
-            if ($size[0] != $set_width || $size[1] != $set_height) {
-                mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $source_file, $thumb_file, $mw_basic[cf_thumb_keep]);
-                if ($mw_basic[cf_thumb2_width])
-                    @mw_make_thumbnail($mw_basic[cf_thumb2_width], $mw_basic[cf_thumb2_height], $source_file,
-                        "{$thumb2_file}", $mw_basic[cf_thumb2_keep]);
-                if ($mw_basic[cf_thumb3_width])
-                    @mw_make_thumbnail($mw_basic[cf_thumb3_width], $mw_basic[cf_thumb3_height], $source_file,
-                        "{$thumb3_file}", $mw_basic[cf_thumb3_keep]);
-                if ($mw_basic[cf_thumb4_width])
-                    @mw_make_thumbnail($mw_basic[cf_thumb4_width], $mw_basic[cf_thumb4_height], $source_file,
-                        "{$thumb4_file}", $mw_basic[cf_thumb4_keep]);
-                if ($mw_basic[cf_thumb5_width])
-                    @mw_make_thumbnail($mw_basic[cf_thumb5_width], $mw_basic[cf_thumb5_height], $source_file,
-                        "{$thumb5_file}", $mw_basic[cf_thumb5_keep]);
-            }
-        //}
-        }
-    } else {
-        preg_match_all("/<img.*src=\\\"(.*)\\\"/iUs", stripslashes($list[$i][wr_content]), $matchs);
-        for ($j=0, $m=count($matchs[1]); $j<$m; ++$j) {
-            $mat = $matchs[1][$j];
-            if (strstr($mat, "mw.basic.comment.image")) $mat = '';
-            if (strstr($mat, "mw.emoticon")) $mat = '';
-            if (preg_match("/cheditor[0-9]\/icon/i", $mat)) $mat = '';
-            if ($mat) {
-                //$mat = str_replace($g4[url], "..", $mat);
-                $mat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
-                if (file_exists($mat)) {
-                    mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $mat, $thumb_file, $mw_basic[cf_thumb_keep]);
-                    if ($mw_basic[cf_thumb2_width])
-                        @mw_make_thumbnail($mw_basic[cf_thumb2_width], $mw_basic[cf_thumb2_height], $mat,
-                            "{$thumb2_file}", $mw_basic[cf_thumb2_keep]);
-                    if ($mw_basic[cf_thumb3_width])
-                        @mw_make_thumbnail($mw_basic[cf_thumb3_width], $mw_basic[cf_thumb3_height], $mat,
-                            "{$thumb3_file}", $mw_basic[cf_thumb3_keep]);
-                    if ($mw_basic[cf_thumb4_width])
-                        @mw_make_thumbnail($mw_basic[cf_thumb4_width], $mw_basic[cf_thumb4_height], $mat,
-                            "{$thumb4_file}", $mw_basic[cf_thumb4_keep]);
-                    if ($mw_basic[cf_thumb5_width])
-                        @mw_make_thumbnail($mw_basic[cf_thumb5_width], $mw_basic[cf_thumb5_height], $mat,
-                            "{$thumb5_file}", $mw_basic[cf_thumb5_keep]);
-                    $is_thumb = true;
-                    break;
-                }
-            } // if 
-        } // for 
-    }
-
-    if (!file_exists("$thumb_path/{$list[$i]['wr_id']}")) {
+    if (!is_file($thumb_path.'/'.$list[$i]['wr_id'])) {
         if (preg_match("/youtu/i", $list[$i]['link'][1])) mw_get_youtube_thumb($list[$i]['wr_id'], $list[$i]['link'][1]);
         else if (preg_match("/youtu/i", $list[$i]['link'][2])) mw_get_youtube_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
         else if (preg_match("/vimeo/i", $list[$i]['link'][1])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][1]);
         else if (preg_match("/vimeo/i", $list[$i]['link'][2])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
     }
 }
+/*
 else {
     $thumb_size = @getImageSize($thumb_file);
 
@@ -577,7 +511,7 @@ else {
         mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height],
             $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep]);
     }
-}
+}*/
 
 if ($mw_basic[cf_social_commerce])
 {

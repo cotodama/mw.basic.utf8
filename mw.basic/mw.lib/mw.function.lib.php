@@ -305,7 +305,7 @@ function mw_image_outline($source, $size=null, $color="#cccccc")
 {
     global $mw_basic;
 
-    if (!preg_match("/(jpe?g|gif|png)$/i", $source)) return;
+    if (!@preg_match("/(jpe?g|gif|png)$/i", $source)) return;
 
     $source_file = $source;
     $size = @getimagesize($source_file);
@@ -602,7 +602,8 @@ function mw_set_sync_tag($content) {
         preg_match_all("/width=[\"\']?([0-9]+)[\"\']?\s.*height=[\"\']?([0-9]+)[\"\'\s>]/iUs", $content, $matchs);
         for ($i=0, $m=count($matchs[1]); $i<$m; $i++) {
             if ($matchs[1][$i] > $board[bo_image_width]) {
-                $content = str_replace($matchs[0][$i], "width=\"{$board[bo_image_width]}\" ", $content);
+                $height = mw_width_ratio($matchs[1][$i], $matchs[2][$i], $board[bo_image_width]);
+                $content = str_replace($matchs[0][$i], "width=\"{$board[bo_image_width]}\", height=\"{$height}\" ", $content);
             }
         }
 
@@ -614,6 +615,14 @@ function mw_set_sync_tag($content) {
         }
     }
     return $content;
+}
+
+function mw_width_ratio($width, $height, $target)
+{
+    $ratio = $height / $width;
+    $tmp = $target * $ratio;
+
+    return (int)$tmp;
 }
 
 // html 태그 갯수 맞추기
@@ -1636,9 +1645,9 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
         // 퀴즈삭제
         if ($mw_basic[cf_quiz] && is_file("$quiz_path/_config.php")) {
             include("$quiz_path/_config.php");
-            $row = sql_fetch(" select * from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
-            sql_query(" delete from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ");
-            sql_query(" delete from $mw_quiz[log_table] where qz_id = '$row[qz_id]' ");
+            $row = sql_fetch(" select * from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ", false);
+            sql_query(" delete from $mw_quiz[quiz_table] where bo_table = '$board[bo_table]' and wr_id = '$write[wr_id]' ", false);
+            sql_query(" delete from $mw_quiz[log_table] where qz_id = '$row[qz_id]' ", false);
         }
 
         // 소셜커머스 삭제
@@ -1850,7 +1859,6 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
                                 wr_link2          = '".addslashes($row2[wr_link2])."',
                                 wr_link1_hit      = '$row2[wr_link1_hit]',
                                 wr_link2_hit      = '$row2[wr_link2_hit]',
-                                wr_trackback      = '".addslashes($row2[wr_trackback])."',
                                 wr_hit            = '$row2[wr_hit]',
                                 wr_good           = '$row2[wr_good]',
                                 wr_nogood         = '$row2[wr_nogood]',
@@ -1877,6 +1885,8 @@ function mw_move($board, $wr_id_list, $chk_bo_table, $sw)
 
                 $insert_id = mysql_insert_id();
                 sql_query("unlock tables", false);
+
+                sql_query(" update $move_write_table set wr_trackback = '".addslashes($row2[wr_trackback])."' where wr_id = '$insert_id' ", false);
 
                 if (!$row2[wr_is_comment]) { // 원글
                     $save_parent = $insert_id;
@@ -3176,5 +3186,158 @@ function mw_category_info($ca_name)
     $row = sql_fetch($sql);
 
     return $row;
+}
+
+function mw_save_remote_image($url, $save_path)
+{
+    $url  = parse_url($url);
+
+    $host = $url['host'];
+    $path = $url['path'];
+    $port = 80;
+
+    if ($url['query']) $path .= '?'.$url['query'];
+    if ($url['port']) $port = $url['port'];
+
+    $fp = fsockopen ($host, $port, $errno, $errstr, 10);
+    if (!$fp) return false;
+    else {
+        fputs($fp, "GET $path HTTP/1.0\r\n");
+        fputs($fp, "User-Agent: mw.basic\r\n");
+        fputs($fp, "Host: $host:80\r\n");
+        fputs($fp, "Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*\r\n");
+        fputs($fp, "\r\n");
+
+        while (trim($buffer = fgets($fp,1024)) != "") { $header .= $buffer; }
+        while (!feof($fp)) { $buffer .= fgets($fp,1024); }
+    }
+    fclose($fp);
+    if ($buffer) {
+        $fw = fopen ($save_path, "wb");
+        fwrite($fw, trim($buffer));
+        chmod ($save_path, 0777);
+        fclose($fw);
+    }
+    return is_file($save_path);
+}
+
+// 게시물별 썸네일 생성
+function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content)
+{
+    global $g4;
+    global $mw_basic;
+    global $file_path;
+    global $thumb_file;
+    global $thumb2_file;
+    global $thumb3_file;
+    global $thumb4_file;
+    global $thumb5_file;
+
+    $is_thumb = false;
+
+    if (file_exists($thumb_file)) unlink($thumb_file);
+    if (file_exists($thumb2_file)) unlink($thumb2_file);
+    if (file_exists($thumb3_file)) unlink($thumb3_file);
+    if (file_exists($thumb4_file)) unlink($thumb4_file);
+    if (file_exists($thumb5_file)) unlink($thumb5_file);
+
+    $file = mw_get_first_file($bo_table, $wr_id, true);
+
+    // 첨부파일 썸네일 생성
+    if (!empty($file))
+    {
+        mw_make_thumbnail_all($file_path.'/'.$file['bf_file']);
+
+        $is_thumb = true;
+    }
+    // 컨텐츠내 이미지 썸네일 생성
+    else
+    {
+        preg_match_all("/<img.*src=\\\"(.*)\\\"/iUs", stripslashes($wr_content), $matchs);
+
+        for ($i=0, $m=count($matchs[1]); $i<$m; ++$i)
+        {
+            $mat = $matchs[1][$i];
+
+            // 이모티콘 썸네일 생성 제외
+            if (strstr($mat, "mw.basic.comment.image")) $mat = '';
+            if (strstr($mat, "mw.emoticon")) $mat = '';
+            if (preg_match("/cheditor[0-9]\/icon/i", $mat)) $mat = '';
+
+            if ($mat)
+            {
+                //$mat = str_replace($g4[url], "..", $mat);
+                $dat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
+
+                // 서버내 이미지 썸네일 생성
+                if (is_file($dat))
+                {
+                    mw_make_thumbnail_all($dat);
+
+                    $is_thumb = true;
+                    break; // for (i)
+                }
+
+                // 외부 이미지 썸네일 생성
+                else
+                {
+                    $ret = mw_save_remote_image($mat, $thumb_file);
+                    if ($ret)
+                    {
+                        mw_make_thumbnail($thumb_file);
+
+                        $is_thumb = true;
+                        break; //for (i)
+                    }
+                }// if (is_file)
+
+            } // if (mat)
+        } // for (i)
+
+    }
+
+    if (!$is_thumb) {
+        if (is_file($thumb_file)) unlink($thumb_file);
+        if (is_file($thumb2_file)) unlink($thumb2_file);
+        if (is_file($thumb3_file)) unlink($thumb3_file);
+        if (is_file($thumb4_file)) unlink($thumb4_file);
+        if (is_file($thumb5_file)) unlink($thumb5_file);
+    }
+
+    return $is_thumb;
+}
+
+function mw_make_thumbnail_all ($source_file)
+{
+    global $g4;
+    global $mw_basic;
+    global $thumb_file;
+    global $thumb2_file;
+    global $thumb3_file;
+    global $thumb4_file;
+    global $thumb5_file;
+
+    mw_make_thumbnail($mw_basic['cf_thumb_width'], $mw_basic['cf_thumb_height'], $source_file,
+        $thumb_file, $mw_basic['cf_thumb_keep']);
+
+    if ($mw_basic['cf_thumb2_width']) {
+        @mw_make_thumbnail($mw_basic['cf_thumb2_width'], $mw_basic['cf_thumb2_height'], $source_file,
+            $thumb2_file, $mw_basic['cf_thumb2_keep']);
+    }
+
+    if ($mw_basic['cf_thumb3_width']) {
+        @mw_make_thumbnail($mw_basic['cf_thumb3_width'], $mw_basic['cf_thumb3_height'], $source_file,
+            $thumb3_file, $mw_basic['cf_thumb3_keep']);
+    }
+
+    if ($mw_basic['cf_thumb4_width']) {
+        @mw_make_thumbnail($mw_basic['cf_thumb4_width'], $mw_basic['cf_thumb4_height'], $source_file,
+            $thumb4_file, $mw_basic['cf_thumb4_keep']);
+    }
+
+    if ($mw_basic['cf_thumb5_width']) {
+        @mw_make_thumbnail($mw_basic['cf_thumb5_width'], $mw_basic['cf_thumb5_height'], $source_file,
+            $thumb5_file, $mw_basic['cf_thumb5_keep']);
+    }
 }
 

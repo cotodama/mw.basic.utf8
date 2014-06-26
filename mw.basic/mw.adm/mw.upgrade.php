@@ -1298,6 +1298,7 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table {$mw[basic_config_table]} add cf_image_outline_color varchar(7) not null default '#cccccc'", false);
 
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_head varchar(255) not null", false);
+    sql_query("alter table {$mw['basic_config_table']} add cf_include_write_main varchar(255) not null", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_tail varchar(255) not null", false);
 
     $sql = "create table if not exists {$mw['category_table']} (

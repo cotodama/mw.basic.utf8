@@ -35,7 +35,12 @@ if ($is_admin == 'group')
 else if ($is_admin == 'board') 
     $sql .= " and a.bo_admin = '$member[mb_id]' ";
 $sql .= " order by a.gr_id, a.bo_order_search, a.bo_table ";
-$result = sql_query($sql);
+$result = sql_query($sql, false);
+if (!$result) {
+    $sql = str_replace("bo_order_search", "bo_order", $sql);
+    $result = sql_query($sql);
+}
+
 for ($i=0; $row=sql_fetch_array($result); $i++) 
 {
     $list[$i] = $row;

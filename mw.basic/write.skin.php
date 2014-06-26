@@ -715,6 +715,12 @@ if ($mw_basic[cf_category_radio]) {
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
 <? } ?>
 
+<?php
+if ($mw_basic['cf_include_write_main'] && is_file($mw_basic['cf_include_write_main'])) {
+    include($mw_basic['cf_include_write_main']);
+}
+?>
+
 <tr>
 <? if ($mw_basic[cf_write_width] == "large") {?>
 <td colspan="2" style='padding:5px 0 5px 20px;'>
