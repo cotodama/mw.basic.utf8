@@ -62,7 +62,7 @@ $is_category = false;
 if ($board[bo_use_category]) 
 {
     $is_category = true;
-    $category_location = "./board.php?bo_table=$bo_table&sca=";
+    $category_location = mw_seo_url($bo_table, 0, "&sca=");
     $category_option = mw_get_category_option($bo_table); // SELECT OPTION 태그로 넘겨받음
 
     if ($mw_basic[cf_default_category] && !$sca) $sca = $mw_basic[cf_default_category];
@@ -70,7 +70,7 @@ if ($board[bo_use_category])
 
 // page 변수 중복 제거
 $qstr = preg_replace("/(\&page=.*)/", "", $qstr);
-$write_pages = get_paging($config[cf_write_pages], $page, $total_page, "./board.php?bo_table=$bo_table".$qstr."&page=");
+$write_pages = get_paging($config[cf_write_pages], $page, $total_page, mw_seo_url($bo_table, 0, $qstr."&page="));
 
 // 이전,다음 검색시 페이지 번호 제거
 $prev_part_href = preg_replace("/(\&page=.*)/", "", $prev_part_href);
@@ -93,10 +93,6 @@ if ($mw_basic[cf_anonymous]) {
         alert("익명작성이 가능한 게시판에서는 아이디 또는 이름으로 검색하실 수 없습니다.");
     }
 }
-
-// 쓰기버튼 항상 출력
-if ($mw_basic[cf_write_button])
-    $write_href = "./write.php?bo_table=$bo_table";
 
 // 글쓰기 버튼에 분류저장
 if ($sca && $write_href)
@@ -289,7 +285,7 @@ if ($is_category && $mw_basic[cf_category_tab]) {
     <? } ?>
     <? for ($i=0, $m=sizeof($category_list); $i<$m; $i++) { ?>
     <li <? if (urldecode($sca) == $category_list[$i]) echo "class='selected'";?>><div><a 
-        href="<?=$g4[bbs_path]?>/board.php?bo_table=<?=$bo_table?>&sca=<?=urlencode($category_list[$i])?>"><?=$category_list[$i]?></a></div></li>
+        href="<?php echo mw_seo_url($bo_table, 0, "&sca=".urlencode($category_list[$i]))?>"><?=$category_list[$i]?></a></div></li>
     <? } ?>
 </ul>
 </div>
@@ -336,6 +332,12 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 <?php
 $line_number = 0;
 for ($i=0; $i<count($list); $i++) {
+
+$html = 0;
+if (strstr($list[$i]['wr_option'], "html1"))
+    $html = 1;
+else if (strstr($list[$i]['wr_option'], "html2"))
+    $html = 2;
 
 if ($mw_basic[cf_include_list_main] && is_file($mw_basic[cf_include_list_main])) {
     include($mw_basic[cf_include_list_main]);
@@ -493,7 +495,6 @@ if (!file_exists($thumb_file))
         else if (preg_match("/vimeo/i", $list[$i]['link'][2])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
     }
 }
-/*
 else {
     $thumb_size = @getImageSize($thumb_file);
 
@@ -511,7 +512,7 @@ else {
         mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height],
             $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep]);
     }
-}*/
+}
 
 if ($mw_basic[cf_social_commerce])
 {
@@ -544,7 +545,10 @@ else if ($mw_basic[cf_type] == "gall")
 
     // 제목스타일
     if ($mw_basic[cf_subject_style]) {
-        $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}";
+        $style .= " style='font-family:{$list[$i][wr_subject_font]}; ";
+        if ($list[$i][wr_subject_color] != $mw_basic[cf_subject_style_color_default])
+            $style .= " color:{$list[$i][wr_subject_color]}";
+
         if ($list[$i][wr_subject_bold]) {
             $style .= "; font-weight:bold; ";
         }
@@ -646,7 +650,10 @@ else if ($mw_basic[cf_type] == "gall")
 
         // 제목스타일
         if ($mw_basic[cf_subject_style]) {
-            $style .= " style='font-family:{$list[$i][wr_subject_font]}; color:{$list[$i][wr_subject_color]}";
+            $style .= " style='font-family:{$list[$i][wr_subject_font]}; ";
+            if ($list[$i][wr_subject_color] != $mw_basic[cf_subject_style_color_default])
+                $style .= " color:{$list[$i][wr_subject_color]}";
+
             if ($list[$i][wr_subject_bold])
                 $style .= "; font-weight:bold; ";
             $style .= " '";
@@ -670,7 +677,7 @@ else if ($mw_basic[cf_type] == "gall")
             echo "</div>";
             $desc = strip_tags($list[$i][wr_content]);
             if ($list[$i][wr_contents_preview])
-                $desc = get_text($list[$i][wr_contents_preview], 1);
+                $desc = conv_content($list[$i][wr_contents_preview], $html);
             $desc = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/i", "", $desc);
             $desc = mw_reg_str($desc);
             $desc = cut_str($desc, $mw_basic[cf_desc_len]);
@@ -891,7 +898,7 @@ function select_delete() {
     if (!confirm("선택한 게시물을 정말 "+str+" 하시겠습니까?\n\n한번 "+str+"한 자료는 복구할 수 없습니다"))
         return;
 
-    f.action = "./delete_all.php";
+    f.action = "<?php echo $g4['bbs_path']?>/delete_all.php";
     f.submit();
 }
 
@@ -914,7 +921,6 @@ function select_copy(sw) {
     f.sw.value = sw;
     f.target = "move";
     f.action = "<?=$board_skin_path?>/move.php";
-    //f.action = "./move.php";
     f.submit();
 }
 

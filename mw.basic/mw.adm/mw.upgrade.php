@@ -1313,4 +1313,5 @@ if (is_null($mw_basic[cf_talent_market])) {
         primary key (ca_id)) ".$default_charset;
     sql_query($sql, false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_seo_url varchar(1) not null", false);
 

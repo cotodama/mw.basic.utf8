@@ -281,7 +281,17 @@ if ($is_category && $mw_basic[cf_category_tab]) {
         <? if ($print_href) { ?><a href="<?=$print_href?>"><img src="<?=$board_skin_path?>/img/btn_print.gif" align=absmiddle title='인쇄'></a><?}?>
     </td>
 </tr>
-<?  if ($mw_basic[cf_umz]) { // 짧은 글주소 사용 ?>
+<? if ($mw_basic[cf_shorten]) { ?>
+<tr><td height=1 bgcolor=#E7E7E7></td></tr>
+<tr>
+    <td height=30 class=mw_basic_view_title>
+        글주소 : <span id="post_url"><?=$shorten?></span>
+        <img src="<?=$board_skin_path?>/img/copy.png" id="post_url_copy" align="absmiddle">
+    </td>
+</tr>
+<?
+} 
+else if ($mw_basic[cf_umz]) { // 짧은 글주소 사용 ?>
 <tr><td height=1 bgcolor=#E7E7E7></td></tr>
 <tr>
     <td height=30 class=mw_basic_view_title>
@@ -308,16 +318,6 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 </tr>
 <? } ?>
 
-<? if ($mw_basic[cf_shorten]) { ?>
-<tr><td height=1 bgcolor=#E7E7E7></td></tr>
-<tr>
-    <td height=30 class=mw_basic_view_title>
-        글주소 : <span id="post_url"><?=$shorten?></span>
-        <img src="<?=$board_skin_path?>/img/copy.png" id="post_url_copy" align="absmiddle">
-    </td>
-</tr>
-<? } ?>
-
 <?php
 if ($mw_basic['cf_include_file_head'] && is_file($mw_basic['cf_include_file_head'])) {
     echo "<tr><td>";
@@ -334,6 +334,8 @@ $cnt = 0;
 for ($i=0; $i<count($view[file]); $i++) {
     if ($view[file][$i][source] && !$view[file][$i][view] && !$view[file][$i][movie]) {
         $cnt++;
+
+    $view[file][$i][href] = str_replace('./', $g4['bbs_path'].'/', $view[file][$i][href]);
 ?>
 <tr><td height=1 bgcolor=#E7E7E7></td></tr>
 <tr>

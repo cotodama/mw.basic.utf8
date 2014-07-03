@@ -389,6 +389,7 @@ bo_table = '$bo_table'
 ,cf_exif = '$cf_exif'
 ,cf_no_img_ext = '$cf_no_img_ext'
 ,cf_print = '$cf_print'
+,cf_seo_url = '$cf_seo_url'
 ,cf_umz = '$cf_umz'
 ,cf_umz2 = '$cf_umz2'
 ,cf_shorten = '$cf_shorten'
@@ -801,6 +802,7 @@ if ($chk[cf_css]) $sql .= ", cf_css = '$cf_css' ";
 if ($chk[cf_exif]) $sql .= ", cf_exif = '$cf_exif' ";
 if ($chk[cf_no_img_ext]) $sql .= ", cf_no_img_ext = '$cf_no_img_ext' ";
 if ($chk[cf_print]) $sql .= ", cf_print = '$cf_print' ";
+if ($chk[cf_seo_url]) $sql .= ", cf_seo_url = '$cf_seo_url' ";
 if ($chk[cf_umz]) $sql .= ", cf_umz = '$cf_umz' ";
 if ($chk[cf_umz]) $sql .= ", cf_umz2 = '$cf_umz2' ";
 if ($chk[cf_shorten]) $sql .= ", cf_shorten = '$cf_shorten' ";

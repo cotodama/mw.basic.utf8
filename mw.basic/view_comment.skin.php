@@ -590,7 +590,7 @@ if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
 
 <div id=mw_basic_comment_write_form>
 
-<form name="fviewcomment" method="post" action="./write_comment_update.php" onsubmit="return fviewcomment_submit(this);" autocomplete="off" style="margin:0;" enctype="multipart/form-data">
+<form name="fviewcomment" method="post" action="<?php echo $g4['bbs_path']?>/write_comment_update.php" onsubmit="return fviewcomment_submit(this);" autocomplete="off" style="margin:0;" enctype="multipart/form-data">
 <input type=hidden name=w           id=w value='c'>
 <input type=hidden name=bo_table    value='<?=$bo_table?>'>
 <input type=hidden name=wr_id       value='<?=$wr_id?>'>

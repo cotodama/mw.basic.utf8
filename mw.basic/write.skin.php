@@ -190,11 +190,6 @@ if ($w == "") {  // 첨부파일 기본갯수
 // 스킨설정버튼
 $config_href = "javascript:mw_config()";
 
-// RSS 버튼
-$rss_href = "";
-if ($board[bo_use_rss_view])
-    $rss_href = "./rss.php?bo_table=$bo_table";
-
 $admin_href = "";
 // 최고관리자 또는 그룹관리자라면
 if ($member[mb_id] && ($is_admin == 'super' || $group[gr_admin] == $member[mb_id])) 
@@ -205,7 +200,7 @@ $is_category = false;
 if ($board[bo_use_category]) 
 {
     $is_category = true;
-    $category_location = "./board.php?bo_table=$bo_table&sca=";
+    $category_location = mw_seo_url($bo_table, 0, "&sca=");
     $category_option = mw_category_option($bo_table); // SELECT OPTION 태그로 넘겨받음
 
     if ($mw_basic[cf_default_category] && !$sca) $sca = $mw_basic[cf_default_category];
@@ -250,7 +245,7 @@ if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
     echo "<script src='$g4[cheditor4_path]/cheditor.js'></script>";
     echo cheditor1('wr_content', '100%', ($write_height*25).'px');
 
-    if ($mw_basic[cf_contents_shop] == '2') {
+    if ($mw_basic[cf_type] == 'desc' or $mw_basic[cf_contents_shop] == '2') {
         echo cheditor1('wr_contents_preview', '100%', ($write_height*25).'px');
     }
 }
@@ -1676,7 +1671,7 @@ if ($mw_basic['cf_bbs_banner']) {
 <tr>
     <td width="100%" align="center" valign="top">
         <input type=image id="btn_submit" src="<?=$board_skin_path?>/img/btn_save.gif" border=0 accesskey='s'>&nbsp;
-        <a href="./board.php?bo_table=<?=$bo_table?>"><img id="btn_list" src="<?=$board_skin_path?>/img/btn_list.gif" border=0></a></td>
+        <a href="<?php echo mw_seo_url($bo_table)?>"><img id="btn_list" src="<?=$board_skin_path?>/img/btn_list.gif" border=0></a></td>
 </tr>
 </table>
 </form>
@@ -1858,7 +1853,7 @@ function fwrite_check(f) {
     if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
         echo cheditor3('wr_content');
 
-        if ($mw_basic[cf_contents_shop] == '2') {
+        if ($mw_basic[cf_type] == 'desc' or $mw_basic[cf_contents_shop] == '2') {
             echo cheditor3('wr_contents_preview');
         }
     }

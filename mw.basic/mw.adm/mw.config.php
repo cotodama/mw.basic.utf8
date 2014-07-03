@@ -2844,6 +2844,15 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 <div id="tabs-7" class="tabs"> <!-- 플러그인 -->
 
     <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_seo_url] value=1>&nbsp; SEO URL </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_seo_url value=1> 사용
+            <span class="cf_info">(퍼머링크, 게시물 고유주소, 추가설정 필요 ⇒  <a href="http://www.miwit.com/b/mw_tip-3870" target="_blank" style="text-decoration:underline;">설정방법 클릭!</a>)</span>  
+	    <script> document.cf_form.cf_seo_url.checked = <?=$mw_basic[cf_seo_url]?>; </script>
+	</div>
+    </div>
+
+    <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_umz] value=1>&nbsp; 짧은링크 </div>
 	<div class="cf_content">
 	    <input type=checkbox name=cf_umz value=1> 사용 <span class="cf_info">(게시물마다 umz.kr/xxxxx 형식의 짧은 글주소 자동생성)</span>  
@@ -2858,7 +2867,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_shorten] value=1>&nbsp; 짧은링크-자체도메인 </div>
 	<div class="cf_content">
-	    <input type=checkbox name=cf_shorten value=1> 사용 <span class="cf_info">(주소:도메인/게시판/글번호 형식, <a href="http://g4.miwit.com/plugin/product/pr_shorten.php" target="_blank">플러그인 설치 후 사용가능 ⇒ <u>다운로드 클릭!</u></a>)</span>  
+	    <input type=checkbox name=cf_shorten value=1> 사용 <span class="cf_info">(포워딩 기능, 주소:도메인/게시판/글번호 형식, <a href="http://g4.miwit.com/plugin/product/pr_shorten.php" target="_blank">플러그인 설치 후 사용가능 ⇒ <u>다운로드 클릭!</u></a>)</span>  
 	    <script> document.cf_form.cf_shorten.checked = <?=$mw_basic[cf_shorten]?>; </script>
 	</div>
     </div>

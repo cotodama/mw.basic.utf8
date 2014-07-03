@@ -58,7 +58,13 @@ while ($write = sql_fetch_array($qry)) {
     $wr_id = $write[wr_id];
     $wr_content = $write[wr_content];
 
-    $is_thumb = mw_make_thumbnail_row($bo_table, $wr_id, $wr_content);
+    $thumb_file = mw_thumb_jpg($thumb_path.'/'.$wr_id);
+    $thumb2_file = mw_thumb_jpg($thumb2_path.'/'.$wr_id);
+    $thumb3_file = mw_thumb_jpg($thumb3_path.'/'.$wr_id);
+    $thumb4_file = mw_thumb_jpg($thumb4_path.'/'.$wr_id);
+    $thumb5_file = mw_thumb_jpg($thumb5_path.'/'.$wr_id);
+
+    $is_thumb = mw_make_thumbnail_row($bo_table, $wr_id, $wr_content, true);
 
     if (!$is_thumb) {
         if (preg_match("/youtu/i", $write['wr_link1']))

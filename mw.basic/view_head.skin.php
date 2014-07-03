@@ -388,10 +388,6 @@ if ($mw_basic[cf_print]) {
     $print_href = "javascript:btn_print()";
 }
 
-// 쓰기버튼 항상 출력
-if ($mw_basic[cf_write_button])
-    $write_href = "./write.php?bo_table=$bo_table";
-
 // 글쓰기 버튼에 분류저장
 if ($sca && $write_href)
     $write_href .= "&sca=".urlencode($sca);
@@ -403,11 +399,6 @@ if ($write_href && $mw_basic[cf_write_notice]) {
 
 // 스킨설정버튼
 $config_href = "javascript:mw_config()";
-
-// RSS 버튼
-$rss_href = "";
-if ($board[bo_use_rss_view])
-    $rss_href = "./rss.php?bo_table=$bo_table";
 
 $view[rich_content] = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/ie", "mw_view_image(\$view, '\\1', '\\2')", $view[content]);
 
@@ -517,14 +508,14 @@ if ($mw_basic[cf_attribute] != "1:1" && (!$prev_href || !$next_href))
     $prev_href = "";
     if ($prev[wr_id]) {
         $prev_wr_subject = get_text(cut_str($prev[wr_subject], 255));
-        $prev_href = "./board.php?bo_table=$bo_table&wr_id=$prev[wr_id]&page=$page" . $qstr;
+        $prev_href = mw_seo_url($bo_table, $prev[wr_id], "&page=$page" . $qstr);
     }
 
     // 다음글 링크
     $next_href = "";
     if ($next[wr_id]) {
         $next_wr_subject = get_text(cut_str($next[wr_subject], 255));
-        $next_href = "./board.php?bo_table=$bo_table&wr_id=$next[wr_id]&page=$page" . $qstr;
+        $next_href = mw_seo_url($bo_table, $next[wr_id], "&page=$page" . $qstr);
     }
 }
 
@@ -552,7 +543,7 @@ $is_category = false;
 if ($board[bo_use_category]) 
 {
     $is_category = true;
-    $category_location = "./board.php?bo_table=$bo_table&sca=";
+    $category_location = mw_seo_url($bo_table, 0, "&sca=");
     $category_option = get_category_option($bo_table); // SELECT OPTION 태그로 넘겨받음
 
     if ($mw_basic[cf_default_category] && !$sca) $sca = $mw_basic[cf_default_category];
@@ -612,7 +603,9 @@ if ($is_admin) {
 
 // 짧은 글주소 사용 - 자체도메인
 $shorten = '';
-if ($mw_basic[cf_shorten])
+if ($mw_basic['cf_seo_url'])
+    $shorten = mw_seo_url($bo_table, $wr_id);
+else if ($mw_basic[cf_shorten])
     $shorten = "$g4[url]/$bo_table/$wr_id";
 
 $new_time = date("Y-m-d H:i:s", $g4[server_time] - ($board[bo_new] * 3600));

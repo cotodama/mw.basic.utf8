@@ -588,7 +588,7 @@ function mw_set_sync_tag($content) {
     $content = preg_replace("/\(<a href=\"([^\)]+)\)\"([^>]*)>([^\)]+)\)<\/a>/i", "(<a href=\"$1\"$2>$3</a>)", $content);
 
     if ($board[bo_image_width]) {
-        if (strstr($_SERVER[PHP_SELF], "plugin/mobile")) {
+        if (mw_is_mobile_builder()) {
             $board[bo_image_width] = 280;
         }
 
@@ -778,7 +778,7 @@ function get_comment_file($bo_table, $wr_id)
     while ($row = sql_fetch_array($result))
     {
         $no = $row[bf_no];
-        $file[$no][href] = "./download.php?bo_table=$bo_table&wr_id=$wr_id&no=$no" . $qstr;
+        $file[$no][href] = $g4['bbs_path']."/download.php?bo_table=$bo_table&wr_id=$wr_id&no=$no" . $qstr;
         $file[$no][download] = $row[bf_download];
         // 4.00.11 - 파일 path 추가
         $file[$no][path] = "$g4[path]/data/file/$bo_table";
@@ -906,10 +906,7 @@ function mw_board_popup($view, $html=0)
     $minWidth = 600;
     $minHeight = 300;
 
-    $is_mobile = false;
-    if (strstr($_SERVER['PHP_SELF'], "plugin/mobile")) {
-        $is_mobile = true;
-    }
+    $is_mobile = mw_is_mobile_builder();
 
     if ($is_mobile) {
         $board[bo_image_width] = 250;
@@ -1274,7 +1271,7 @@ function bc_code($str, $is_content=1, $only_admin=0) {
             $callback = create_function ('$arg', '
                 global $g4;
 
-                if (strstr($_SERVER[PHP_SELF], "plugin/mobile"))
+                if (mw_is_mobile_builder())
                     $arg[1] = preg_replace("/^\.\.\//", "../../", $arg[1]);
                 $content = $arg[0];
                 if (is_file($arg[1])) {
@@ -2997,7 +2994,20 @@ function mw_write_icon($row)
 
 function mw_list_link($row)
 {
-    global $g4, $board_skin_path, $board, $mw_basic, $member, $is_admin, $is_member, $write;
+    global $g4; 
+    global $board_skin_path; 
+    global $board; 
+    global $mw_basic; 
+    global $member; 
+    global $is_admin; 
+    global $is_member; 
+    global $write;
+    global $bo_table;
+    global $qstr;
+
+    if ($mw_basic['cf_seo_url']) {
+        $row['href'] = mw_seo_url($bo_table, $row['wr_id'], $qstr);
+    }
 
     // 링크로그
     for ($j=1; $j<=$g4['link_count']; $j++)
@@ -3199,7 +3209,7 @@ function mw_save_remote_image($url, $save_path)
     if ($url['query']) $path .= '?'.$url['query'];
     if ($url['port']) $port = $url['port'];
 
-    $fp = fsockopen ($host, $port, $errno, $errstr, 10);
+    $fp = @fsockopen ($host, $port, $errno, $errstr, 10);
     if (!$fp) return false;
     else {
         fputs($fp, "GET $path HTTP/1.0\r\n");
@@ -3222,7 +3232,7 @@ function mw_save_remote_image($url, $save_path)
 }
 
 // 게시물별 썸네일 생성
-function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content)
+function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false)
 {
     global $g4;
     global $mw_basic;
@@ -3235,11 +3245,11 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content)
 
     $is_thumb = false;
 
-    if (file_exists($thumb_file)) unlink($thumb_file);
-    if (file_exists($thumb2_file)) unlink($thumb2_file);
-    if (file_exists($thumb3_file)) unlink($thumb3_file);
-    if (file_exists($thumb4_file)) unlink($thumb4_file);
-    if (file_exists($thumb5_file)) unlink($thumb5_file);
+    if (is_file($thumb_file)) unlink($thumb_file);
+    if (is_file($thumb2_file)) unlink($thumb2_file);
+    if (is_file($thumb3_file)) unlink($thumb3_file);
+    if (is_file($thumb4_file)) unlink($thumb4_file);
+    if (is_file($thumb5_file)) unlink($thumb5_file);
 
     $file = mw_get_first_file($bo_table, $wr_id, true);
 
@@ -3279,12 +3289,12 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content)
                 }
 
                 // 외부 이미지 썸네일 생성
-                else
+                else if ($remote)
                 {
                     $ret = mw_save_remote_image($mat, $thumb_file);
                     if ($ret)
                     {
-                        mw_make_thumbnail($thumb_file);
+                        mw_make_thumbnail_all($thumb_file);
 
                         $is_thumb = true;
                         break; //for (i)
@@ -3339,5 +3349,77 @@ function mw_make_thumbnail_all ($source_file)
         @mw_make_thumbnail($mw_basic['cf_thumb5_width'], $mw_basic['cf_thumb5_height'], $source_file,
             $thumb5_file, $mw_basic['cf_thumb5_keep']);
     }
+}
+
+function mw_seo_url($bo_table, $wr_id=0, $qstr='')
+{
+    global $g4;
+    global $mw_basic;
+
+    $url = $g4['bbs_path']."/board.php?bo_table=".$bo_table;
+
+    if ($wr_id)
+        $url .= "&wr_id=".$wr_id;
+
+    if ($qstr)
+        $url .= $qstr;
+
+    $seo_path = '/b/';
+    if (mw_is_mobile_builder())
+        $seo_path = '/m/b/';
+
+    if ($mw_basic['cf_seo_url'])
+    {
+        $url = $g4['url'].$seo_path.$bo_table;
+
+        if ($wr_id)
+            $url .= '-'.$wr_id;
+
+        if ($qstr)
+            $url .= '?'.$qstr;
+    }
+
+    return $url;
+}
+
+function mw_bbs_path($path)
+{
+    global $g4;
+
+    if (mw_is_mobile_builder()) {
+        $path = preg_replace("/\.\//iUs", $g4['path'].'/plugin/mobile/', $path);
+    }
+    else {
+        $path = preg_replace("/\.\//iUs", $g4['bbs_path'].'/', $path);
+    }
+
+    return $path;
+}
+
+function mw_seo_bbs_path($path)
+{
+    global $g4;
+    global $bo_table;
+
+    if (mw_is_mobile_builder()) {
+        $path = str_replace('../../plugin/mobile/board.php?bo_table='.$bo_table, mw_seo_url($bo_table).'?', $path);
+    }
+    else {
+        $path = str_replace('../board.php?bo_table='.$bo_table, mw_seo_url($bo_table).'?', $path);
+    }
+
+    return $path;
+}
+
+function mw_is_mobile_builder()
+{
+    $is_mobile = false;
+
+    if (strstr($_SERVER['PHP_SELF'], "/plugin/mobile/"))
+        $is_mobile = true;
+    else if (strstr($_SERVER['PHP_SELF'], "/m/b/"))
+        $is_mobile = true;
+
+    return $is_mobile;
 }
 
