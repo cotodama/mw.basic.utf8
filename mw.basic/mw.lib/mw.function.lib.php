@@ -3438,7 +3438,7 @@ function mw_make_thumbnail_all ($source_file)
 }
 
 if (!function_exists("mw_seo_url")) {
-function mw_seo_url($bo_table, $wr_id, $qstr='', $mobile=1)
+function mw_seo_url($bo_table, $wr_id=0, $qstr='', $mobile=1)
 {
     global $g4;
     global $mw;

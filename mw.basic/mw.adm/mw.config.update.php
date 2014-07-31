@@ -99,6 +99,7 @@ if ($cf_sns_facebook_good) $cf_sns.= '/facebook_good/';
 if ($cf_sns_google_plus) $cf_sns.= '/google_plus/';
 if ($cf_sns_kakao) $cf_sns.= '/kakao/';
 if ($cf_sns_kakaostory) $cf_sns.= '/kakaostory/';
+if ($cf_sns_line) $cf_sns.= '/line/';
 
 $cf_include_head_page = '';
 if ($cf_include_head_list) $cf_include_head_page.= '/l/';
