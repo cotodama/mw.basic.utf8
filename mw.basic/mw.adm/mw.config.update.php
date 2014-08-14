@@ -386,6 +386,8 @@ bo_table = '$bo_table'
 ,cf_name_title = '$cf_name_title'
 ,cf_attach_count = '$cf_attach_count'
 ,cf_related_table = '$cf_related_table'
+,cf_rss = '$cf_rss'
+,cf_rss_limit = '$cf_rss_limit'
 ,cf_latest_table = '$cf_latest_table'
 ,cf_anonymous = '$cf_anonymous'
 ,cf_anonymous_nopoint = '$cf_anonymous_nopoint'
@@ -822,6 +824,10 @@ if ($chk[cf_nogood_level]) $sql .= ", cf_nogood_level = '$cf_nogood_level' ";
 if ($chk[cf_name_title]) $sql .= ", cf_name_title = '$cf_name_title' ";
 if ($chk[cf_attach_count]) $sql .= ", cf_attach_count = '$cf_attach_count' ";
 if ($chk[cf_related_table]) $sql .= ", cf_related_table = '$cf_related_table' ";
+if ($chk[cf_rss]) {
+    $sql .= ", cf_rss = '$cf_rss' ";
+    $sql .= ", cf_rss_limit = '$cf_rss_limit' ";
+}
 if ($chk[cf_latest_table]) $sql .= ", cf_latest_table = '$cf_latest_table' ";
 if ($chk[cf_anonymous]) {
     $sql .= ", cf_anonymous = '$cf_anonymous' ";

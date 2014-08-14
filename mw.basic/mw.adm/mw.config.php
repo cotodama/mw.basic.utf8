@@ -843,6 +843,19 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_rss] value=1>&nbsp; 전용 RSS </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_rss value=1> 사용
+	    <span class="cf_info">(배추스킨 전용 RSS. 게시판 설정에서 RSS 사용에 먼저 체크해주세요.)</span>
+            <br>
+            출력 갯수 :
+            <input type="text" size="10" class="ed" name="cf_rss_limit" value="<?=$mw_basic[cf_rss_limit]?>"> 개
+
+	    <script> document.cf_form.cf_rss.checked = <?=$mw_basic[cf_rss]?>; </script>
+	</div>
+    </div>
+
     <div class="block"></div>
 
 </div> <!-- tabs-1 -->

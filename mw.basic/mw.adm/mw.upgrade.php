@@ -1330,3 +1330,7 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table $mw[basic_config_table] add cf_gender_m varchar(4) not null default 'lvwc'", false);
     sql_query("alter table $mw[basic_config_table] add cf_gender_w varchar(4) not null default 'lvwc'", false);
+
+    sql_query("alter table $mw[basic_config_table] add cf_rss varchar(1) not null default ''", false);
+    sql_query("alter table $mw[basic_config_table] add cf_rss_limit int not null default '10'", false);
+
