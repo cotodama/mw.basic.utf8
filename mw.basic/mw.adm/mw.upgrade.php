@@ -1334,3 +1334,8 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table $mw[basic_config_table] add cf_rss varchar(1) not null default ''", false);
     sql_query("alter table $mw[basic_config_table] add cf_rss_limit int not null default '10'", false);
 
+    sql_query("alter table $mw[basic_config_table] add cf_hidden_link tinyint not null", false);
+
+    sql_query("alter table {$write_table} add wr_hidden_link1 varchar(255) not null default ''", false);
+    sql_query("alter table {$write_table} add wr_hidden_link2 varchar(255) not null default ''", false);
+

@@ -736,6 +736,19 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <span class="cf_info">(게시물에 별도로 첨부된 링크 클릭시 포인트를 적용합니다. 플러스 마이너스 가능.)</span>
 	</div>
     </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_hidden_link] value=1>&nbsp; 숨김링크 </div>
+	<div class="cf_content">
+            <select name="cf_hidden_link">
+            <? for ($i=0; $i<=10; $i++) { ?>
+            <option value="<?=$i?>"> <?=$i?> </option>
+            <? } ?>
+            </select> 레벨 이상
+	    <span class="cf_info">(보이는 링크와 실제 이동되는 링크를 다르게합니다. 0이면 사용안함)</span> 
+	    <script> document.cf_form.cf_hidden_link.value = '<?=$mw_basic[cf_hidden_link]?>'; </script>
+	</div>
+    </div>
  
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_list_shuffle] value=1>&nbsp; 게시물 목록 셔플 </div>
