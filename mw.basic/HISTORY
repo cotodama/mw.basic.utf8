@@ -1,3 +1,13 @@
+ver 2.7.1 (14.08.29)
+    : 유투브 공유주소 본문 삽입시 썸네일 생성 (먹는언니님 제안)
+    : 링크 바로 이동에 label 적용
+
+    mw.basic/HISTORY
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/list.skin.php
+    mw.basic/write_update.skin.php
+    mw.basic/write.skin.php
+ 
 ver 2.7.0 (14.08.22)
     : 숨김링크 - 링크 보이는 주소, 실제 이동주소 별도 설정
     : 비회원 추천목록 ip 일부 가림 (메모님 제안)

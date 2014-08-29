@@ -2714,6 +2714,7 @@ function mw_youtube($url, $q=0)
 
 function mw_youtube_content($content, $q='')
 {
+/*
     $pt1 = "/\[<a href=\"(https?:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
     $pt2 = "/\[<a href=\"(https?:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
     $pt3 = "/\[(https?:\/\/youtu\.be\/[^\]]+)\]/ie";
@@ -2729,8 +2730,49 @@ function mw_youtube_content($content, $q='')
 
     $content = preg_replace($pt5, "mw_vimeo('\\1', '$q')", $content); 
     $content = preg_replace($pt6, "mw_vimeo('\\1', '$q')", $content); 
+*/
+
+    $pt = mw_youtube_pattern($content);
+    if ($pt)
+        $content = preg_replace($pt, "mw_youtube('\\1', '$q')", $content);
+
+    $pt = mw_vimeo_pattern($content);
+    if ($pt)
+        $content = preg_replace($pt, "mw_vimeo('\\1', '$q')", $content);
 
     return $content;
+}
+
+function mw_youtube_pattern($content)
+{
+    $pt = array();
+    $pt[] = "/\[<a href=\"(https?:\/\/youtu\.be\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
+    $pt[] = "/\[<a href=\"(https?:\/\/www\.youtube\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie";
+    $pt[] = "/\[(https?:\/\/youtu\.be\/[^\]]+)\]/ie";
+    $pt[] = "/\[(https?:\/\/www\.youtube\.com\/[^\]]+)\]/ie";
+
+    foreach ($pt as $p) {
+        if (preg_match($p, $content)) {
+            return $p;
+        }
+    }
+
+    return false;
+}
+
+function mw_vimeo_pattern($content)
+{
+    $pt = array();
+    $pt[] = "/\[(https?:\/\/vimeo\.com\/[^]]+)\]/ie"; 
+    $pt[] = "/\[<a href=\"(https?:\/\/vimeo\.com\/[^\"]+)\"[^>]+>[^<]+<\/a>\]/ie"; 
+
+    foreach ($pt as $p) {
+        if (preg_match($p, $content)) {
+            return $p;
+        }
+    }
+
+    return false;
 }
 
 function mw_make_lightbox()

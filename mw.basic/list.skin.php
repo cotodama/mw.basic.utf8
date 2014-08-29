@@ -497,6 +497,20 @@ if (!file_exists($thumb_file))
         else if (preg_match("/youtu/i", $list[$i]['link'][2])) mw_get_youtube_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
         else if (preg_match("/vimeo/i", $list[$i]['link'][1])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][1]);
         else if (preg_match("/vimeo/i", $list[$i]['link'][2])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
+        else {
+            $pt = mw_youtube_pattern($list[$i]['wr_content']);
+            if ($pt) {
+                preg_match($pt, $list[$i]['wr_content'], $mat);
+                mw_get_youtube_thumb($list[$i]['wr_id'], $mat[1]);
+            }
+            else {
+                $pt = mw_vimeo_pattern($list[$i]['wr_content']);
+                if ($pt) {
+                    preg_match($pt, $list[$i]['wr_content'], $mat);
+                    mw_get_vimeo_thumb($list[$i]['wr_id'], $mat[1]);
+                }
+            }
+        }
     }
 }
 else {
