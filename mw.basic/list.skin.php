@@ -541,8 +541,12 @@ else if ($mw_basic[cf_type] == "gall")
 {
     if ($list[$i][is_notice]) continue;
 
-    if (!file_exists($thumb_file) || $list[$i][icon_secret] || $list[$i][wr_view_block]) {
+    if (!is_file($thumb_file)) {
         $thumb_file = mw_get_noimage();
+        $thumb_width = "width='$mw_basic[cf_thumb_width]'";
+        $thumb_height = "height='$mw_basic[cf_thumb_height]'";
+    } else if ($list[$i][icon_secret] || $list[$i][wr_view_block] || $list[$i][wr_key_password]) {
+        $thumb_file = $board_skin_path.'/img/lock.png';
         $thumb_width = "width='$mw_basic[cf_thumb_width]'";
         $thumb_height = "height='$mw_basic[cf_thumb_height]'";
     } else {
@@ -623,7 +627,9 @@ else if ($mw_basic[cf_type] == "gall")
     <? } ?>
 
     <? if ($mw_basic[cf_type] == "thumb") { ?>
-    <? if (!file_exists($thumb_file) || $list[$i][icon_secret] || $list[$i][wr_view_block]) $thumb_file = mw_get_noimage(); ?>
+    <? if (!is_file($thumb_file)) $thumb_file = mw_get_noimage(); ?>
+    <? if ($list[$i][icon_secret] || $list[$i][wr_view_block] || $list[$i][wr_key_password])
+        $thumb_file = $board_skin_path.'/img/lock.png'; ?>
 
     <!-- 썸네일 -->
     <td class=mw_basic_list_thumb><!-- 여백제거

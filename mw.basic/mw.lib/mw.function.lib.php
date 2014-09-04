@@ -1329,6 +1329,8 @@ function mw_spelling($str)
 {
     global $g4, $board_skin_path;
 
+    $str = str_replace("&#8238", "& #8238", $str);
+
     return $str;
 
     $path = "$board_skin_path/mw.lib/mw.spelling";
