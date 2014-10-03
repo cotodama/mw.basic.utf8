@@ -196,6 +196,13 @@ $new_count = $row[cnt];
     <link rel="stylesheet" href="<?=$social_commerce_path?>/style.css" type="text/css">
     <? } ?>
 <? } ?>
+<? if ($mw_basic[cf_talent_market]) { ?>
+    <? if ($mw_basic[cf_type] == 'gall') { ?>
+    <link rel="stylesheet" href="<?=$talent_market_path?>/style-gall.css" type="text/css">
+    <? } else { ?>
+    <link rel="stylesheet" href="<?=$talent_market_path?>/style.css" type="text/css">
+    <? } ?>
+<? } ?>
 
 <!--
 <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
@@ -207,6 +214,9 @@ $new_count = $row[cnt];
 <script type="text/javascript" src="<?=$board_skin_path?>/mw.js/tooltip.js"></script>
 <? } ?>
 <script type="text/javascript" src="<?="$board_skin_path/mw.js/mw_image_window.js"?>"></script>
+
+<link rel="stylesheet" href="<?php echo $pc_skin_path?>/mw.js/mw.star.rate/jquery.mw.star.rate.css" type="text/css">
+<script src="<?php echo $pc_skin_path?>/mw.js/mw.star.rate/jquery.mw.star.rate.js"></script>
 
 <!-- 게시판 목록 시작 -->
 <table width="<?=$bo_table_width?>" align="center" cellpadding="0" cellspacing="0"><tr><td id=mw_basic>
@@ -232,7 +242,7 @@ include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
             <?=$category_option?>
             </select>
         <? } ?>
-        <? if (($mw_basic[cf_type] == "gall" || $mw_basic[cf_social_commerce]) && $is_checkbox) { ?>
+        <? if (($mw_basic[cf_type] == "gall" || $mw_basic[cf_social_commerce] || $mw_basic[cf_talent_market]) && $is_checkbox) { ?>
             <input onclick="if (this.checked) all_checked(true); else all_checked(false);" type=checkbox>
         <?}?>
 
@@ -307,7 +317,7 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 
 <table width=100% border=0 cellpadding=0 cellspacing=0>
 <tr><td colspan=<?=$colspan?> height=2 class=mw_basic_line_color></td></tr>
-<? if ($mw_basic[cf_type] != "gall" && !$mw_basic[cf_social_commerce]) { ?>
+<? if ($mw_basic[cf_type] != "gall" && !$mw_basic[cf_social_commerce] && !$mw_basic[cf_talent_market]) { ?>
 <tr class=mw_basic_list_title>
     <? if (!$mw_basic[cf_post_num]) { ?><td width=50>번호</td><? } ?>
     <? if ($is_checkbox) { ?><td width=40><input onclick="if (this.checked) all_checked(true); else all_checked(false);" type=checkbox></td><?}?>
@@ -535,6 +545,11 @@ else {
 if ($mw_basic[cf_social_commerce])
 {
     $a = include("$social_commerce_path/list.skin.php");    
+    if (!$a) continue;
+}
+else if ($mw_basic[cf_talent_market])
+{
+    $a = include("$talent_market_path/list.skin.php");    
     if (!$a) continue;
 }
 else if ($mw_basic[cf_type] == "gall")

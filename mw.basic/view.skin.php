@@ -735,7 +735,9 @@ if ($bomb) {
 
 <?php if ($mw_basic['cf_rate_level'] && $write['wr_rate'] > 0) { ?>
 <?php
-$rate_count = mw_rate($bo_table, $wr_id);
+$rate = mw_rate($bo_table, $wr_id);
+$rate_count = $rate['cnt'];
+$write['wr_rate'] = $rate['rate'];
 ?>
 <tr>
     <td>

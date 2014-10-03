@@ -1366,4 +1366,5 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table {$write_table} add wr_rate decimal(3,2) not null", false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_umz_domain varchar(100) not null default ''", false);
 

@@ -658,15 +658,26 @@ if ($mw_basic[cf_iframe_level] && $mw_basic[cf_iframe_level] <= $mb[mb_level]) {
 if ($mw_basic[cf_umz]) { // 짧은 글주소 사용 
     //if ($write[wr_umz] == "") {
     if ($mw_basic[cf_umz2]) {
-        if (substr(trim($write[wr_umz]), 0, strlen($mw_basic[cf_umz2])+7) != "http://$mw_basic[cf_umz2]") {
-            $url = "$g4[url]/$g4[bbs]/board.php?bo_table=$bo_table&wr_id=$wr_id";
+        if ($mw_basic['cf_umz2'] == 'my' && substr(trim($write[wr_umz]), 0, strlen($mw_basic[cf_umz_domain])+7) != "http://$mw_basic[cf_umz_domain]") {
+            //$url = "$g4[url]/$g4[bbs]/board.php?bo_table=$bo_table&wr_id=$wr_id";
+            $url = mw_seo_url($bo_table, $wr_id);
             $umz = umz_get_url($url);
             sql_query("update $write_table set wr_umz = '$umz' where wr_id = '$wr_id'");
             $view[wr_umz] = $umz;
         }
-    } else {
+        else if (substr(trim($write[wr_umz]), 0, strlen($mw_basic[cf_umz2])+7) != "http://$mw_basic[cf_umz2]") {
+            //$url = "$g4[url]/$g4[bbs]/board.php?bo_table=$bo_table&wr_id=$wr_id";
+
+            $url = mw_seo_url($bo_table, $wr_id);
+            $umz = umz_get_url($url);
+            sql_query("update $write_table set wr_umz = '$umz' where wr_id = '$wr_id'");
+            $view[wr_umz] = $umz;
+        }
+    }
+    else {
         if (substr(trim($write[wr_umz]), 0, 10) != "http://umz") {
-            $url = "$g4[url]/$g4[bbs]/board.php?bo_table=$bo_table&wr_id=$wr_id";
+            //$url = "$g4[url]/$g4[bbs]/board.php?bo_table=$bo_table&wr_id=$wr_id";
+            $url = mw_seo_url($bo_table, $wr_id);
             $umz = umz_get_url($url);
             sql_query("update $write_table set wr_umz = '$umz' where wr_id = '$wr_id'");
             $view[wr_umz] = $umz;

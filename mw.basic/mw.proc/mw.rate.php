@@ -31,7 +31,7 @@ header("Pragma: no-cache"); // HTTP/1.0
 
 if (!$bo_table or !$wr_id) die("데이터가 없습니다.");
 
-include_once("{$board_skin_path}/mw.lib/mw.skin.basic.lib.php");
+include("{$board_skin_path}/mw.lib/mw.skin.basic.lib.php");
 
 $readonly = mw_is_rate($bo_table, $wr_id);
 ?>
@@ -42,14 +42,14 @@ $readonly = mw_is_rate($bo_table, $wr_id);
 
 <script>
 $(".comment_rate").mw_star_rate({
-    path : "<?php echo $board_skin_path?>/mw.js/mw.star.rate/",
+    path : "<?php echo $g4['url']."/skin/board/".$board['bo_skin']?>/mw.js/mw.star.rate/",
     star : "star1",
     default_value : 0,
     readonly : <?php echo $readonly?'true':'false'?>,
     readonly_msg : "<?php echo $readonly?>",
     form_id : "wr_rate",
     half : true,
-    max : 5,
+    max : 5
 });
 </script>
 
