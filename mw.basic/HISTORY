@@ -1,3 +1,32 @@
+ver 2.7.7 (14.10.10)
+    : font awesome 적용, 디자인 변경
+      익스플로러8 버전이하는 루트의 head.sub.php 파일의
+      <head>와 </head> 사이에 쿼크모드 (Edge) 지정을 하셔야 합니다.
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    : 제목스타일 기본색 지우기 기능 추가
+      배추스킨 디자인 변경으로 인해 작업해야할 부분입니다.
+      배추스킨설정-모양-제목스타일-기본색 #3d5b7a 지우기
+      배추스킨설정-모양-제목스타일-기본색 #555555 로 변경
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.css/font-awesome-4.2.0/*
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.good.php
+    mw.basic/mw.proc/mw.jump.php
+    mw.basic/mw.proc/mw.notice.top.php
+    mw.basic/mw.proc/mw.top.button.php
+    mw.basic/mw.proc/mw.delete.subject.color.php
+    mw.basic/list.skin.php
+    mw.basic/view.skin.php
+    mw.basic/view_head.skin.php
+    mw.basic/view_comment.skin.php
+    mw.basic/write.skin.php
+    mw.basic/style.common.css
+    mw.basic/write_update.skin.php
+ 
 ver 2.7.6 (14.10.03)
     : 짧은주소 엄지 솔루션 지원
     : 별점평가 삭제시 Division by zero 오류 수정 (도장관님 제안)

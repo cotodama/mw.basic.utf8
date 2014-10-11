@@ -3044,32 +3044,51 @@ function mw_write_icon($row)
     global $quiz_id, $bomb_id, $vote_id;
 
     $write_icon = '';
-    $style =  "align=absmiddle style=\"border-bottom:2px solid #fff;\"";
+    $style =  "align=\"absmiddle\" style=\"border-bottom:2px solid #fff;\" class=\"write_icon\"";
 
     if ($row['wr_kcb_use'])
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_kcb.png\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_kcb.png\" {$style}>";
     elseif (in_array($row['wr_id'], $bomb_id))
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_bomb.gif\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_bomb.gif\" {$style}>";
     elseif ($row['wr_key_password'])
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_key.png\" {$style} width=\"13\" height=\"12\">&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_key.png\" {$style} width=\"13\" height=\"12\">";
     elseif (in_array($row['wr_id'], $quiz_id))
-        $write_icon = "<img src=\"{$quiz_path}/img/icon_quiz.png\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$quiz_path}/img/icon_quiz.png\" {$style}>";
     elseif (in_array($row['wr_id'], $vote_id))
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_vote.png\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_vote.png\" {$style}>";
     elseif (strstr($row['wr_link1'], "youtu"))
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_youtube.png\" width=\"13\" height=\"12\">&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_youtube.png\" {$style} width=\"13\" height=\"12\">";
     elseif ($row['wr_is_mobile'])
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_mobile.png\" {$style} width=\"13\" height=\"12\">&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_mobile.png\" {$style} width=\"13\" height=\"12\">";
     else
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_subject.gif\" width=\"13\" height=\"12\">&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_subject.gif\" {$style} width=\"13\" height=\"12\">";
+
+    // ---- font awesome
+
+    if ($row['wr_kcb_use'])
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_kcb.png\" {$style}>";
+    elseif (in_array($row['wr_id'], $bomb_id))
+        $write_icon = "<i class='fa fa-bomb'></i>&nbsp;";
+    elseif ($row['wr_key_password'])
+        $write_icon = "<i class='fa fa-key'></i>&nbsp;";
+    elseif (in_array($row['wr_id'], $quiz_id))
+        $write_icon = "<i class='fa fa-question'></i>&nbsp;";
+    elseif (in_array($row['wr_id'], $vote_id))
+        $write_icon = "<i class='fa fa-bar-chart'></i>&nbsp;";
+    elseif (strstr($row['wr_link1'], "youtu"))
+        $write_icon = "<i class='fa fa-youtube'></i>&nbsp;";
+    elseif ($row['wr_is_mobile'])
+        $write_icon = "<i class='fa fa-mobile' style='font-size:15px;'></i>&nbsp;";
+    else
+        $write_icon = "<i class='fa fa-file-text-o' style='font-size:10px; margin-top:5px;'></i>&nbsp;";
 
     // ---- 
 
     if ($is_singo)
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_red.png\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_red.png\" {$style}>";
 
     if ($row['wr_view_block'])
-        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_view_block.png\" {$style}>&nbsp;";
+        $write_icon = "<img src=\"{$pc_skin_path}/img/icon_view_block.png\" {$style}>";
 
     return $write_icon;
 }
