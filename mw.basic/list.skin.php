@@ -225,7 +225,10 @@ $new_count = $row[cnt];
 
 <?php
 if ($mw_basic[cf_include_head] && is_file($mw_basic[cf_include_head]) && strstr($mw_basic[cf_include_head_page], '/l/')) {
-    include_once($mw_basic[cf_include_head]);
+    if (!strstr($mw_basic[cf_include_head_page], '/v/') && $wr_id)
+        ;
+    else
+        include_once($mw_basic[cf_include_head]);
 }
 
 if ($mw_basic['cf_bbs_banner']) include_once("$bbs_banner_path/list.skin.php"); // 게시판 배너
@@ -295,10 +298,7 @@ if ($is_category && $mw_basic[cf_category_tab]) {
 <tr class=mw_basic_list_title>
     <? if ($is_checkbox) { ?><td width=40><input onclick="if (this.checked) all_checked(true); else all_checked(false);" type=checkbox></td><?}?>
     <? if (!$mw_basic[cf_post_num]) { ?><td width=40>번호</td><? } ?>
-
-    <? if ($is_category) {?>
-    <td width="80">분류</td>
-    <? }?> 
+    <? if (!$mw_basic['cf_list_cate'] && $is_category) {?> <td width="80">분류</td> <? }?> 
     <? if ($mw_basic[cf_type] == "thumb") { ?><td width=<?=$mw_basic[cf_thumb_width]+20?>> 이미지 </td><?}?>
     <td>제목</td>
     <? if ($mw_basic[cf_reward]) { ?> <td width=70>충전</td> <?}?>
@@ -504,21 +504,21 @@ if (!is_file($thumb_file))
     }
 }
 else {
-    $thumb_size = @getImageSize($thumb_file);
+    $thumb_size = @getimagesize($thumb_file);
 
     $set_width = $mw_basic[cf_thumb_width];
     $set_height = $mw_basic[cf_thumb_height];
 
     if ($mw_basic[cf_thumb_keep]) {
-        //$size = @getImageSize($thumb_file);
-        $size = mw_thumbnail_keep($size, $set_width, $set_height);
+        //$size = @getimagesize($thumb_file);
+        $size = mw_thumbnail_keep($thumb_size, $set_width, $set_height);
         $set_width = $size[0];
         $set_height = $size[1];
     }
 
     if ($thumb_size[0] != $set_width || $thumb_size[1] != $set_height) {
         mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height],
-            $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep]);
+            $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep], $list[$i]['wr_datetime']);
     }
 }
 
@@ -641,7 +641,7 @@ else if ($mw_basic[cf_type] == "gall")
     <? } ?>
 
     <?php
-    if ($is_category) {
+    if (!$mw_basic['cf_list_cate'] && $is_category) {
         echo "<td><a href=\"{$list[$i][ca_name_href]}\" class=mw_basic_list_category {$ca_color_style}>{$list[$i][ca_name]}</a></td>";
     }
     ?>
@@ -886,7 +886,10 @@ else if ($mw_basic[cf_type] == "gall")
 
 <?php
 if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr($mw_basic[cf_include_tail_page], '/l/')) {
-    include_once($mw_basic[cf_include_tail]);
+    if (!strstr($mw_basic[cf_include_tail_page], '/v/') && $wr_id)
+        ;
+    else
+        include_once($mw_basic[cf_include_tail]);
 }
 ?>
 

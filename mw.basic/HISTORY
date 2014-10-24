@@ -1,3 +1,26 @@
+ver 2.7.9 (14.10.24)
+    : 목록에 분류 안보이기 (먹는언니님 제안)
+    : 점프 사용시 남은 횟수 안내 (마사지스타님 제안)
+    : 전체목록보이기 사용시 게시판 상단파일, 하단파일 읽기 미설정시 출력 안되게 (재아님 제안)
+    : 외부이미지 사용시 allow_url_fopen 사용여부 검사 (으아아아낮님 제안)
+    : 평가참여점수 무조건 부여되는 문제 해결
+    : 썸네일 비율유지시 목록에서 반복생성되는 문제 해결
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.file.viewer.php
+    mw.basic/mw.proc/mw.jump.php
+    mw.basic/mw.proc/mw.jump.update.php
+    mw.basic/view_head.skin.php
+    mw.basic/view.skin.php
+    mw.basic/list.skin.php
+    mw.basic/write_update.head.skin.php
+    mw.basic/write_update.skin.php
+    mw.basic/write_update.tail.skin.php
+ 
 ver 2.7.8 (14.10.17)
     : css 버튼 조정 (Dae-Seok Kim님 제안)
     : 인기 게시물 별점 추가 (브라운아이즈님 제안)

@@ -937,6 +937,15 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <script> document.cf_form.cf_post_num.checked = <?=$mw_basic[cf_post_num]?>; </script>
 	</div>
     </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_list_cate] value=1>&nbsp; 분류 </div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_list_cate value=1> 출력안함 
+	    <span class="cf_info">(체크하면 목록에서 출력하지 않습니다.)</span>
+	    <script> document.cf_form.cf_list_cate.checked = <?=$mw_basic[cf_list_cate]?>; </script>
+	</div>
+    </div>
 	
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_post_name] value=1>&nbsp; 작성자 이름 </div>

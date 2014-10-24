@@ -701,7 +701,7 @@ if ($is_signature && $signature && !$view[wr_anonymous] && $mw_basic[cf_attribut
     if ($mw_basic[cf_attribute] != "anonymous" && !$view[wr_anonymous] && $view[mb_id] && file_exists("$comment_image_path/{$view[mb_id]}")) {
         $comment_image = "$comment_image_path/{$view[mb_id]}";
         $is_comment_image = true;
-        $tmpsize = @getImageSize($comment_image);
+        $tmpsize = @getimagesize($comment_image);
         $comment_image.= '?'.filemtime($comment_image);
     }
 

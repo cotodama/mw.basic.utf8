@@ -1369,3 +1369,5 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table {$mw['basic_config_table']} add cf_umz_domain varchar(100) not null default ''", false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_list_cate varchar(1) not null", false);
+

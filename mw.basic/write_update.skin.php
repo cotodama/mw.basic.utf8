@@ -210,7 +210,7 @@ $is_thumb = mw_make_thumbnail_row($bo_table, $wr_id, $_POST['wr_content'], $mw_b
 for ($i=0, $m=sizeof($watermark_files); $i<$m; $i++) // 기존 원터마크 파일 삭제
     unlink($watermark_files[$i]);
 
-if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path]))
+if ($mw_basic[cf_watermark_use] && is_file($mw_basic[cf_watermark_path]))
 {
     $sql = "select * from $g4[board_file_table] where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_width > 0  order by bf_no";
     $qry = sql_query($sql);

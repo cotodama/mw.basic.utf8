@@ -62,7 +62,7 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
                 $file = "$file_path/{$view[file][$i][file]}";
                 mw_make_thumbnail($mw_basic[cf_original_width], $mw_basic[cf_original_height], $file, $file, true);
                 if ($mw_basic[cf_watermark_use] && file_exists($mw_basic[cf_watermark_path])) mw_watermark_file($file);
-                $size = getImageSize($file);
+                $size = getimagesize($file);
                 $view[file][$i][image_width] = $size[0];
                 $view[file][$i][image_height] = $size[1];
                 sql_query("update $g4[board_file_table] set bf_width = '$size[0]', bf_height = '$size[1]',
@@ -184,10 +184,13 @@ else {
             $path = $_SERVER[DOCUMENT_ROOT].$match;
         //} else { $path = $match;
         }
-        if ($path)
+        $size = null;
+        if ($path) {
             $size = @getimagesize($path);
-        else
+        }
+        else if (ini_get('allow_url_fopen')) {
             $size = @getimagesize($match);
+        }
         if ($size[0] && $size[1]) {
             $match = $matchs[1][$i];
             $match = str_replace("/", "\/", $match);

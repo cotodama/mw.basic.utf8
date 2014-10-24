@@ -279,7 +279,7 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
         $time = $write['wr_datetime'];
 
     if ($time)
-        @touch($thumbnail_file, strtotime($time));
+        touch($thumbnail_file, strtotime($time));
 }
 
 function mw_hex_to_rgb($hex)
@@ -2532,7 +2532,7 @@ function mw_file_view($url, $write, $width=0, $height=0, $content="")
             return "<script>doc_write(obj_movie('{$url}', '_g4_{$ids}', '$width', '$height'));</script>";
         }
         else if (preg_match("/\.($config[cf_flash_extension])$/i", $url)) {
-            $size = @getImageSize($url);
+            $size = @getimagesize($url);
             if ($size[0]) {
                 $width = $size[0];
                 $height = $size[1];
@@ -3395,7 +3395,7 @@ function mw_save_remote_image($url, $save_path)
 }
 
 // 게시물별 썸네일 생성
-function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false)
+function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $time='')
 {
     global $g4;
     global $mw_basic;
@@ -3405,13 +3405,13 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false)
     global $thumb3_path;
     global $thumb4_path;
     global $thumb5_path;
-    /*
+
     global $thumb_file;
     global $thumb2_file;
     global $thumb3_file;
     global $thumb4_file;
     global $thumb5_file;
-    */
+
     global $is_admin;
 
     $is_thumb = false;
@@ -3505,6 +3505,7 @@ function mw_make_thumbnail_all ($source_file)
     global $thumb3_file;
     global $thumb4_file;
     global $thumb5_file;
+    global $is_admin;
 
     mw_make_thumbnail($mw_basic['cf_thumb_width'], $mw_basic['cf_thumb_height'], $source_file,
         $thumb_file, $mw_basic['cf_thumb_keep']);
