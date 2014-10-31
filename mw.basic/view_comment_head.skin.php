@@ -37,8 +37,14 @@ if (function_exists("mw_cash_membership_icon") && $row[mb_id] != $config[cf_admi
     }
 }
 
-if ($mw_basic[cf_attribute] == "anonymous") $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
-if ($row[wr_anonymous]) $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
+if ($mw_basic[cf_attribute] == "anonymous") {
+    $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
+    $row[wr_name] = '';
+}
+if ($row[wr_anonymous]) {
+    $row[name] = mw_anonymous_nick($row[mb_id], $row[wr_ip]); 
+    $row[wr_name] = '';
+}
 
 if ($i < $from_record) {
     $list[$i] = $row;

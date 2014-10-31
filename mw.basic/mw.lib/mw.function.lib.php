@@ -834,19 +834,25 @@ function mw_get_editor_image($data)
     $url = preg_replace("(\/)", "\\\/", $url);
     $url = preg_replace("(\.)", "\.", $url);
 
-    $ext = "src=\"({$url}\/data\/geditor[^\"]+)\"";
+    $ext = "<img.*src=\"(.*\/data\/geditor[^\"]+)\"";
     preg_match_all("/$ext/iUs", $data, $matchs);
     for ($j=0; $j<count($matchs[1]); $j++) {
         $editor_image[] = $matchs[1][$j];
     }
 
-    $ext = "src=\"({$url}\/data\/mw\.cheditor[^\"]+)\"";
+    $ext = "<img.*src=\"(.*\/data\/file[^\"]+)\"";
     preg_match_all("/$ext/iUs", $data, $matchs);
     for ($j=0; $j<count($matchs[1]); $j++) {
         $editor_image[] = $matchs[1][$j];
     }
 
-    $ext = "src=\"({$url}\/data\/{$g4[cheditor4]}[^\"]+)\"";
+    $ext = "<img.*src=\"(.*\/data\/mw\.cheditor[^\"]+)\"";
+    preg_match_all("/$ext/iUs", $data, $matchs);
+    for ($j=0; $j<count($matchs[1]); $j++) {
+        $editor_image[] = $matchs[1][$j];
+    }
+
+    $ext = "<img.*src=\"(.*\/data\/{$g4[cheditor4]}[^\"]+)\"";
     preg_match_all("/$ext/iUs", $data, $matchs);
     for ($j=0; $j<count($matchs[1]); $j++) {
         $editor_image[] = $matchs[1][$j];
@@ -854,13 +860,23 @@ function mw_get_editor_image($data)
 
     for ($j=0, $m=count($editor_image); $j<$m; $j++) {
         $match = $editor_image[$j];
-        if (strstr($match, $g4[url])) { // 웹에디터로 첨부한 이미지 뿐 아니라 다양한 상황을 고려함.
-            $path = str_replace($g4[url], "..", $match);
-        } elseif (substr($match, 0, 1) == "/") {
-            $path = $_SERVER[DOCUMENT_ROOT].$match;
-        } else {
-            $path = $match;
+        $path = $match;
+        if (substr($match, 0, 7) == "http://") {
+            $path = preg_replace("/http:\/\/[^\/]+\//iUs", "", $match);
+            $path = $_SERVER['DOCUMENT_ROOT'].$path;
+            $path = str_replace("//", "/", $path);
         }
+        else if (substr($match, 0, 1) == "/") {
+            $path = $_SERVER['DOCUMENT_ROOT'].$path;
+            $path = str_replace("//", "/", $path);
+        }
+        else if (substr($match, 0, 3) == "../") {
+            $path = str_replace("../", "", $path);
+            for ($z=0, $zm=substr_count(dirname($_SERVER['PHP_SELF']), "/"); $z<$zm; ++$z) {
+                $path = '../'.$path;
+            }
+        }
+       
         $ret[http_path][$j] = $match;
         $ret[local_path][$j] = $path;
     }
@@ -3457,6 +3473,8 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $
             {
                 //$mat = str_replace($g4[url], "..", $mat);
                 $dat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
+                if (!is_file($dat) && (substr($mat, 0, 1) == '/' or substr($mat, 0, 1) == '.'))
+                    $dat = str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].$mat);
 
                 // 서버내 이미지 썸네일 생성
                 if (is_file($dat))

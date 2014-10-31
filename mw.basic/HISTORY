@@ -1,3 +1,23 @@
+ver 2.8.0 (14.10.31)
+    : 
+
+    mw.basic/HISTORY
+    mw.basic/_common.php
+    mw.basic/mw.adm/_common.php
+    mw.basic/mw.adm/config.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/mw.proc/_common.php
+    mw.basic/mw.proc/mw.file.viewer.php
+    mw.basic/mw.proc/mw.g5.adapter.php
+    mw.basic/mw.js/mw.g5.adapter.js.php
+    mw.basic/view_comment_head.skin.php
+    mw.basic/view_comment.skin.php
+    mw.basic/write.skin.php
+    mw.basic/list.skin.php
+    mw.basic/view.skin.php
+    mw.basic/style.common.css
+ 
 ver 2.7.9 (14.10.24)
     : 목록에 분류 안보이기 (먹는언니님 제안)
     : 점프 사용시 남은 횟수 안내 (마사지스타님 제안)

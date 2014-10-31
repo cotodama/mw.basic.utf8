@@ -208,14 +208,15 @@ $new_count = $row[cnt];
 
 <!--
 <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
 -->
+<script src="<?php echo $board_skin_path?>/mw.js/mw.g5.adapter.js.php?bo_table=<?php echo $bo_table?>"></script>
 <link type="text/css" href="<?=$board_skin_path?>/mw.js/ui-lightness/jquery-ui-1.8.19.custom.css" rel="stylesheet" />
-<script type="text/javascript" src="<?=$board_skin_path?>/mw.js/jquery-ui-1.8.19.custom.min.js"></script>
+<script src="<?=$board_skin_path?>/mw.js/jquery-ui-1.8.19.custom.min.js"></script>
 <? if (!$wr_id) { ?>
-<script type="text/javascript" src="<?=$board_skin_path?>/mw.js/tooltip.js"></script>
+<script src="<?=$board_skin_path?>/mw.js/tooltip.js"></script>
 <? } ?>
-<script type="text/javascript" src="<?="$board_skin_path/mw.js/mw_image_window.js"?>"></script>
+<script src="<?="$board_skin_path/mw.js/mw_image_window.js"?>"></script>
 
 <link rel="stylesheet" href="<?php echo $pc_skin_path?>/mw.js/mw.star.rate/jquery.mw.star.rate.css" type="text/css">
 <script src="<?php echo $pc_skin_path?>/mw.js/mw.star.rate/jquery.mw.star.rate.js"></script>
@@ -339,6 +340,14 @@ if ($mw_basic[cf_include_list_main] && is_file($mw_basic[cf_include_list_main]))
 
 mw_basic_move_cate($bo_table, $list[$i][wr_id]);
 
+$reply = $list[$i]['wr_reply'];
+
+$list[$i]['reply'] = "";
+if (strlen($reply) > 0) {
+    for ($k=0; $k<strlen($reply); $k++)
+        $list[$i]['reply'] .= ' &nbsp;&nbsp; ';
+}
+
 $ca_color = '';
 if ($sca && $mw_category) {
     $ca_color = $mw_category['ca_color'];
@@ -461,8 +470,9 @@ if ($list[$i]['wr_view_block']) {
 // 업데이트 아이콘
 $list[$i]['icon_update'] = "";
 if (!$list[$i]['icon_new'] && $list[$i]['wr_last'] != $list[$i]['wr_datetime'] && $list[$i]['wr_last'] >= date("Y-m-d H:i:s", $g4['server_time'] - ($board['bo_new'] * 3600))) {
-    $list[$i]['icon_update'] = "<img src='$board_skin_path/img/icon_update.gif' align='absmiddle'>";
+    //$list[$i]['icon_update'] = "<img src='$board_skin_path/img/icon_update.gif' align='absmiddle'>";
     //$list[$i]['icon_new'] = '';
+    $list[$i]['icon_update'] = "&nbsp;&nbsp;<i class='fa fa-refresh fa-spin' style='font-size:9px;'></i>";
 }
 
 // 게시물 아이콘
@@ -791,8 +801,8 @@ else if ($mw_basic[cf_type] == "gall")
         $(document).ready(function () {
             $(".mw_manage_list_title").mouseenter(function () {
                 $manage_button = $(this);
-                $(".mw_manage_list").css("top", $manage_button.offset().top);
-                $(".mw_manage_list").css("left", $manage_button.offset().left);
+                $(".mw_manage_list").css("top", $manage_button.position().top);
+                $(".mw_manage_list").css("left", $manage_button.position().left);
                 $(".mw_manage_list").css("display", "block");
                 $(".mw_manage_list .item").mouseenter(function () {
                     $(this).css("background-color", "#ddd");
@@ -896,7 +906,7 @@ if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr(
 </td></tr></table>
 
 
-<script type="text/javascript">
+<script>
 <?  if (!$mw_basic[cf_category_tab]) { ?>
 if ('<?=$sca?>') document.fcategory.sca.value = '<?=urlencode($sca)?>';
 <? } ?>
@@ -907,7 +917,7 @@ if ('<?=$stx?>') {
 </script>
 
 <? if ($mw_basic[cf_write_notice]) { ?>
-<script type="text/javascript">
+<script>
 // 글쓰기버튼 공지
 function btn_write_notice(url) {
     var msg = "<?=$mw_basic[cf_write_notice]?>";
@@ -919,7 +929,7 @@ function btn_write_notice(url) {
 
 
 <? if ($is_checkbox) { ?>
-<script type="text/javascript">
+<script>
 
 <? if ($is_admin == "super") { ?>
 function mw_config() {
@@ -1054,7 +1064,7 @@ function mw_qna(sw) {
 $(window).load(function () {
     $(".icon_gall_new").each(function () {
         var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-        <? if ($mw_basic['cf_type'] == 'gall') { ?>
+        <?php if ($mw_basic['cf_type'] == 'gall') { ?>
         var wt = $(this).closest('td').width();
         var wi = $(this).next().find("img").width();
         var ma = (wt-wi)/2-22;
@@ -1064,10 +1074,10 @@ $(window).load(function () {
         if (navigator.appVersion.indexOf("MSIE 10") !== -1) {
             $(this).css('margin-left', ma+'px');
         }
-        <? } else if ($mw_basic['cf_type'] == 'thumb') { ?>
+        <?php } else if ($mw_basic['cf_type'] == 'thumb') { ?>
         if (is_chrome)
-            $(this).css('margin-left', '-10px');
-        <? } ?>
+            ;//$(this).css('margin-left', '-10px');
+        <?php } ?>
         $(this).css('display', 'block');
     });
 });
@@ -1097,7 +1107,7 @@ if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_col
     include_once("$rss_collect_path/_config.php");
     if ($mw_rss_collect_config[cf_license]) {
         ?>
-        <script type="text/javascript">
+        <script>
         $(document).ready(function () {
             $.get("<?=$rss_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
         });
@@ -1111,7 +1121,7 @@ if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && file_exists("
     include_once("$youtube_collect_path/_config.php");
     if ($mw_youtube_collect_config[cf_license]) {
         ?>
-        <script type="text/javascript">
+        <script>
         $(document).ready(function () {
             $.get("<?=$youtube_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
         });

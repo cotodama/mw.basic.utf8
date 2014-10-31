@@ -689,7 +689,14 @@ if (!$is_member) {
 </tr>
 <?}?>
 
-<? if (file_exists("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?>
+<?php if ($is_guest && defined('G5_PATH')) { //자동등록방지  ?>
+<tr>
+    <td>자동등록방지</td>
+    <td style="padding:3px 0 3px 0;">
+        <?php echo $captcha_html ?>
+    </td>
+</tr>
+<?php } else if (is_file("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?>
 <tr>
     <td> 자동등록방지 </td>
     <td style="padding:3px 0 3px 0;">
@@ -731,8 +738,6 @@ if (!$is_member) {
         <?}?>
     </td>
 </tr>
-
-
 
 <tr>
     <td colspan="2" style="line-height:30px;">
@@ -1039,9 +1044,13 @@ function fviewcomment_submit(f)
         }
     }
 
+    <?php if(defined("G5_PATH") && $is_guest) {?>
+        <?php echo chk_captcha_js();  ?>
+    <?php } else { ?>
     if (!check_kcaptcha(f.wr_key)) {
         return false;
     }
+    <?php } ?>
 
     var geditor_status = document.getElementById("geditor_wr_content_geditor_status");
     if (geditor_status != null) {
@@ -1087,7 +1096,7 @@ function comment_box(comment_id, work, mb_nick)
         $("#"+el_id).html(save_html);
 
         <?php if ($mw_basic['cf_comment_mention']) { ?>
-        if (mb_nick != undefined) {
+        if (mb_nick != undefined && mb_nick != '') {
             <?php if ($is_comment_editor && $mw_basic['cf_editor'] == "cheditor") { ?>
                 $("#tx_wr_content").val("[@"+mb_nick+"] ");
             <?php } else { ?>
@@ -1134,8 +1143,11 @@ function comment_box(comment_id, work, mb_nick)
     }
 
     if (work == 'c') {
-	<? /*if (file_exists("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?> imageClick();<? }*/ ?>
-	<? if (file_exists("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?> $.kcaptcha_run(); <? } ?>
+        <?php if (defined("G5_PATH") && $is_guest) { ?>
+            $("#captcha_reload").trigger("click");
+	<?php } else  if (is_file("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?>
+            $.kcaptcha_run();
+        <?php } ?>
     }
 }
 
@@ -1241,8 +1253,8 @@ var g4_skin_path = "<?=$board_skin_path?>";
 $(document).ready(function () {
     $(".mw_basic_comment_url").click(function () {
         var comment_id = $(this).attr("value");
-        var top = $(this).offset().top + 15 ;
-        var left = $(this).offset().left;
+        var top = $(this).position().top + 15 ;
+        var left = $(this).position().left;
 
         if ($("#comment_url_popup").css("display") != "block" || comment_id != old_comment_id) {
             $(this).append("<img src='<?=$board_skin_path?>/img/icon_loading.gif' style='position:absolute;' id='comment_url_loading'>");

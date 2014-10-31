@@ -20,7 +20,7 @@
  */
 
 include_once("_common.php");
-include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
+include_once($board_skin_path."/mw.lib/mw.skin.basic.lib.php");
 
 if ($is_admin != "super")
     alert_close("접근 권한이 없습니다.");
@@ -33,7 +33,6 @@ if (!$mw_basic[cf_type]) $mw_basic[cf_type] = "list";
 
 $g4[title] = "배추 BASIC SKIN 관리자";
 
-header("Content-Type: text/html; charset=$g4[charset]");
 $gmnow = gmdate("D, d M Y H:i:s") . " GMT";
 header("Expires: 0"); // rfc2616 - Section 14.21
 header("Last-Modified: " . $gmnow);
@@ -50,11 +49,10 @@ set_session("ss_config_token", $token = uniqid(time()));
 ?>
 <!doctype html>
 <html lang="ko">
+<head>
 <meta charset="<?=$g4['charset']?>">
 <title><?=$g4['title']?></title>
-<link rel="stylesheet" href="<?=$g4['path']?>/style.css" type="text/css">
-</head>
-<script type="text/javascript">
+<script>
 // 자바스크립트에서 사용하는 전역변수 선언
 var g4_path      = "<?=$g4['path']?>";
 var g4_bbs       = "<?=$g4['bbs']?>";
@@ -70,8 +68,10 @@ var g4_is_gecko  = navigator.userAgent.toLowerCase().indexOf("gecko") != -1;
 var g4_is_ie     = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
 <? if ($is_admin) { echo "var g4_admin = '{$g4['admin']}';"; } ?>
 </script>
-<script type="text/javascript" src="<?=$g4['path']?>/js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="<?=$g4['path']?>/js/common.js"></script>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<link href="//code.jquery.com/ui/1.11.2/themes/humanity/jquery-ui.css" rel="stylesheet" />
+</head>
 <body topmargin="0" leftmargin="0" <?=isset($g4['body_script']) ? $g4['body_script'] : "";?>>
 <a name="g4_head"></a>
 
@@ -81,8 +81,6 @@ var g4_is_ie     = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
 <link rel="stylesheet" href="<?=$board_skin_path?>/mw.js/ui-lightness/jquery-ui-1.7.2.custom.css" type="text/css"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
 -->
-<link href="<?=$board_skin_path?>/mw.js/ui-lightness/jquery-ui-1.8.19.custom.css" rel="stylesheet" />
-<script src="<?=$board_skin_path?>/mw.js/jquery-ui-1.8.19.custom.min.js"></script>
 <script src="<?="$board_skin_path/mw.js/selectbox.js"?>"></script>
 
 <?
@@ -2929,10 +2927,10 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
-	<div class="cf_title"> <input type=checkbox name=chk[cf_image_remote_save] value=1>&nbsp; 외부이미지 </div>
+	<div class="cf_title"> <input type=checkbox name=chk[cf_image_remote_save] value=1>&nbsp; 외부썸네일 </div>
 	<div class="cf_content">
 	    <input type=checkbox name=cf_image_remote_save value=1> 사용
-            <span class="cf_info">(본문에 외부이미지 링크가 있을 경우 파일을 우리서버에 저장합니다.)</span>
+            <span class="cf_info">(본문에 외부이미지 링크가 있을 경우 썸네일을 만들어 우리서버에 저장합니다.)</span>
 	    <script> document.cf_form.cf_image_remote_save.checked = '<?=$mw_basic[cf_image_remote_save]?>'; </script>
 	</div>
     </div>

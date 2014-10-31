@@ -272,6 +272,7 @@ if (!$is_member) {
     if (!$homepage) $homepage = get_cookie("mw_cookie_homepage");
 }
 ?>
+<script src="<?php echo $board_skin_path?>/mw.js/mw.g5.adapter.js.php?bo_table=<?php echo $bo_table?>"></script>
 <link href="<?php echo $pc_skin_path?>/mw.css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
 <link rel="stylesheet" href="<?=$board_skin_path?>/style.common.css?<?=filemtime("$board_skin_path/style.common.css")?>" type="text/css">
@@ -1631,21 +1632,20 @@ if ($mw_basic['cf_bbs_banner']) {
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
 <? } ?>
 
-<? if (file_exists("$g4[bbs_path]/kcaptcha_session.php") && $is_guest) { ?>
+<?php if ($is_guest && defined('G5_PATH')) { //자동등록방지  ?>
+<tr>
+    <td class=mw_basic_write_title>· 자동등록방지</td>
+    <td class=mw_basic_write_content style="padding:5px 0 5px 0;">
+        <?php echo $captcha_html ?>
+    </td>
+</tr>
+<?php } else if ($is_guest && is_file($g4['bbs_path']."/kcaptcha_session.php")) { ?>
 <tr>
     <td class=write_head><img id='kcaptcha_image' /></td>
     <td><input class='ed' type=input size=10 name=wr_key itemname="자동등록방지" required>&nbsp;&nbsp;왼쪽의 글자를 입력하세요.</td>
 </tr>
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
-<? /* ?>
-<script> var md5_norobot_key = ''; </script>
-<tr>
-    <td class=write_head><img id='kcaptcha_image' border='0' width=120 height=60 onclick="imageClick();" style="cursor:pointer;" title="글자가 잘안보이는 경우 클릭하시면 새로운 글자가 나옵니다."></td>
-    <td><input class='ed' type=input size=10 name=wr_key itemname="자동등록방지" required>&nbsp;&nbsp;왼쪽의 글자를 입력하세요.</td>
-</tr>
-<tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
-<? */ ?>
-<? } ?>
+<?php } ?>
 
 
 <tr><td colspan=2 height=1 class=mw_basic_line_color></td></tr>
@@ -1673,9 +1673,11 @@ if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr(
 
 </td></tr></table>
 
-<script src="<?="$g4[path]/js/jquery.kcaptcha.js"?>"></script>
-<script>
+<?php if (is_file($g4['path']."/js/jquery.kcaptcha.js")) { ?>
+<script src="<?php echo $g4['path']."/js/jquery.kcaptcha.js"?>"></script>
+<?php } ?>
 
+<script>
 $(document).ready(function () {
     if (typeof(document.fwrite.ca_name) != 'undefined') {
         fwrite.ca_name.value = "<?=$sca?>";
@@ -1908,9 +1910,13 @@ function fwrite_check(f) {
         return false;
     }
 
-    if (!check_kcaptcha(f.wr_key)) {
-        return false;
-    }
+    <?php if (defined('G5_PATH')) { ?>
+        <?php echo $captcha_js; // 캡챠 사용시 자바스크립트에서 입력된 캡챠를 검사함  ?>
+    <?php } else { ?>
+        if (!check_kcaptcha(f.wr_key)) {
+            return false;
+        }
+    <?php } ?>
 
     /*if (typeof(f.wr_key) != 'undefined') {
         if (hex_md5(f.wr_key.value) != md5_norobot_key) {

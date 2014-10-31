@@ -188,8 +188,12 @@ else {
         if ($path) {
             $size = @getimagesize($path);
         }
-        else if (ini_get('allow_url_fopen')) {
-            $size = @getimagesize($match);
+        else if ($path && ini_get('allow_url_fopen')) {
+            $size = @getimagesize($path);
+            /*$tmp = $g4['path']."/data/tmp-remote";
+            mw_save_remote_image($match, $tmp);
+            $size = getimagesize($tmp);
+            unlink($tmp);*/
         }
         if ($size[0] && $size[1]) {
             $match = $matchs[1][$i];
