@@ -863,11 +863,13 @@ function mw_get_editor_image($data)
         $path = $match;
         if (substr($match, 0, 7) == "http://") {
             $path = preg_replace("/http:\/\/[^\/]+\//iUs", "", $match);
-            $path = $_SERVER['DOCUMENT_ROOT'].$path;
+            $path = $_SERVER['DOCUMENT_ROOT'].'/'.$path;
+            $path = str_replace("//", "/", $path);
             $path = str_replace("//", "/", $path);
         }
         else if (substr($match, 0, 1) == "/") {
-            $path = $_SERVER['DOCUMENT_ROOT'].$path;
+            $path = $_SERVER['DOCUMENT_ROOT'].'/'.$path;
+            $path = str_replace("//", "/", $path);
             $path = str_replace("//", "/", $path);
         }
         else if (substr($match, 0, 3) == "../") {
@@ -3607,7 +3609,7 @@ function mw_path_to_url($content)
 {
     global $g4;
 
-    //$content = str_replace($g4['path'].'/data/', $g4['url'].'/data/', $content);
+    $content = str_replace($g4['path'].'/data/', $g4['url'].'/data/', $content);
     $content = str_replace('../data/', $g4['url'].'/data/', $content);
 
     return $content;
@@ -3756,5 +3758,13 @@ function mw_rate_count($bo_table, $wr_id)
     $row = sql_fetch($sql);
 
     return $row['cnt'];
+}
+
+function is_g5()
+{
+    if (defined('G5_PATH'))
+        return true;
+
+    return false;
 }
 

@@ -156,7 +156,7 @@ if ($mw_basic[cf_comment_period] > 0) {
     }
 }
 
-
+$is_singo_admin = mw_singo_admin($member[mb_id]);
 
 echo bc_code($mw_basic[cf_comment_head]);
 ?>
@@ -176,7 +176,7 @@ AutoSourcing.init( 'view_%id%' , true);
 </script>
 <? } ?>
 
-<script type="text/javascript">
+<script>
 // 글자수 제한
 var char_min = parseInt(<?=$comment_min?>); // 최소
 var char_max = parseInt(<?=$comment_max?>); // 최대
@@ -291,7 +291,7 @@ if ($mw_basic[cf_comment_best]) {
             <? if ($mw_basic[cf_attribute] == 'qna' && $write[wr_qna_status] && $write[wr_qna_id] == $row[wr_id]) { ?> <img src="<?=$board_skin_path?>/img/icon_choose.png" align="absmiddle"> <? } ?>
             <span class=mw_basic_comment_name><?=$row[name]?></span>
             <? if ($is_ip_view && $row[ip]) { ?> <span class=mw_basic_comment_ip>(<?=$row[ip]?>)</span> <?}?>
-            <? if ($is_admin) { ?>
+            <? if ($is_admin or $is_singo_admin) { ?>
             <img src="<?=$board_skin_path?>/img/btn_intercept_small.gif" align=absmiddle title='접근차단' style="cursor:pointer" onclick="btn_intercept('<?=$row[mb_id]?>', '<?=$row[wr_ip]?>')">
             <img src="<?=$board_skin_path?>/img/btn_ip.gif" align=absmiddle title='IP조회' style="cursor:pointer" onclick="btn_ip('<?=$row[wr_ip]?>')">
             <img src="<?=$board_skin_path?>/img/btn_ip_search.gif" align=absmiddle title='IP검색' style="cursor:pointer" onclick="btn_ip_search('<?=$row[wr_ip]?>')">
@@ -340,7 +340,7 @@ if ($mw_basic[cf_comment_best]) {
 <a id="cs" name="cs"></a>
 <? if ($is_admin) { ?> <input onclick="$('input[name=chk_comment_id[]]').attr('checked', this.checked);" type=checkbox> 코멘트 전체 선택 <? } ?>
 
-<?
+<?php
 $total_count = count($list);
 
 if ($mw_basic[cf_comment_page]) { // 코멘트 페이지
@@ -418,7 +418,7 @@ for ($i=0; $i<$to_record; $i++) {
             style="font:normal 11px 'gulim'; color:#888; text-decoration:none;"><? echo $is_comment_image ? "사진변경" : "사진등록"; ?></a></div>
         <? } ?>
 
-        <script type="text/javascript">
+        <script>
         function mw_member_photo(mb_id) {
             win_open('<?=$board_skin_path?>/mw.proc/mw.comment.image.php?bo_table=<?=$bo_table?>&mb_id='+mb_id,'comment_image','width=500,height=350');
         }
@@ -454,7 +454,7 @@ for ($i=0; $i<$to_record; $i++) {
                 <? if ($list[$i][is_edit]) { echo "<a href=\"javascript:comment_box('{$comment_id}', 'cu');\"><img src='$board_skin_path/img/btn_comment_update.gif' border=0 align=absmiddle title='수정'></a> "; } ?>
                 <? if ($list[$i][is_del])  { echo "<a href=\"javascript:comment_delete('{$list[$i][del_link]}');\"><img src='$board_skin_path/img/btn_comment_delete.gif' border=0 align=absmiddle title='삭제'></a> "; } ?>
                 <? if ($list[$i][singo_href]) { ?><a href="<?=$list[$i][singo_href]?>"><img src="<?=$board_skin_path?>/img/btn_singo.gif" align=absmiddle title='신고'></a><?}?>
-		<? if ($is_admin) { ?>
+		<? if ($is_admin or $is_singo_admin) { ?>
 		<img src="<?=$board_skin_path?>/img/btn_intercept_small.gif" align=absmiddle title='접근차단' style="cursor:pointer" onclick="btn_intercept('<?=$list[$i][mb_id]?>', '<?=$list[$i][wr_ip]?>')">
 		<img src="<?=$board_skin_path?>/img/btn_ip.gif" align=absmiddle title='IP조회' style="cursor:pointer" onclick="btn_ip('<?=$list[$i][wr_ip]?>')">
 		<img src="<?=$board_skin_path?>/img/btn_ip_search.gif" align=absmiddle title='IP검색' style="cursor:pointer" onclick="btn_ip_search('<?=$list[$i][wr_ip]?>')">
@@ -598,11 +598,18 @@ if ($mw_basic[cf_comment_default] && $is_comment_editor)
 if (!$mw_basic[cf_editor])
     $mw_basic[cf_editor] = "cheditor";
 
-if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
-    /*$g4[cheditor4_path] = "$board_skin_path/cheditor";
-    include_once("$board_skin_path/mw.lib/mw.cheditor.lib.php");
-    echo "<script type='text/javascript' src='$board_skin_path/cheditor/cheditor.js'></script>";
-    echo cheditor1('wr_content', '100%', '100');*/
+if (is_g5())
+{
+    $is_comment_editor = false;
+
+    /*include_once(G5_EDITOR_LIB);
+    $editor_html = editor_html('wr_content', '', $is_comment_editor);
+    $editor_js = '';
+    $editor_js .= get_editor_js('wr_content', $is_comment_editor);
+    $editor_js .= chk_editor_js('wr_content', $is_comment_editor);*/
+
+}
+else if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") {
     include_once("$g4[path]/lib/cheditor4.lib.php");
     echo "<script src='$g4[cheditor4_path]/cheditor.js'></script>";
     echo cheditor1('wr_content', '100%', '100');
@@ -689,7 +696,7 @@ if (!$is_member) {
 </tr>
 <?}?>
 
-<?php if ($is_guest && defined('G5_PATH')) { //자동등록방지  ?>
+<?php if ($is_guest && is_g5()) { //자동등록방지  ?>
 <tr>
     <td>자동등록방지</td>
     <td style="padding:3px 0 3px 0;">
@@ -742,11 +749,6 @@ if (!$is_member) {
 <tr>
     <td colspan="2" style="line-height:30px;">
         <? if (!$is_comment_editor) { ?>
-        <? /* ?>
-        <span style="cursor: pointer;" onclick="textarea_decrease('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_up.gif" align=absmiddle></span>
-        <span style="cursor: pointer;" onclick="textarea_original('wr_content', 5);"><img src="<?=$board_skin_path?>/img/btn_init.gif" align=absmiddle></span>
-        <span style="cursor: pointer;" onclick="textarea_increase('wr_content', 10);"><img src="<?=$board_skin_path?>/img/btn_down.gif" align=absmiddle></span>
-        <? */ ?>
         <? if ($mw_basic[cf_comment_html]) echo "<input type=\"checkbox\" id=\"wr_html\" name=\"html\" value=\"html2\"> <label for='wr_html'>html</label>"; ?>
         <? } ?>
 
@@ -777,7 +779,8 @@ if (!$is_member) {
 <table width=98% cellpadding=0 cellspacing=0 border=0>
 <tr>
     <td>
-        <? if (!$is_comment_editor || $mw_basic[cf_editor] != "cheditor") { ?>
+        <?//php if (!is_g5() && (!$is_comment_editor || $mw_basic[cf_editor] != "cheditor")) { ?>
+        <?php if ((!$is_comment_editor || $mw_basic[cf_editor] != "cheditor")) { ?>
         <textarea id="wr_content" name="wr_content" rows="6" itemname="내용" required
             <?php
             if (!$write_error) { 
@@ -795,7 +798,9 @@ if (!$is_member) {
         <script> check_byte('wr_content', 'char_count'); </script><?}?>
         <?php } ?>
         <?php
-        if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor")
+        if (is_g5())
+            ;//echo $editor_html;
+        else if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor")
             echo "<textarea name='wr_content' id='tx_wr_content'>{$mw_basic[cf_comment_default]}</textarea>\n";
         ?>
     </td>
@@ -815,11 +820,12 @@ if (trim($mw_basic[cf_comment_write_notice])) {
     $comment_write_notice = preg_replace("/\n/", "\\n", $comment_write_notice);
     $comment_write_notice = preg_replace("/\r/", "", $comment_write_notice);
 
+if (!is_g5()) {
 ?>
 <script>
 $(document).ready(function () {
-<? if ($is_comment_editor) { ?>
-    <? if ($mw_basic[cf_editor] == "cheditor") { ?>
+<?php if ($is_comment_editor) { ?>
+    <?php if ($mw_basic[cf_editor] == "cheditor") { ?>
     ed_wr_content.editArea.blur();
     ed_wr_content.editArea.onfocus = function () {
         var ed = ed_wr_content.outputBodyHTML();
@@ -827,7 +833,7 @@ $(document).ready(function () {
             ed_wr_content.doc.body.innerHTML = '';
         }
     }
-    <? } else { ?>
+    <?php } else if ($mw_basic[cf_editor] == 'geditor') { ?>
     ged = document.getElementById("geditor_wr_content_frame").contentWindow.document.body;
     ged.onfocus = function () {
         var ed = document.getElementById('wr_content').value;
@@ -835,18 +841,18 @@ $(document).ready(function () {
             ged.innerHTML = '';
         }
     }
-    <? } ?>
-<? } else { ?>
+    <?php } ?>
+<?php } else { ?>
     $("#wr_content").focus(function () {
         if ($("#wr_content").val() == "<?=$comment_write_notice?>") {
             $("#wr_content").val('');
         }
     });
-<? } ?>
+<?php } ?>
 });
 
 </script>
-<? } ?>
+<?php } } ?>
 
 <div style="height:40px; clear:both;">
     <div class="comment_submit_button">
@@ -919,7 +925,7 @@ $(document).ready(function () {
 var save_before = '';
 var save_html = document.getElementById('mw_basic_comment_write').innerHTML;
 function good_submit(f, good) {
-    <? if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") { ?>
+    <? if (!is_g5() && $is_comment_editor && $mw_basic[cf_editor] == "cheditor") { ?>
     var ed = ed_wr_content.outputBodyHTML();
     <? } else { ?>
     var ed = document.getElementById('wr_content').value;
@@ -949,6 +955,13 @@ function is_empty(ed)
     return !ed;
 }
 
+<?php if (is_g5()) { ?>
+function g5_editor_to_text()
+{
+    <?php echo get_editor_js('wr_content', $is_comment_editor)?>
+}
+<?php } ?>
+
 function fviewcomment_submit(f)
 {
     var pattern = /(^\s*)|(\s*$)/g; // \s 공백 문자
@@ -963,8 +976,14 @@ function fviewcomment_submit(f)
     }
     */
 
-    <? if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") echo cheditor3('wr_content'); ?>
+    <?php
+    if (is_g5())
+        echo $editor_js;
+    elseif ($is_comment_editor && $mw_basic[cf_editor] == "cheditor")
+        echo cheditor3('wr_content');
+    ?>
 
+    <?php if (!is_g5()) { ?>
     if (document.getElementById('tx_wr_content')) {
         if (is_empty(ed_wr_content.outputBodyHTML())) { 
             alert('내용을 입력하십시오.'); 
@@ -972,6 +991,7 @@ function fviewcomment_submit(f)
             return false;
         }
     }
+    <?php } ?>
  
     var subject = "";
     var content = "";
@@ -1108,9 +1128,11 @@ function comment_box(comment_id, work, mb_nick)
         // 코멘트 수정
         if (work == 'cu')
         {
-            <? if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") { ?>
+            <?php if (!is_g5() && ($is_comment_editor && $mw_basic[cf_editor] == "cheditor")) { ?>
                 $("#tx_wr_content").val($("#save_comment_" + comment_id).val());
-            <? } else { ?>
+            <?php } else if (is_g5()) { ?>
+                g5_editor_to_text();
+            <?php } else { ?>
                 $("#wr_content").val($("#save_comment_" + comment_id).val());
 
                 $("#wr_content").removeAttr("readonly");
@@ -1118,12 +1140,12 @@ function comment_box(comment_id, work, mb_nick)
                 $("#btn_comment_submit").removeAttr("readonly");
                 $("#btn_comment_submit").removeAttr("onclick");
 
-                <? if (!$mw_basic[cf_comment_editor] && ($comment_min || $comment_max)) { ?>
+                <?php if (!$mw_basic[cf_comment_editor] && ($comment_min || $comment_max)) { ?>
                 if (typeof char_count != 'undefined')
                     check_byte('wr_content', 'char_count');
-                <? } ?>
+                <?php } ?>
 
-            <? } ?>
+            <?php } ?>
             if ($("#secret_"+comment_id).val() == '1')
                 $("#wr_secret").attr("checked", "true");
             if ($("#html_"+comment_id).val() == '1')
@@ -1135,7 +1157,7 @@ function comment_box(comment_id, work, mb_nick)
 
         save_before = el_id;
 
-        <? if ($is_comment_editor && $mw_basic[cf_editor] == "cheditor") { ?> ed_wr_content.run(); <? } ?> 
+        <? if (!is_g5() && $is_comment_editor && $mw_basic[cf_editor] == "cheditor") { ?> ed_wr_content.run(); <? } ?> 
     }
 
     if (typeof geditor_textareas != "undefined") {
@@ -1143,7 +1165,7 @@ function comment_box(comment_id, work, mb_nick)
     }
 
     if (work == 'c') {
-        <?php if (defined("G5_PATH") && $is_guest) { ?>
+        <?php if (is_g5() && $is_guest) { ?>
             $("#captcha_reload").trigger("click");
 	<?php } else  if (is_file("$g4[bbs_path]/kcaptcha_session.php") && $is_guest && !$write_error) { ?>
             $.kcaptcha_run();
@@ -1179,7 +1201,9 @@ function comment_all_delete()
 <? } ?>
 
 //$(document).ready(function () {
+<?php if (!is_g5()) { ?>
     comment_box('', 'c');
+<?php } ?>
 //});
 </script>
 
@@ -1366,7 +1390,6 @@ function btn_singo_clear(wr_id) {
 <? } ?>
 
 <?php
-$is_singo_admin = mw_singo_admin($member[mb_id]);
 if ($is_singo_admin) { ?>
 <script>
 function btn_intercept(mb_id, wr_ip) {
@@ -1389,12 +1412,14 @@ function btn_intercept(mb_id, wr_ip) {
 #loading { display:none; }
 </style>
 
+<?php if (!$is_comment_editor) { ?>
 <script src="<?php echo $board_skin_path?>/mw.js/autogrow.js"></script>
 <script>
 $(document).ready(function () {
     $("#wr_content").autogrow();
 });
 </script>
+<?php } ?>
 
 <div id="loading"><img src="<?=$board_skin_path?>/img/icon_loading.gif"/></div>
 

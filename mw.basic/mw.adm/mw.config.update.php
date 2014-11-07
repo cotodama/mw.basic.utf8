@@ -490,6 +490,7 @@ bo_table = '$bo_table'
 ,cf_include_write_head = '$cf_include_write_head'
 ,cf_include_write_main = '$cf_include_write_main'
 ,cf_include_write_tail = '$cf_include_write_tail'
+,cf_include_write_update = '$cf_include_write_update'
 ,cf_subject_style = '$cf_subject_style'
 ,cf_subject_style_level = '$cf_subject_style_level'
 ,cf_subject_style_color_default = '$cf_subject_style_color_default'
@@ -927,6 +928,7 @@ if ($chk[cf_include_comment_main]) $sql .= ", cf_include_comment_main = '$cf_inc
 if ($chk[cf_include_write_head]) $sql .= ", cf_include_write_head = '$cf_include_write_head' ";
 if ($chk[cf_include_write_main]) $sql .= ", cf_include_write_main = '$cf_include_write_main' ";
 if ($chk[cf_include_write_tail]) $sql .= ", cf_include_write_tail = '$cf_include_write_tail' ";
+if ($chk[cf_include_write_update]) $sql .= ", cf_include_write_update = '$cf_include_write_update' ";
 if ($chk[cf_subject_style]) {
     $sql .= ", cf_subject_style = '$cf_subject_style' ";
     $sql .= ", cf_subject_style_level = '$cf_subject_style_level' ";

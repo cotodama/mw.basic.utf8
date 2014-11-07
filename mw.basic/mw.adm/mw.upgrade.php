@@ -1303,6 +1303,7 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_head varchar(255) not null", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_main varchar(255) not null", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_include_write_tail varchar(255) not null", false);
+    sql_query("alter table {$mw['basic_config_table']} add cf_include_write_update varchar(255) not null", false);
 
     $sql = "create table if not exists {$mw['category_table']} (
         bo_table varchar(20) not null,

@@ -636,6 +636,12 @@ else if ($mw_basic[cf_type] == "gall")
     </td>
     <? } ?>
 
+    <?php
+    if (!$mw_basic['cf_list_cate'] && $is_category) {
+        echo "<td><a href=\"{$list[$i][ca_name_href]}\" class=mw_basic_list_category {$ca_color_style}>{$list[$i][ca_name]}</a></td>";
+    }
+    ?>
+
     <? if ($mw_basic[cf_type] == "thumb") { ?>
     <? if (!is_file($thumb_file)) $thumb_file = mw_get_noimage(); ?>
     <? if ($list[$i][icon_secret] || $list[$i][wr_view_block] || $list[$i][wr_key_password])
@@ -649,12 +655,6 @@ else if ($mw_basic[cf_type] == "gall")
         --><? if ($list[$i][icon_new]) { echo "<div class='icon_gall_new'><img src='{$pc_skin_path}/img/icon_gall_new.png'></div>"; } ?><a href="<?=$list[$i][href]?>"><img src="<?=$thumb_file?>" width=<?=$mw_basic[cf_thumb_width]?> height=<?=$mw_basic[cf_thumb_height]?> align=absmiddle></a><!--
     --></td>
     <? } ?>
-
-    <?php
-    if (!$mw_basic['cf_list_cate'] && $is_category) {
-        echo "<td><a href=\"{$list[$i][ca_name_href]}\" class=mw_basic_list_category {$ca_color_style}>{$list[$i][ca_name]}</a></td>";
-    }
-    ?>
 
     <!-- 글제목 -->
     <td class=mw_basic_list_subject>

@@ -236,7 +236,7 @@ $write_height = 10;
 if ($mw_basic[cf_write_height])
     $write_height = $mw_basic[cf_write_height];
 
-if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
+if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor" && !is_g5()) {
     /* $g4[cheditor4_path] = "$board_skin_path/cheditor";
     include_once("$board_skin_path/mw.lib/mw.cheditor.lib.php");
     echo "<script type='text/javascript' src='$board_skin_path/cheditor/cheditor.js'></script>";
@@ -753,14 +753,16 @@ if ($mw_basic['cf_include_write_main'] && is_file($mw_basic['cf_include_write_ma
     </table>
     <? } ?>
 
-    <? if (!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") { ?>
+    <? if ((!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") && !is_g5()) { ?>
     <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows="<?=$write_height?>" itemname="내용" class=mw_basic_textarea
     <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") echo "geditor"; ?>
     <? if ($write_min || $write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?}?>><?=$content?></textarea>
     <? if (($write_min || $write_max) && !$is_dhtml_editor) { ?><script> check_byte('wr_content', 'char_count'); </script><?}?>
     <? } // if (!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") ?>
 
-    <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") echo cheditor2('wr_content', $content); ?>
+    <?php
+    if ($is_dhtml_editor && is_g5()) echo $editor_html;
+    else if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") echo cheditor2('wr_content', $content); ?>
     <div><button type="button" class="fa-button" onclick="mw_save_temp('임시 저장 했습니다.')"><i class="fa fa-save"></i> 임시저장</button></div>
 </td>
 </tr>
@@ -1632,7 +1634,7 @@ if ($mw_basic['cf_bbs_banner']) {
 <tr><td colspan=2 height=1 bgcolor=#e7e7e7></td></tr>
 <? } ?>
 
-<?php if ($is_guest && defined('G5_PATH')) { //자동등록방지  ?>
+<?php if ($is_guest && is_g5()) { //자동등록방지  ?>
 <tr>
     <td class=mw_basic_write_title>· 자동등록방지</td>
     <td class=mw_basic_write_content style="padding:5px 0 5px 0;">
@@ -1758,7 +1760,7 @@ function mw_save_temp(msg)
     var wr_subject = $("#wr_subject").val();
     var wr_content = $("#wr_content").val();
 
-    <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") { ?>
+    <? if (!is_g5() && $is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") { ?>
     wr_content = ed_wr_content.outputBodyHTML();
     <? } ?>
 
@@ -1833,15 +1835,20 @@ function fwrite_check(f) {
             return false;
         }
     }
+    <?php if (!is_g5()) { ?>
     else if ($("#wr_content")) {
         if (!trim($("#wr_content").val())) { 
             alert('내용을 입력하십시오.'); 
             return false;
         }
     }
+    <?php } ?>
 
     <?php
-    if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
+    if (is_g5()) {
+        echo $editor_js;
+    }
+    else if ($is_dhtml_editor && $mw_basic[cf_editor] == "cheditor") {
         echo cheditor3('wr_content');
 
         if (($mw_basic[cf_type] == 'desc' && $mw_basic[cf_desc_use] && $mw_basic[cf_desc_use] <= $member[mb_level]) or $mw_basic[cf_contents_shop] == '2') {
@@ -1910,7 +1917,7 @@ function fwrite_check(f) {
         return false;
     }
 
-    <?php if (defined('G5_PATH')) { ?>
+    <?php if (is_g5()) { ?>
         <?php echo $captcha_js; // 캡챠 사용시 자바스크립트에서 입력된 캡챠를 검사함  ?>
     <?php } else { ?>
         if (!check_kcaptcha(f.wr_key)) {

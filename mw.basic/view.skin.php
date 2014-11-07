@@ -1372,7 +1372,9 @@ function mw_move_cate_one() {
 </script>
 <? } ?>
 
+<?php if (!is_g5()) { ?>
 <script> $(document).ready (function() { resizeBoardImage(<?=$board[bo_image_width]?>); }); </script>
+<?php } ?>
 
 <style type="text/css">
 /* 본문 img */

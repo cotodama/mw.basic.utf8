@@ -172,7 +172,7 @@ function reload_config() {
     });
 }
 function copy_config() {
-    win_open("mw.copy.config.php?bo_table=<?=$bo_table?>", "copy_config", "left=50, top=50, width=500, height=550, scrollbars=1");
+    window.open("mw.copy.config.php?bo_table=<?=$bo_table?>", "copy_config", "left=50, top=50, width=500, height=550, scrollbars=1");
 }
 function run_order(item, order)
 {
@@ -1268,6 +1268,14 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_content">
 	    <input type="text" size="60" name="cf_include_write_tail" class="ed" value="<?=$mw_basic[cf_include_write_tail]?>"> 
 	    <div class="cf_info">글작성 페이지 내용 아래 부분에 포함될 파일입니다.</div>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_action] value=1>&nbsp; 글쓰기 업데이트</div>
+	<div class="cf_content">
+	    <input type="text" size="60" name="cf_include_write_update" class="ed" value="<?=$mw_basic[cf_include_write_update]?>"> 
+	    <div class="cf_info">글작성 DB 업데이트 부분에에 포함될 파일입니다.</div>
 	</div>
     </div>
 
@@ -3135,7 +3143,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 
             <br/>진행시작일수 : <input type="text" class="ed" name="cf_social_commerce_begin" size="3" numeric value="<?=$mw_basic[cf_social_commerce_begin]?>"> 일 이내
             <br/>진행최대일수 : <input type="text" class="ed" name="cf_social_commerce_limit" size="3" numeric value="<?=$mw_basic[cf_social_commerce_limit]?>"> 일 까지
-            <div><a href="#;" onclick="win_open('<?=$social_commerce_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
+            <div><a href="#;" onclick="window.open('<?=$social_commerce_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
 	    <script>
             document.cf_form.cf_social_commerce.checked = "<?=$mw_basic[cf_social_commerce]?>";
             document.cf_form.cf_social_commerce_hp.checked = "<?=$mw_basic[cf_social_commerce_hp]?>";
@@ -3237,7 +3245,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                 <script> document.cf_form.cf_talent_market_hp.checked = "<?=$mw_basic[cf_talent_market_hp]?>"; </script>
             </div>
             <script> document.cf_form.cf_talent_market.value = "<?=$mw_basic[cf_talent_market]?>"; </script>
-            <div><a href="#;" onclick="win_open('<?=$talent_market_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
+            <div><a href="#;" onclick="window.open('<?=$talent_market_path?>/terms_write.php?bo_table=<?=$bo_table?>', 'terms', 'width=800,height=600,scrollbars=1')" style="text-decoration:underline;">이용약관 및 개인정보 제3자제공 동의 편집</a></div>
         </div>
     </div>
 

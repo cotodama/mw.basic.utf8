@@ -64,3 +64,8 @@ if ($mw_basic[cf_image_outline]) {
 }
 
 include_once($board_skin_path.'/mw.proc/naver_syndi.php');
+
+if ($mw_basic['cf_include_write_update'] && is_file($mw_basic['cf_include_write_update'])) {
+    include($mw_basic['cf_include_write_update']);
+}
+
