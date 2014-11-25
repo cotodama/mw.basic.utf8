@@ -238,6 +238,10 @@ if (file_exists("{$rss_collect_path}/_config.php")) include_once("{$rss_collect_
 $youtube_collect_path = "{$g4['path']}/plugin/youtube-collect";
 if (file_exists("{$youtube_collect_path}/_config.php")) include_once("{$youtube_collect_path}/_config.php");
 
+// 카카오스토리 수집기
+$kakao_collect_path = "{$g4['path']}/plugin/kakao-collect";
+if (file_exists("{$kakao_collect_path}/_config.php")) include_once("{$kakao_collect_path}/_config.php");
+
 // MarketDB
 $marketdb_path = "{$g4['path']}/plugin/marketdb";
 if (file_exists("{$marketdb_path}/_config.php")) include_once("{$marketdb_path}/_config.php");

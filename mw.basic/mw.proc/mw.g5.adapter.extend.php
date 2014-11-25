@@ -23,6 +23,7 @@ $g4['time_ymdhis']      = date("Y-m-d H:i:s", $g4['server_time']);
 $g4['charset']          = "utf-8";
 
 $g4['admin_path']       = $g4['path'].'/'.G5_ADMIN_DIR;
+$g4['link_count']       = G5_LINK_COUNT;
 
 if (G5_IS_MOBILE) {
     $board_skin_path    = $g4['path'].'/board/'.$board['bo_mobile_skin'];

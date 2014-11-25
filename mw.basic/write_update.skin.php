@@ -214,8 +214,12 @@ if ($mw_basic[cf_watermark_use] && is_file($mw_basic[cf_watermark_path]))
 {
     $sql = "select * from $g4[board_file_table] where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_width > 0  order by bf_no";
     $qry = sql_query($sql);
-    while ($row = sql_fetch_array($qry))
-        mw_watermark_file("$file_path/$row[bf_file]");
+    while ($row = sql_fetch_array($qry)) {
+        $watermark_file = mw_watermark_file("$file_path/$row[bf_file]");
+        if ($mw_basic['cf_image_outline']) {
+            mw_image_outline($watermark_file, null, $mw_basic['cf_image_outline_color']);
+        }
+    }
 }
 
 

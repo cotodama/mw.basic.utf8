@@ -601,8 +601,9 @@ if (!$mw_basic[cf_editor])
 if (is_g5())
 {
     $is_comment_editor = false;
+    include_once(G5_EDITOR_LIB);
 
-    /*include_once(G5_EDITOR_LIB);
+    /*
     $editor_html = editor_html('wr_content', '', $is_comment_editor);
     $editor_js = '';
     $editor_js .= get_editor_js('wr_content', $is_comment_editor);

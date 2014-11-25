@@ -54,12 +54,17 @@ if ($is_admin && $wr_to_id && $mw_basic[cf_attribute] == "1:1") {
     }
 }
 
-if ($mw_basic[cf_image_outline]) {
+if ($mw_basic['cf_image_outline']) {
     for ($i=0, $m=count($upload); $i<$m; ++$i) {
-        $dest_file = "$g4[path]/data/file/$bo_table/" . $upload[$i][file];
+        $dest_file = "$g4[path]/data/file/{$bo_table}/" . $upload[$i][file];
         if (is_file($dest_file)) {
-            mw_image_outline($dest_file);
+            mw_image_outline($dest_file, null, $mw_basic['cf_image_outline_color']);
         }
+    }
+
+    $editor_image = mw_get_editor_image($_POST['wr_content']);
+    for ($j=0, $m=count($editor_image['local_path']); $j<$m; $j++) {
+        mw_image_outline($editor_image['local_path'][$j], null, $mw_basic['cf_image_outline_color']);
     }
 }
 

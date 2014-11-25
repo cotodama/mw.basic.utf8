@@ -879,8 +879,10 @@ function mw_get_editor_image($data)
             }
         }
        
-        $ret[http_path][$j] = $match;
-        $ret[local_path][$j] = $path;
+        if (is_file($path)) {
+            $ret[http_path][] = $match;
+            $ret[local_path][] = $path;
+        }
     }
     return $ret;
 }
@@ -888,7 +890,9 @@ function mw_get_editor_image($data)
 // 에디터 이미지 워터마크 생성
 function mw_create_editor_image_watermark($data)
 {
-    global $g4, $watermark_path;
+    global $g4;
+    global $watermark_path;
+    global $mw_basic;
 
     $editor_image = mw_get_editor_image($data);
 
@@ -899,6 +903,9 @@ function mw_create_editor_image_watermark($data)
         if ($size[0] > 0) {
             $watermark_file = mw_watermark_file($path);
             $data = str_replace($match, $watermark_file, $data);
+            if ($mw_basic['cf_image_outline']) {
+                mw_image_outline($watermark_file, null, $mw_basic['cf_image_outline_color']);
+            }
         }
     }
     return $data;
@@ -1337,6 +1344,12 @@ function bc_code($str, $is_content=1, $only_admin=0) {
             return mw_pay_banner($arg[1], $arg[2]);
         }, $str);*/
     }
+
+    $str = preg_replace("/\[line\]/iU", "<hr/>", $str);
+    $str = preg_replace("/\[line\s+color=([^\]]+)\]/iU", "<hr style='border-color:\\1;'/>", $str);
+
+    $str = preg_replace("/\[hr\]/iU", "<hr/>", $str);
+    $str = preg_replace("/\[hr\s+color=([^\]]+)\]/iU", "<hr style='border-color:\\1;'/>", $str);
 
     $str = preg_replace("/\[month\]/iU", date('n', $g4[server_time]), $str);
     $str = preg_replace("/\[last_day\]/iU", date('t', $g4[server_time]), $str);

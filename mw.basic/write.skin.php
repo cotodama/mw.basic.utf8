@@ -127,8 +127,19 @@ if (!$is_admin && $write[wr_view_block])
 if (!$mw_basic[cf_editor])
     $mw_basic[cf_editor] = "cheditor";
 
+if (is_g5())
+    $mw_basic['cf_editor'] = '';
+
 // 관리자만 dhtml 사용
-if ($mw_basic[cf_admin_dhtml] && $is_admin) $is_dhtml_editor = true;
+if ($mw_basic[cf_admin_dhtml] && $is_admin) {
+    $is_dhtml_editor = true;
+    if (is_g5()) {
+        $editor_html = editor_html('wr_content', $content, $is_dhtml_editor);
+        $editor_js = '';
+        $editor_js .= get_editor_js('wr_content', $is_dhtml_editor);
+        $editor_js .= chk_editor_js('wr_content', $is_dhtml_editor);
+    }
+}
 
 // 모바일 접근시 에디터 사용안함
 if (preg_match("/(iphone|samsung|lgte|mobile|BlackBerry|android|windows ce|mot|SonyEricsson)/i", $_SERVER[HTTP_USER_AGENT])) {
@@ -753,7 +764,7 @@ if ($mw_basic['cf_include_write_main'] && is_file($mw_basic['cf_include_write_ma
     </table>
     <? } ?>
 
-    <? if ((!$is_dhtml_editor || $mw_basic[cf_editor] != "cheditor") && !is_g5()) { ?>
+    <? if ((!$is_dhtml_editor || (!is_g5() && $mw_basic[cf_editor] != "cheditor"))) { ?>
     <textarea id="wr_content" name="wr_content" style='width:98%; word-break:break-all;' rows="<?=$write_height?>" itemname="내용" class=mw_basic_textarea
     <? if ($is_dhtml_editor && $mw_basic[cf_editor] == "geditor") echo "geditor"; ?>
     <? if ($write_min || $write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?}?>><?=$content?></textarea>

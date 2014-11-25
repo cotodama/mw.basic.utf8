@@ -3187,8 +3187,9 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	<div class="cf_content">
             <select name="cf_collect" id="cf_collect">
                 <option value="">사용안함</option>
-                <option value="rss">RSS 수집기 <? if (file_exists("$rss_collect_path/_lib.php")) echo '(설치됨)'; else echo '(설치안됨)'; ?></option>
-                <option value="youtube">Youtube 수집기 <? if (file_exists("$youtube_collect_path/_lib.php")) echo '(설치됨)'; else echo '(설치안됨)'; ?></option>
+                <option value="rss">RSS 수집기 <? if (is_file("$rss_collect_path/_lib.php")) echo '(설치됨)'; else echo '(설치안됨)'; ?></option>
+                <option value="youtube">Youtube 수집기 <? if (is_file("$youtube_collect_path/_lib.php")) echo '(설치됨)'; else echo '(설치안됨)'; ?></option>
+                <option value="kakao">카카오스토리 수집기 <? if (is_file("$kakao_collect_path/_lib.php")) echo '(설치됨)'; else echo '(설치안됨)'; ?></option>
             </select>
             <span class="cf_info" id="cf_collect_info"></span>  
             <script>

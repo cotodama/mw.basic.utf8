@@ -1,3 +1,26 @@
+ver 2.8.2 (14.11.14)
+    : 카카오스토리 수집기 지원 (신규출시!)
+    : 그누보드5 - 코멘트 get_editor_js 오류 해결 (칭와와님 제안)
+    : 그누보드5 - 이모티콘 미출력 문제 (그누보드5 auto_link 버그 보완)
+    : 그누보드5 - 링크 미출력 문제 해결
+    : 이미지 외곽선 색상변경 오류 수정 (먹는언니님 제안)
+    : 이미지 외곽선 에디터 첨부 이미지 적용 (먹는언니님 제안)
+    : 워터마크에 외곽선 적용
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.proc/mw.file.viewer.php
+    mw.basic/mw.proc/mw.g5.adapter.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.lib/mw.skin.basic.lib.php
+    mw.basic/mw.proc/mw.top.button.php
+    mw.basic/write.skin.php
+    mw.basic/view_comment.skin.php
+    mw.basic/view_comment_head.skin.php
+    mw.basic/write_update.tail.skin.php
+    mw.basic/write_comment_update.tail.skin.php
+ 
 ver 2.8.1 (14.11.07)
     : 글작성 제한 권한별 설정 쿼리문 변경 (edccesl님 제안)
     : 배추스킨설정 새창 스크립트 변경 (헨리님 제안)
@@ -12,6 +35,7 @@ ver 2.8.1 (14.11.07)
     mw.basic/mw.adm/mw.config.update.php
     mw.basic/mw.adm/mw.upgrade.php
     mw.basic/mw.adm/mw.level.update.php 
+    mw.basic/mw.lib/mw.function.lib.php
     mw.basic/list.skin.php
     mw.basic/view.skin.php
     mw.basic/view_comment.skin.php
