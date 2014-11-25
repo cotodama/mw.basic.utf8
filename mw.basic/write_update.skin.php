@@ -202,6 +202,12 @@ if ($mw_basic[cf_change_image_size] && $member[mb_level] >= $mw_basic[cf_change_
             where bo_table = '$bo_table' and wr_id = '$wr_id' and bf_no = '$row[bf_no]'");
     }
 }
+// 썸네일
+$thumb_file = mw_thumb_jpg($thumb_path.'/'.$wr_id);
+$thumb2_file = mw_thumb_jpg($thumb2_path.'/'.$wr_id);
+$thumb3_file = mw_thumb_jpg($thumb3_path.'/'.$wr_id);
+$thumb4_file = mw_thumb_jpg($thumb4_path.'/'.$wr_id);
+$thumb5_file = mw_thumb_jpg($thumb5_path.'/'.$wr_id);
 
 // 썸네일 생성
 $is_thumb = mw_make_thumbnail_row($bo_table, $wr_id, $_POST['wr_content'], $mw_basic['cf_image_remote_save']);
@@ -222,10 +228,9 @@ if ($mw_basic[cf_watermark_use] && is_file($mw_basic[cf_watermark_path]))
     }
 }
 
-
 // 생성된 썸네일이 없고, 유튜브 링크를 사용할 경우
 // 유튜브 섬네일 가져오기
-if (!$is_thumb && !is_file("{$thumb_path}/{$wr_id}")) {
+if (!$is_thumb && !is_file($thumb_file)) {
     if (preg_match("/youtu/i", $wr_link1)) mw_get_youtube_thumb($wr_id, $wr_link1);
     else if (preg_match("/youtu/i", $wr_link2)) mw_get_youtube_thumb($wr_id, $wr_link2);
     else if (preg_match("/vimeo/i", $wr_link1)) mw_get_vimeo_thumb($wr_id, $wr_link1);

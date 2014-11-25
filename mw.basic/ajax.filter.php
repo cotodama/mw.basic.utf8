@@ -50,7 +50,7 @@ if (strtolower($g4[charset]) == 'euc-kr')
 $filter = explode(",", trim($config['cf_filter']));
 for ($i=0; $i<count($filter); $i++) 
 {
-    $str = $filter[$i];
+    $str = strtolower($filter[$i]);
 
     // 제목 필터링 (찾으면 중지)
     $subj = "";

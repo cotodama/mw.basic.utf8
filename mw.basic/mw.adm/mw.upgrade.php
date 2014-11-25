@@ -1372,3 +1372,7 @@ if (is_null($mw_basic[cf_talent_market])) {
 
     sql_query("alter table {$mw['basic_config_table']} add cf_list_cate varchar(1) not null", false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_search_name varchar(1) default '' not null", false);
+
+    sql_query("alter table {$mw[basic_config_table]} add cf_ani_nothumb varchar(1) not null default ''", false);
+

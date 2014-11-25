@@ -88,13 +88,19 @@ if ($mw_basic[cf_attribute] == "1:1" && !$is_admin) {
 // 익명 게시판
 if ($mw_basic[cf_attribute] == "anonymous") {
     if (strstr($sfl, "mb_id") || strstr($sfl, "wr_name")) {
-        alert("익명게시판에서는 아이디 또는 이름으로 검색하실 수 없습니다.");
+        alert("익명게시판에서는 회원아이디 또는 이름으로 검색하실 수 없습니다.");
     }
 }
 
 if ($mw_basic[cf_anonymous]) {
     if (strstr($sfl, "mb_id") || strstr($sfl, "wr_name")) {
-        alert("익명작성이 가능한 게시판에서는 아이디 또는 이름으로 검색하실 수 없습니다.");
+        alert("익명작성이 가능한 게시판에서는 회원아이디 또는 이름으로 검색하실 수 없습니다.");
+    }
+}
+
+if ($mw_basic['cf_search_name']) {
+    if (strstr($sfl, "mb_id") || strstr($sfl, "wr_name")) {
+        alert("회원아이디 또는 이름으로 검색하실 수 없습니다.");
     }
 }
 
@@ -492,7 +498,7 @@ if (!is_file($thumb_file))
 {
     $is_thumb = mw_make_thumbnail_row($bo_table, $list[$i]['wr_id'], $list[$i]['wr_content']);
 
-    if (!is_file($thumb_path.'/'.$list[$i]['wr_id'])) {
+    if (!is_file($thumb_file)) {
         if (preg_match("/youtu/i", $list[$i]['link'][1])) mw_get_youtube_thumb($list[$i]['wr_id'], $list[$i]['link'][1]);
         else if (preg_match("/youtu/i", $list[$i]['link'][2])) mw_get_youtube_thumb($list[$i]['wr_id'], $list[$i]['link'][2]);
         else if (preg_match("/vimeo/i", $list[$i]['link'][1])) mw_get_vimeo_thumb($list[$i]['wr_id'], $list[$i]['link'][1]);
@@ -547,7 +553,9 @@ else if ($mw_basic[cf_type] == "gall")
     if ($list[$i][is_notice]) continue;
 
     if (!is_file($thumb_file)) {
-        $thumb_file = mw_get_noimage();
+        $thumb_file = $list[$i]['file'][0]['path'].'/'.$list[$i]['file'][0]['file'];
+        if (!is_file($thumb_file))
+            $thumb_file = mw_get_noimage();
         $thumb_width = "width='$mw_basic[cf_thumb_width]'";
         $thumb_height = "height='$mw_basic[cf_thumb_height]'";
     }
@@ -642,19 +650,23 @@ else if ($mw_basic[cf_type] == "gall")
     }
     ?>
 
-    <? if ($mw_basic[cf_type] == "thumb") { ?>
-    <? if (!is_file($thumb_file)) $thumb_file = mw_get_noimage(); ?>
-    <? if ($list[$i][icon_secret] || $list[$i][wr_view_block] || $list[$i][wr_key_password])
-        $thumb_file = $board_skin_path.'/img/lock.png'; ?>
-
-    <? if (strstr($board['bo_notice'], $list[$i]['wr_id']."\n") && $thumb_file == mw_get_noimage())
-        $thumb_file = $board_skin_path.'/img/notice.png'; ?>
+    <?php
+    if ($mw_basic[cf_type] == "thumb") {
+        if (!is_file($thumb_file))
+            $thumb_file = $list[$i]['file'][0]['path'].'/'.$list[$i]['file'][0]['file'];
+        if (!is_file($thumb_file))
+            $thumb_file = mw_get_noimage();
+        if ($list[$i][icon_secret] || $list[$i][wr_view_block] || $list[$i][wr_key_password])
+            $thumb_file = $board_skin_path.'/img/lock.png';
+        if (strstr($board['bo_notice'], $list[$i]['wr_id']."\n") && $thumb_file == mw_get_noimage())
+            $thumb_file = $board_skin_path.'/img/notice.png';
+    ?>
 
     <!-- 썸네일 -->
     <td class=mw_basic_list_thumb><!-- 여백제거
         --><? if ($list[$i][icon_new]) { echo "<div class='icon_gall_new'><img src='{$pc_skin_path}/img/icon_gall_new.png'></div>"; } ?><a href="<?=$list[$i][href]?>"><img src="<?=$thumb_file?>" width=<?=$mw_basic[cf_thumb_width]?> height=<?=$mw_basic[cf_thumb_height]?> align=absmiddle></a><!--
     --></td>
-    <? } ?>
+    <?php } ?>
 
     <!-- 글제목 -->
     <td class=mw_basic_list_subject>
@@ -838,7 +850,7 @@ else if ($mw_basic[cf_type] == "gall")
             <option value='wr_subject'>제목</option>
             <option value='wr_content'>내용</option>
             <option value='wr_subject||wr_content'>제목+내용</option>
-            <? if ($mw_basic[cf_attribute] != "anonymous" && !$mw_basic[cf_anonymous]) { ?>
+            <? if ($mw_basic[cf_attribute] != "anonymous" && !$mw_basic[cf_anonymous] && !$mw_basic['cf_search_name']) { ?>
             <option value='mb_id,1'>회원아이디</option>
             <option value='mb_id,0'>회원아이디(코)</option>
             <option value='wr_name,1'>이름</option>
@@ -1103,7 +1115,7 @@ while ($row = sql_fetch_array($qry)) {
 }
 
 // RSS 수집기
-if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_collect_path/_config.php")) {
+if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && is_file("$rss_collect_path/_config.php")) {
     include_once("$rss_collect_path/_config.php");
     if ($mw_rss_collect_config[cf_license]) {
         ?>
@@ -1117,13 +1129,27 @@ if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_col
 }
 
 // Youtube 수집기
-if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && file_exists("$youtube_collect_path/_config.php")) {
+if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && is_file("$youtube_collect_path/_config.php")) {
     include_once("$youtube_collect_path/_config.php");
     if ($mw_youtube_collect_config[cf_license]) {
         ?>
         <script>
         $(document).ready(function () {
             $.get("<?=$youtube_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
+        });
+        </script>
+        <?
+    }
+}
+
+// Youtube 수집기
+if ($mw_basic[cf_collect] == 'kakao' && $kakao_collect_path && is_file("$kakao_collect_path/_config.php")) {
+    include_once("$kakao_collect_path/_config.php");
+    if ($mw_kakao_collect_config['cf_license']) {
+        ?>
+        <script>
+        $(document).ready(function () {
+            $.get("<?=$kakao_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
         });
         </script>
         <?

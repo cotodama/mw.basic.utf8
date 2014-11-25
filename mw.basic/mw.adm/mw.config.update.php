@@ -381,6 +381,7 @@ bo_table = '$bo_table'
 ,cf_notice_hit = '$cf_notice_hit'
 ,cf_notice_good = '$cf_notice_good'
 ,cf_post_name = '$cf_post_name'
+,cf_search_name = '$cf_search_name'
 ,cf_post_date = '$cf_post_date'
 ,cf_post_hit = '$cf_post_hit'
 ,cf_list_good = '$cf_list_good'
@@ -393,6 +394,7 @@ bo_table = '$bo_table'
 ,cf_image_outline = '$cf_image_outline'
 ,cf_image_outline_color = '$cf_image_outline_color'
 ,cf_image_remote_save = '$cf_image_remote_save'
+,cf_ani_nothumb = '$cf_ani_nothumb'
 ,cf_only_one = '$cf_only_one'
 ,cf_must_notice = '$cf_must_notice'
 ,cf_must_notice_read = '$cf_must_notice_read'
@@ -790,6 +792,7 @@ if ($chk[cf_notice_date]) $sql .= ", cf_notice_date = '$cf_notice_date' ";
 if ($chk[cf_notice_hit]) $sql .= ", cf_notice_hit = '$cf_notice_hit' ";
 if ($chk[cf_notice_good]) $sql .= ", cf_notice_good = '$cf_notice_good' ";
 if ($chk[cf_post_name]) $sql .= ", cf_post_name = '$cf_post_name' ";
+if ($chk[cf_search_name]) $sql .= ", cf_search_name = '$cf_search_name' ";
 if ($chk[cf_post_date]) $sql .= ", cf_post_date = '$cf_post_date' ";
 if ($chk[cf_post_hit]) $sql .= ", cf_post_hit = '$cf_post_hit' ";
 if ($chk[cf_list_good]) $sql .= ", cf_list_good = '$cf_list_good' ";
@@ -804,6 +807,7 @@ if ($chk[cf_image_outline]) {
     $sql .= ", cf_image_outline_color = '$cf_image_outline_color' ";
 }
 if ($chk[cf_image_remote_save]) $sql .= ", cf_image_remote_save = '$cf_image_remote_save' ";
+if ($chk[cf_ani_nothumb]) $sql .= ", cf_ani_nothumb = '$cf_ani_nothumb' ";
 if ($chk[cf_only_one]) $sql .= ", cf_only_one = '$cf_only_one' ";
 if ($chk[cf_must_notice]) {
     $sql .= ", cf_must_notice = '$cf_must_notice' ";

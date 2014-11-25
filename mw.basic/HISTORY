@@ -1,3 +1,26 @@
+ver 2.8.3 (14.11.21)
+    : 이름, 아이디 검색 안함 옵션 (진나진님 제안)
+    : 날짜순 정렬 오류 수정 (진나진님 제안)
+    : 그누보드5 - 첨부 이미지 표시 문제 (busan님 제안)
+    : BC CODE - 오늘날짜, 요일 추가 (재아님 제안)
+    : 움직이는 gif 워터마크, 썸네일 생성안함 (인쇄쟁이님 제안)
+    : 차단 페이지 모바일 최적화
+    : 카카오스토리 수집기 자동수집 지원
+    : 단어필터링 대소문자 구분 안함
+    : 썸네일 없는 경우 원본 이미지 출력
+
+    mw.basic/HISTORY
+    mw.basic/mw.adm/mw.config.php
+    mw.basic/mw.adm/mw.config.update.php
+    mw.basic/mw.adm/mw.upgrade.php
+    mw.basic/mw.lib/mw.function.lib.php
+    mw.basic/mw.proc/mw.adm.order.php
+    mw.basic/mw.proc/mw.intercept.php
+    mw.basic/mw.proc/mw.file.viewer.php
+    mw.basic/write.skin.php
+    mw.basic/list.skin.php
+    mw.basic/ajax.filter.php
+ 
 ver 2.8.2 (14.11.14)
     : 카카오스토리 수집기 지원 (신규출시!)
     : 그누보드5 - 코멘트 get_editor_js 오류 해결 (칭와와님 제안)

@@ -244,9 +244,9 @@ $google_map_is_view = false;
 if ($mw_basic[cf_google_map] && trim($write[wr_google_map])) {
     ob_start();
     ?>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&language=ko"></script>
-    <script type="text/javascript" src="<?=$pc_skin_path?>/mw.js/mw.google.js"></script>
-    <script type="text/javascript">
+    <script src="http://maps.google.com/maps/api/js?sensor=true&language=ko"></script>
+    <script src="<?=$pc_skin_path?>/mw.js/mw.google.js"></script>
+    <script>
     $(document).ready(function () {
         mw_google_map("google_map", "<?=addslashes($write[wr_google_map])?>");
     });
@@ -281,7 +281,7 @@ if ($mw_basic[cf_contents_shop] == '2' and $write[wr_contents_price]) // 배추 
             <?=conv_content($view[wr_contents_preview], $html)?>
             <div style="margin:20px 0 0 0;"><input type="button" class="btn1" value="내용보기" onclick="buy_contents('<?=$bo_table?>','<?=$wr_id?>', 0)"/></div>
         </div>
-        <script type="text/javascript">
+        <script>
         function contents_shop_view() {
         }
         </script>

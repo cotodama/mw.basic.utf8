@@ -196,6 +196,10 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
     if (!$thumbnail_file)
         $source_file = $thumbnail_file;
 
+    // 애니GIF 생성안함
+    if ($mw_basic['cf_ani_nothumb'] && is_ani($source_file))
+        return;
+
     $size = @getimagesize($source_file);
 
     switch ($size[2]) {
@@ -280,6 +284,8 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
 
     if ($time)
         touch($thumbnail_file, strtotime($time));
+
+    thumb_log($thumbnail_file, 'finally');
 }
 
 function mw_hex_to_rgb($hex)
@@ -308,6 +314,11 @@ function mw_image_outline($source, $size=null, $color="#cccccc")
     if (!@preg_match("/(jpe?g|gif|png)$/i", $source)) return;
 
     $source_file = $source;
+
+    // 애니GIF 생성안함
+    if ($mw_basic['cf_ani_nothumb'] && is_ani($source_file))
+        return;
+
     $size = @getimagesize($source_file);
     switch ($size[2]) {
         case 1: $source = @imagecreatefromgif($source_file); break;
@@ -335,6 +346,7 @@ function mw_image_outline($source, $size=null, $color="#cccccc")
     @chmod($source_file, 0606);
     @imagedestroy($source);
 
+    thumb_log($thumbnail_file, 'outline');
     return $source;
 }
 
@@ -493,6 +505,10 @@ function mw_watermark_file($source_file)
 
     if (is_file($watermark_file)) return $watermark_file;
 
+    // 애니GIF 생성안함
+    if ($mw_basic['cf_ani_nothumb'] && is_ani($source_file))
+        return;
+
     $size = @getimagesize($source_file);
     switch ($size[2]) {
         case 1: $source = @imagecreatefromgif($source_file); break;
@@ -506,6 +522,7 @@ function mw_watermark_file($source_file)
     @imagefilledrectangle($target, 0, 0, $size[0], $size[1], $white);
     @imagecopyresampled($target, $source, 0, 0, 0, 0, $size[0], $size[1], $size[0], $size[1]);
 
+    thumb_log($thumbnail_file, 'watermark_file');
     mw_watermark($target, $size[0], $size[1]
         , $mw_basic[cf_watermark_path]
         , $mw_basic[cf_watermark_position]
@@ -1354,6 +1371,9 @@ function bc_code($str, $is_content=1, $only_admin=0) {
     $str = preg_replace("/\[month\]/iU", date('n', $g4[server_time]), $str);
     $str = preg_replace("/\[last_day\]/iU", date('t', $g4[server_time]), $str);
 
+    $str = preg_replace("/\[today\]/iU", date('Y년 m월 d일', $g4['server_time']), $str);
+    $str = preg_replace("/\[day of the week\]/iU", get_yoil($g4['time_ymdhis']), $str);
+
     preg_match_all("/\[counting (.*)\]/iU", $str, $matches);
     for ($i=0, $m=count($matches[1]); $i<$m; $i++) {
         $str = preg_replace("/\[counting {$matches[1][$i]}\]/iU", mw_basic_counting_date($matches[1][$i]), $str);
@@ -1840,7 +1860,13 @@ function mw_basic_move_cate($bo_table, $wr_id)
 
 function mw_view_image($view, $number, $attribute)
 {
+    global $bo_table;
+    global $wr_id;
+
     $ret = '';
+    if (!$view['file']['count'])
+        $view['file'] = get_file($bo_table, $wr_id);
+
     if ($view['file'][$number]['view']) {
         $ret = preg_replace("/>$/", " $attribute>", $view['file'][$number]['view']);
         if (trim($view['file'][$number][content]))
@@ -2619,6 +2645,7 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
         if ($size[2] != 2) @unlink($file);
     }
 
+    thumb_log($thumbnail_file, 'youtube');
     mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
 
     if (!$datetime) {
@@ -2679,6 +2706,7 @@ function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
         if ($size[2] != 2) @unlink($file);
     }
 
+    thumb_log($thumbnail_file, 'vimeo');
     mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
 
     if (!$datetime) {
@@ -3466,6 +3494,7 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $
     // 첨부파일 썸네일 생성
     if (!empty($file))
     {
+        thumb_log($thumbnail_file, "file-{$bo_table}-{$wr_id}");
         mw_make_thumbnail_all($file_path.'/'.$file['bf_file']);
 
         $is_thumb = true;
@@ -3494,6 +3523,7 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $
                 // 서버내 이미지 썸네일 생성
                 if (is_file($dat))
                 {
+                    thumb_log($thumbnail_file, 'editor');
                     mw_make_thumbnail_all($dat);
 
                     $is_thumb = true;
@@ -3506,6 +3536,7 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $
                     $ret = mw_save_remote_image($mat, $thumb_file);
                     if ($ret)
                     {
+                        thumb_log($thumbnail_file, 'remote');
                         mw_make_thumbnail_all($thumb_file);
 
                         $is_thumb = true;
@@ -3540,25 +3571,30 @@ function mw_make_thumbnail_all ($source_file)
     global $thumb5_file;
     global $is_admin;
 
+    thumb_log($thumbnail_file, 'all-1');
     mw_make_thumbnail($mw_basic['cf_thumb_width'], $mw_basic['cf_thumb_height'], $source_file,
         $thumb_file, $mw_basic['cf_thumb_keep']);
 
     if ($mw_basic['cf_thumb2_width']) {
+        thumb_log($thumbnail_file, 'all-2');
         @mw_make_thumbnail($mw_basic['cf_thumb2_width'], $mw_basic['cf_thumb2_height'], $source_file,
             $thumb2_file, $mw_basic['cf_thumb2_keep']);
     }
 
     if ($mw_basic['cf_thumb3_width']) {
+        thumb_log($thumbnail_file, 'all-3');
         @mw_make_thumbnail($mw_basic['cf_thumb3_width'], $mw_basic['cf_thumb3_height'], $source_file,
             $thumb3_file, $mw_basic['cf_thumb3_keep']);
     }
 
     if ($mw_basic['cf_thumb4_width']) {
+        thumb_log($thumbnail_file, 'all-4');
         @mw_make_thumbnail($mw_basic['cf_thumb4_width'], $mw_basic['cf_thumb4_height'], $source_file,
             $thumb4_file, $mw_basic['cf_thumb4_keep']);
     }
 
     if ($mw_basic['cf_thumb5_width']) {
+        thumb_log($thumbnail_file, 'all-5');
         @mw_make_thumbnail($mw_basic['cf_thumb5_width'], $mw_basic['cf_thumb5_height'], $source_file,
             $thumb5_file, $mw_basic['cf_thumb5_keep']);
     }
@@ -3779,5 +3815,59 @@ function is_g5()
         return true;
 
     return false;
+}
+
+function thumb_log($thumb_file, $act)
+{
+    return;
+    global $member;
+    global $bo_table;
+    global $wr_id;
+    global $g4;
+    global $w;
+
+    if (strstr($_SERVER['PHP_SELF'], "mw.adm.thumb.remake.php")) return;
+
+    include_once($g4['path']."/lib/etc.lib.php");
+
+    $file = $g4['path']."/data/thumb_log";
+    $url = mw_seo_url($bo_table, $wr_id);
+
+    $log = date("Y-m-d H:i:s")." {$act} [{$member['mb_id']}] {$_SERVER['REMOTE_ADDR']} {$_SERVER['PHP_SELF']} [{$w}] {$thumb_file} {$url}\n";
+
+    write_log($file, $log);
+}
+
+function is_ani($filename)
+{
+    $filecontents = file_get_contents($filename);
+
+    $str_loc=0;
+    $count=0;
+    while ($count < 2) # There is no point in continuing after we find a 2nd frame
+    {
+        $where1=strpos($filecontents,"\x00\x21\xF9\x04",$str_loc);
+        if ($where1 === FALSE) {
+            break;
+        }
+        else {
+            $str_loc=$where1+1;
+            $where2=strpos($filecontents,"\x00\x2C",$str_loc);
+            if ($where2 === FALSE) {
+                break;
+            }
+            else {
+                if ($where1+8 == $where2) {
+                    $count++;
+                }
+                $str_loc=$where2+1;
+            }
+        }
+    }
+
+    if ($count > 1)
+        return(true);
+    else
+        return(false);
 }
 
