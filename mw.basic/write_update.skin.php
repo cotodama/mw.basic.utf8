@@ -633,3 +633,7 @@ if ($mw_basic['cf_hidden_link'] && $mw_basic['cf_hidden_link'] <= $member['mb_le
     sql_query("update {$write_table} set wr_hidden_link2 = '{$wr_hidden_link2}' where wr_id = '{$wr_id}' ");
 }
 
+if ($mw_basic['cf_include_write_update'] && is_file($mw_basic['cf_include_write_update'])) {
+    include($mw_basic['cf_include_write_update']);
+}
+

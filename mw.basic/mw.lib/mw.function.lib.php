@@ -40,19 +40,25 @@ function mw_mkdir($path, $permission=0707) {
 }
 
 // 관련글 얻기.. 080429, curlychoi
-function mw_related($related, $field="wr_id, wr_subject, wr_content, wr_datetime, wr_comment")
+function mw_related($bo_table, $related, $related_skin, $field="wr_id, wr_subject, wr_content, wr_datetime, wr_comment")
 {
-    global $bo_table, $write_table, $g4, $wr_id, $mw_basic;
+    global $g4;
+    global $wr_id;
+    global $mw_basic;
+    global $is_admin;
 
     if (!trim($related)) return;
 
+    $keys = $related;
     $bo_table2 = $bo_table;
-    $write_table2 = $write_table;
 
-    if (trim($mw_basic[cf_related_table])) {
-        $bo_table2 = $mw_basic[cf_related_table];
-        $write_table2 = "$g4[write_prefix]$bo_table2";
-    }
+    $board = sql_fetch("select bo_subject from {$g4['board_table']} where bo_table = '{$bo_table2}' ");
+    if (!$board) return;
+
+    if (trim($mw_basic['cf_related_table']) && !$mw_basic['cf_related_table_div'])
+        $bo_table2 = trim($mw_basic['cf_related_table']);
+
+    $write_table2 = $g4['write_prefix'].$bo_table2;
 
     $sql_where = "";
     $related = explode(",", $related);
@@ -63,7 +69,17 @@ function mw_related($related, $field="wr_id, wr_subject, wr_content, wr_datetime
             if ($sql_where) {
                 $sql_where .= " or ";
             }
-            $sql_where .= " (instr(wr_subject, '$rel') or instr(wr_content, '$rel')) ";
+            $sql_where .= " ( ";
+            if ($mw_basic['cf_related_subject'])
+                $sql_where .= " instr(wr_subject, '{$rel}') ";
+
+            if ($mw_basic['cf_related_content']) {
+                if ($mw_basic['cf_related_subject']) {
+                    $sql_where .= " or ";
+                }
+                $sql_where .= " instr(wr_content, '{$rel}') ";
+            }
+            $sql_where .= " ) ";
         }
     }
     if (!trim($mw_basic[cf_related_table]))
@@ -84,7 +100,34 @@ function mw_related($related, $field="wr_id, wr_subject, wr_content, wr_datetime
             break;
         }
     }
-    return $list;
+
+    $etc = "&sfl=wr_subject||wr_content,1&sop=or&stx=".@urlencode(str_replace(",", " ", $keys));
+    $board_url = mw_seo_url($bo_table2, 0, $etc);
+
+    $skin = $related_skin;
+    $skin = str_replace("{{board_subject}}", $board['bo_subject'], $skin);
+    $skin = str_replace("{{board_url}}", $board_url, $skin);
+
+    preg_match("/{{for}}(.*){{\/for}}/iUs", $related_skin, $match);
+    $for_skin = $match[1];
+    $for = '';
+    for ($i=0, $m=count($list); $i<$m; ++$i) {
+        $href = $list[$i]['href'];
+        $date = substr($list[$i]['wr_datetime'], 0, 10);
+        $subject = $list[$i]['subject'];
+        $comment = $list[$i]['comment'];
+
+        $row = $for_skin;
+        $row = str_replace("{{href}}", $href, $row);
+        $row = str_replace("{{date}}", $date, $row);
+        $row = str_replace("{{subject}}", $subject, $row);
+        $row = str_replace("{{comment}}", $comment, $row);
+
+        $for.= $row;
+    }
+    $skin = preg_replace("/{{for}}.*{{\/for}}/iUs", $for, $skin);
+
+    return $skin;
 }
 
 // 관련글 얻기.. 080429, curlychoi
@@ -3833,7 +3876,7 @@ function thumb_log($thumb_file, $act)
     $file = $g4['path']."/data/thumb_log";
     $url = mw_seo_url($bo_table, $wr_id);
 
-    $log = date("Y-m-d H:i:s")." {$act} [{$member['mb_id']}] {$_SERVER['REMOTE_ADDR']} {$_SERVER['PHP_SELF']} [{$w}] {$thumb_file} {$url}\n";
+    $log = date("Y-m-d H:i:s")." {$act} [{$member['mb_id']}] {$_SERVER['REMOTE_ADDR']} {$_SERVER['PHP_SELF']}?{$_SERVER["QUERY_STRING"]} [{$w}] {$thumb_file} {$url}\n";
 
     write_log($file, $log);
 }

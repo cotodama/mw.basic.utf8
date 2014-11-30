@@ -485,11 +485,11 @@ if (!$list[$i]['icon_new'] && $list[$i]['wr_last'] != $list[$i]['wr_datetime'] &
 $write_icon = mw_write_icon($list[$i]);
 
 // 썸네일
-$thumb_file = mw_thumb_jpg("$thumb_path/{$list[$i]['wr_id']}");
-$thumb2_file = mw_thumb_jpg("$thumb2_path/{$list[$i]['wr_id']}");
-$thumb3_file = mw_thumb_jpg("$thumb3_path/{$list[$i]['wr_id']}");
-$thumb4_file = mw_thumb_jpg("$thumb4_path/{$list[$i]['wr_id']}");
-$thumb5_file = mw_thumb_jpg("$thumb5_path/{$list[$i]['wr_id']}");
+$thumb_file = mw_thumb_jpg($thumb_path.'/'.$list[$i]['wr_id']);
+$thumb2_file = mw_thumb_jpg($thumb2_path.'/'.$list[$i]['wr_id']);
+$thumb3_file = mw_thumb_jpg($thumb3_path.'/'.$list[$i]['wr_id']);
+$thumb4_file = mw_thumb_jpg($thumb4_path.'/'.$list[$i]['wr_id']);
+$thumb5_file = mw_thumb_jpg($thumb5_path.'/'.$list[$i]['wr_id']);
 
 $set_width = $mw_basic[cf_thumb_width];
 $set_height = $mw_basic[cf_thumb_height];
@@ -532,9 +532,12 @@ else {
         $set_height = $size[1];
     }
 
-    if ($thumb_size[0] != $set_width || $thumb_size[1] != $set_height) {
-        mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height],
-            $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep], $list[$i]['wr_datetime']);
+    if ($thumb_size[0]) {
+        if ($thumb_size[0] != $set_width || $thumb_size[1] != $set_height) {
+            thumb_log($thumb_file, 'list-resize');
+            mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height],
+                $thumb_file, $thumb_file, $mw_basic[cf_thumb_keep], $list[$i]['wr_datetime']);
+        }
     }
 }
 

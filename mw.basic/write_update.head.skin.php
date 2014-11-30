@@ -194,3 +194,7 @@ if ($mw_category['ca_level_write'] && $mw_category['ca_level_write'] > $member['
     alert("{$sca} 분류의 글작성권한이 없습니다.");
 }
 
+if ($mw_basic['cf_include_write_update_head'] && is_file($mw_basic['cf_include_write_update_head'])) {
+    include($mw_basic['cf_include_write_update_head']);
+}
+

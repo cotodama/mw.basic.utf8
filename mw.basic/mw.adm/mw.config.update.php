@@ -441,6 +441,9 @@ bo_table = '$bo_table'
 ,cf_name_title = '$cf_name_title'
 ,cf_attach_count = '$cf_attach_count'
 ,cf_related_table = '$cf_related_table'
+,cf_related_table_div = '$cf_related_table_div'
+,cf_related_subject = '$cf_related_table'
+,cf_related_content = '$cf_related_content'
 ,cf_rss = '$cf_rss'
 ,cf_rss_limit = '$cf_rss_limit'
 ,cf_latest_table = '$cf_latest_table'
@@ -493,7 +496,9 @@ bo_table = '$bo_table'
 ,cf_include_write_head = '$cf_include_write_head'
 ,cf_include_write_main = '$cf_include_write_main'
 ,cf_include_write_tail = '$cf_include_write_tail'
+,cf_include_write_update_head = '$cf_include_write_update_head'
 ,cf_include_write_update = '$cf_include_write_update'
+,cf_include_write_update_tail = '$cf_include_write_update_tail'
 ,cf_subject_style = '$cf_subject_style'
 ,cf_subject_style_level = '$cf_subject_style_level'
 ,cf_subject_style_color_default = '$cf_subject_style_color_default'
@@ -664,7 +669,11 @@ if ($chk[cf_hot]) {
     $sql .= ", cf_hot_cache = '$cf_hot_cache' ";
     $sql .= ", cf_hot_print = '$cf_hot_print' ";
 }
-if ($chk[cf_related]) $sql .= ", cf_related = '$cf_related' ";
+if ($chk[cf_related]) {
+    $sql .= ", cf_related = '$cf_related' ";
+    $sql .= ", cf_related_subject = '$cf_related_subject' ";
+    $sql .= ", cf_related_content = '$cf_related_content' ";
+}
 if ($chk[cf_latest]) $sql .= ", cf_latest = '$cf_latest' ";
 if ($chk[cf_sns]) $sql .= ", cf_sns = '$cf_sns' ";
 if ($chk[cf_zzal]) $sql .= ", cf_zzal = '$cf_zzal', cf_zzal_must = '$cf_zzal_must' ";
@@ -896,7 +905,10 @@ if ($chk[cf_good_level]) $sql .= ", cf_good_level = '$cf_good_level' ";
 if ($chk[cf_nogood_level]) $sql .= ", cf_nogood_level = '$cf_nogood_level' ";
 if ($chk[cf_name_title]) $sql .= ", cf_name_title = '$cf_name_title' ";
 if ($chk[cf_attach_count]) $sql .= ", cf_attach_count = '$cf_attach_count' ";
-if ($chk[cf_related_table]) $sql .= ", cf_related_table = '$cf_related_table' ";
+if ($chk[cf_related_table]) {
+    $sql .= ", cf_related_table = '$cf_related_table' ";
+    $sql .= ", cf_related_table_div = '$cf_related_table_div' ";
+}
 if ($chk[cf_rss]) {
     $sql .= ", cf_rss = '$cf_rss' ";
     $sql .= ", cf_rss_limit = '$cf_rss_limit' ";
@@ -933,7 +945,9 @@ if ($chk[cf_include_comment_main]) $sql .= ", cf_include_comment_main = '$cf_inc
 if ($chk[cf_include_write_head]) $sql .= ", cf_include_write_head = '$cf_include_write_head' ";
 if ($chk[cf_include_write_main]) $sql .= ", cf_include_write_main = '$cf_include_write_main' ";
 if ($chk[cf_include_write_tail]) $sql .= ", cf_include_write_tail = '$cf_include_write_tail' ";
+if ($chk[cf_include_write_update_head]) $sql .= ", cf_include_write_update_head = '$cf_include_write_update_head' ";
 if ($chk[cf_include_write_update]) $sql .= ", cf_include_write_update = '$cf_include_write_update' ";
+if ($chk[cf_include_write_update_tail]) $sql .= ", cf_include_write_update_tail = '$cf_include_write_update_tail' ";
 if ($chk[cf_subject_style]) {
     $sql .= ", cf_subject_style = '$cf_subject_style' ";
     $sql .= ", cf_subject_style_level = '$cf_subject_style_level' ";

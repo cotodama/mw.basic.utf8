@@ -663,14 +663,28 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    </select>
 	    <span class="cf_info">(본문하단에 관련 게시물을 출력합니다.)</span>
 	    <script> document.cf_form.cf_related.value = "<?=$mw_basic[cf_related]?>"; </script>
+            <div>
+                <input type="checkbox" name="cf_related_subject" value="1"> 제목
+                <input type="checkbox" name="cf_related_content" value="1"> 내용 
+            </div>
+	    <script>
+            document.cf_form.cf_related_subject.checked = '<?php echo $mw_basic['cf_related_subject']?>';
+            document.cf_form.cf_related_content.checked = '<?php echo $mw_basic['cf_related_content']?>';
+            </script>
+
 	</div>
     </div>
 
     <div class="cf_item">
 	<div class="cf_title"> <input type=checkbox name=chk[cf_related_table] value=1>&nbsp; 관련글 타게시판 </div>
 	<div class="cf_content">
-            <input type="text" size="10" class="ed" name="cf_related_table" value="<?=$mw_basic[cf_related_table]?>">
-	    <span class="cf_info">(관련 게시물을 다른게시판에서 검색합니다. 게시판 TABLE 명을 넣어주세요.)</span>
+            <input type="text" size="50" class="ed" name="cf_related_table" value="<?=$mw_basic[cf_related_table]?>">
+	    <div class="cf_info">(관련 게시물을 다른게시판에서 검색합니다. 게시판 TABLE 명을 넣어주세요. 복수의 게시판 , 컴마로 구분)</div>
+            <div>
+                <input type="checkbox" name="cf_related_table_div" value="1">
+                현재 게시판, 타게시판 모두 출력
+            </div>
+	    <script> document.cf_form.cf_related_table_div.checked = '<?php echo $mw_basic['cf_related_table_div']?>'; </script>
 	</div>
     </div>
 
@@ -1281,9 +1295,25 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
     </div>
 
     <div class="cf_item">
-	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_action] value=1>&nbsp; 글쓰기 업데이트</div>
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_update_head] value=1>&nbsp; 글쓰기 업데이트 HEAD</div>
+	<div class="cf_content">
+	    <input type="text" size="60" name="cf_include_write_update_head" class="ed" value="<?=$mw_basic[cf_include_write_update_head]?>"> 
+	    <div class="cf_info">글작성 DB 업데이트 부분에에 포함될 파일입니다.</div>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_update] value=1>&nbsp; 글쓰기 업데이트</div>
 	<div class="cf_content">
 	    <input type="text" size="60" name="cf_include_write_update" class="ed" value="<?=$mw_basic[cf_include_write_update]?>"> 
+	    <div class="cf_info">글작성 DB 업데이트 부분에에 포함될 파일입니다.</div>
+	</div>
+    </div>
+
+    <div class="cf_item">
+	<div class="cf_title"> <input type=checkbox name=chk[cf_include_write_update_tail] value=1>&nbsp; 글쓰기 업데이트 TAIL</div>
+	<div class="cf_content">
+	    <input type="text" size="60" name="cf_include_write_update_tail" class="ed" value="<?=$mw_basic[cf_include_write_update_tail]?>"> 
 	    <div class="cf_info">글작성 DB 업데이트 부분에에 포함될 파일입니다.</div>
 	</div>
     </div>

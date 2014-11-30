@@ -900,29 +900,41 @@ if ($mw_basic[cf_attribute] == 'qna' && !$view[is_notice]) {
 </tr>
 <? } ?>
 
-<? if ($mw_basic[cf_related] && $view[wr_related]) { ?>
-<? $rels = mw_related($view[wr_related]); ?>
-<? if (count($rels)) {?>
-<? if ($mw_basic[cf_related_table]) $bo_table2 = $mw_basic[cf_related_table]; else $bo_table2 = $bo_table; ?>
-<tr>
-    <td class=mw_basic_view_related>
-        <h3>
-            관련글
-            <a href="<?=mw_seo_url($bo_table2, 0, "&sfl=wr_subject||wr_content,1&sop=or&stx=".urlencode(str_replace(",", " ", $view[wr_related])))?>">[더보기]</a>
-        </h3>
-    </td>
-</tr>
-<tr>
-    <td class="mw_basic_view_content mw_basic_view_related">
-        <ul>
-        <? for ($i=0; $i<count($rels); $i++) { ?>
-        <li> <a href="<?=$rels[$i][href]?>">[<?=substr($rels[$i][wr_datetime], 0, 10)?>] <?=$rels[$i][subject]?> <?=$rels[$i][comment]?></a> </li>
-        <? } ?>
-        </ul>
-    </td>
-</tr>
-<? } ?>
-<? } ?>
+<?php
+// 관련글 출력
+if ($mw_basic['cf_related'] && $view['wr_related']) { 
+
+    $related_skin = '';
+    ob_start();
+    ?>
+    <tr>
+        <td class="mw_basic_view_related">
+            <h3> {{board_subject}} 관련글<a href="{{board_url}}">[더보기]</a></h3>
+        </td>
+    </tr>
+    <tr>
+        <td class="mw_basic_view_content mw_basic_view_related">
+            <ul>
+            {{for}}
+            <li> <a href="{{href}}">[{{date}}] {{subject}} {{comment}}</a> </li>
+            {{/for}}
+            </ul>
+        </td>
+    </tr>
+    <?php
+    $related_skin = ob_get_clean();
+
+    if (!$mw_basic['cf_related_table'] or ($mw_basic['cf_related_table'] && $mw_basic['cf_related_table_div']))
+        echo mw_related($bo_table, $view['wr_related'], $related_skin); 
+
+    if ($mw_basic['cf_related_table']) {
+        $tables = array_map('trim', explode(",", $mw_basic['cf_related_table']));
+        foreach ($tables as $table) {
+            echo mw_related($table, $view['wr_related'], $related_skin); 
+        }
+    }
+}
+?>
 
 <? if ($mw_basic[cf_latest]) { ?>
 <? $latest = mw_view_latest(); ?>

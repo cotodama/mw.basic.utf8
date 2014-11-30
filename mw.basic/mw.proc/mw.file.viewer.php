@@ -57,10 +57,11 @@ for ($i=$file_start; $i<=$view[file][count]; $i++) {
     else if ($view[file][$i][view])
     {
         // 원본 강제 리사이징
-        if ($mw_basic[cf_original_width] && $mw_basic[cf_original_height]) {
-            if ($view[file][$i][image_width] > $mw_basic[cf_original_width] || $view[file][$i][image_height] > $mw_basic[cf_original_height]) {
+        if ($mw_basic[cf_resize_original]) {
+            if ($view[file][$i][image_width] > $mw_basic[cf_resize_original] || $view[file][$i][image_height] > $mw_basic[cf_resize_original]) {
                 $file = "$file_path/{$view[file][$i][file]}";
-                mw_make_thumbnail($mw_basic[cf_original_width], $mw_basic[cf_original_height], $file, $file, true);
+                thumb_log($file, 'resize-original');
+                mw_make_thumbnail($iw_basic[cf_resize_original], $mw_basic[cf_resize_original], $file, $file, true);
                 if ($mw_basic[cf_watermark_use] && is_file($mw_basic[cf_watermark_path])) mw_watermark_file($file);
                 $size = getimagesize($file);
                 $view[file][$i][image_width] = $size[0];
