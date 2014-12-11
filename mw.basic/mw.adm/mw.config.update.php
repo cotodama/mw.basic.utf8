@@ -192,6 +192,7 @@ while ($row = sql_fetch_array($qry))
     $ca_level_view = "ca_level_view_".$row['ca_id'];
     $ca_level_write = "ca_level_write_".$row['ca_id'];
     $ca_color = "ca_color_".$row['ca_id'];
+    $$ca_color = str_replace("#", "", $$ca_color);
 
     $sql = " update {$mw['category_table']} set ";
     $sql.= "  ca_type = '".$$ca_type."' ";

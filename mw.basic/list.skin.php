@@ -367,7 +367,7 @@ else {
 
 $ca_color_style = '';
 if ($ca_color)
-    $ca_color_style = " style='color:{$ca_color}' ";
+    $ca_color_style = " style='color:#{$ca_color}' ";
 
 // 댓글감춤
 if ($list[$i][wr_comment_hide])

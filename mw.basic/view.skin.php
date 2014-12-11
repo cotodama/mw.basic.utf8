@@ -925,12 +925,12 @@ if ($mw_basic['cf_related'] && $view['wr_related']) {
     $related_skin = ob_get_clean();
 
     if (!$mw_basic['cf_related_table'] or ($mw_basic['cf_related_table'] && $mw_basic['cf_related_table_div']))
-        echo mw_related($bo_table, $view['wr_related'], $related_skin); 
+        echo mw_related2($bo_table, $view['wr_related'], $related_skin); 
 
     if ($mw_basic['cf_related_table']) {
         $tables = array_map('trim', explode(",", $mw_basic['cf_related_table']));
         foreach ($tables as $table) {
-            echo mw_related($table, $view['wr_related'], $related_skin); 
+            echo mw_related2($table, $view['wr_related'], $related_skin); 
         }
     }
 }

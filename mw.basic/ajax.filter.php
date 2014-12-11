@@ -1,13 +1,8 @@
 <?php
 include_once("./_common.php");
-include_once("$g4[path]/lib/etc.lib.php");
+if (is_file($g4['path']."/lib/etc.lib.php"))
+    include_once("$g4[path]/lib/etc.lib.php");
 
-$gmnow = gmdate("D, d M Y H:i:s") . " GMT";
-header("Expires: 0"); // rfc2616 - Section 14.21
-header("Last-Modified: " . $gmnow);
-header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
-header("Cache-Control: pre-check=0, post-check=0, max-age=0"); // HTTP/1.1
-header("Pragma: no-cache"); // HTTP/1.0
 if (!function_exists('convert_charset')) 
 {
     /*
@@ -29,8 +24,6 @@ if (!function_exists('convert_charset'))
             die("Not found 'iconv' or 'mbstring' library in server.");
     }
 }
-
-header("Content-Type: text/html; charset=$g4[charset]");
 
 $subject = str_replace(" ", "", strtolower($_POST['subject']));
 $content = str_replace(" ", "", strtolower($_POST['content']));

@@ -1898,6 +1898,9 @@ function fwrite_check(f) {
             content = data.content;
             link1 = data.link1;
             link2 = data.link2;
+        },
+        error:function(request,status,error) {
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 

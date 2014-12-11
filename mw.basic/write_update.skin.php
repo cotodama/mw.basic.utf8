@@ -410,6 +410,15 @@ if ($mw_basic[cf_vote] && $mw_basic[cf_vote_level] <= $member[mb_level])
         $vt_edate = '0000-00-00 00:00:00';
 
     $tmp = array();
+    $tmp2 = array();
+    if (strstr($vt_item[0], "|")) {
+        $tmp2 = $vt_item;
+        array_shift($tmp2);
+        $tmp = array_map("trim", explode("|", $vt_item[0]));
+        $vt_item = array_merge($tmp, $tmp2);
+    }
+
+    $tmp = array();
     for ($i=0, $m=sizeof($vt_item); $i<$m; $i++) {
         if (trim($vt_item[$i])) {
             $tmp[] = strip_tags(trim($vt_item[$i]));

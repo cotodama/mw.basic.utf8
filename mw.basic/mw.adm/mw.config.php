@@ -2567,7 +2567,7 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
                         <script> $("#ca_level_write_<?php echo $row['ca_id']?>").val("<?php echo $row['ca_level_write']?>"); </script>
                     </td>
                     <td>
-                        <input type="text" size="10" id="ca_color_<?php echo $row['ca_id']?>" name="ca_color_<?php echo $row['ca_id']?>" value="<?php echo $row['ca_color']?>">
+                        <input type="text" size="10" maxlength="7" id="ca_color_<?php echo $row['ca_id']?>" name="ca_color_<?php echo $row['ca_id']?>" value="#<?php echo $row['ca_color']?>">
                     </td>
                     <td>
                         <input type="button" class="bt" value="글삭제" onclick="mw_category_action('<?php echo $ca_name?>', 'del')">

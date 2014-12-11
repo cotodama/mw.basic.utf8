@@ -40,7 +40,54 @@ function mw_mkdir($path, $permission=0707) {
 }
 
 // 관련글 얻기.. 080429, curlychoi
-function mw_related($bo_table, $related, $related_skin, $field="wr_id, wr_subject, wr_content, wr_datetime, wr_comment")
+function mw_related($related, $field="wr_id, wr_subject, wr_content, wr_datetime, wr_comment")
+{
+    global $bo_table, $write_table, $g4, $wr_id, $mw_basic;
+
+    if (!trim($related)) return;
+
+    $bo_table2 = $bo_table;
+    $write_table2 = $write_table;
+
+    if (trim($mw_basic[cf_related_table])) {
+        $bo_table2 = $mw_basic[cf_related_table];
+        $write_table2 = "$g4[write_prefix]$bo_table2";
+    }
+
+    $sql_where = "";
+    $related = explode(",", $related);
+    foreach ($related as $rel) {
+        $rel = trim($rel);
+        if ($rel) {
+            $rel = addslashes($rel);
+            if ($sql_where) {
+                $sql_where .= " or ";
+            }
+            $sql_where .= " (instr(wr_subject, '$rel') or instr(wr_content, '$rel')) ";
+        }
+    }
+    if (!trim($mw_basic[cf_related_table]))
+        $sql_where .= " and wr_id <> '$wr_id' ";
+
+    $sql = "select $field from $write_table2 where wr_is_comment = 0 and ($sql_where) order by wr_num ";
+    $qry = sql_query($sql, false);
+
+    $list = array();
+    $i = 0;
+    while ($row = sql_fetch_array($qry)) {
+        $row[href] = mw_seo_url($bo_table2, $row[wr_id]);
+        $row[comment] = $row[wr_comment] ? "<span class='comment'>($row[wr_comment])</span>" : "";
+        $row[subject] = get_text($row[wr_subject]);
+        $row[subject] = mw_reg_str($row[subject]);
+        $list[$i] = $row;
+        if (++$i >= $mw_basic[cf_related]) {
+            break;
+        }
+    }
+    return $list;
+}
+
+function mw_related2($bo_table, $related, $related_skin, $field="wr_id, wr_subject, wr_content, wr_datetime, wr_comment")
 {
     global $g4;
     global $wr_id;
@@ -2665,6 +2712,8 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
 
     if (!$v) return;
 
+    thumb_log($thumbnail_file, 'youtube-try');
+
     $fp = fsockopen ("img.youtube.com", 80, $errno, $errstr, 10);
     if (!$fp) return false;
     fputs($fp, "GET /vi/{$v}/mqdefault.jpg HTTP/1.0\r\n");
@@ -3862,7 +3911,7 @@ function is_g5()
 
 function thumb_log($thumb_file, $act)
 {
-    return;
+    //return;
     global $member;
     global $bo_table;
     global $wr_id;

@@ -95,7 +95,7 @@ if ($mw_basic[cf_link_board] && !$is_admin && $view[mb_id] != $member[mb_id] && 
     goto_url($view['link_href'][1]);
 }
 // 게시물별 링크
-elseif ($write[wr_link_write] && !$is_admin && $view[mb_id] != $member[mb_id] && $view[link][1]) {
+elseif ($write[wr_link_write] && !$is_admin && ($view[mb_id] != $member[mb_id] or !$view[mb_id]) && $view[link][1]) {
     if ($mw_basic[cf_read_level] && $list[$i][wr_read_level]) {
         if ($list[$i][wr_read_level] <= $member[mb_level])
             goto_url($view['link_href'][1]);

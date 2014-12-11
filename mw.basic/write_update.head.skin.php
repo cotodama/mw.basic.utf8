@@ -21,6 +21,11 @@
 
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가 
 
+if (defined('G5_PATH'))
+    header("Content-Type: text/html; charset=utf-8");
+else
+    header("Content-Type: text/html; charset=$g4[charset]");
+
 $mw_is_list = false;
 $mw_is_view = false;
 $mw_is_write = true;

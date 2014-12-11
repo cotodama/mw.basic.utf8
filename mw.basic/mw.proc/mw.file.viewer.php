@@ -22,7 +22,7 @@
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 // 파일 출력
-if ($mw_basic[cf_social_commerce]) {
+if ($mw_basic['cf_social_commerce'] or $mw_basic['cf_talent_market']) {
     $file_start = 2;
 }
 else if ($mw_basic[cf_talent_market]) {
