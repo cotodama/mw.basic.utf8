@@ -157,7 +157,11 @@ if ($mw_basic[cf_watermark_use] && is_file($mw_basic[cf_watermark_path]))
 if (!$mw_basic[cf_zzal] && !strstr($view[content], "{이미지:") && !$write['wr_lightbox'])// 파일 출력  
     $view[content] = $file_viewer . $view[content]; 
 
-$view[rich_content] = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/ie", "mw_view_image(\$view, '\\1', '\\2')", $view[content]);
+if (!$mw_basic['cf_zzal'])
+    $view[rich_content] = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/ie", "mw_view_image(\$view, '\\1', '\\2')", $view[content]);
+else
+
+    $view[rich_content] = preg_replace("/{이미지\:([0-9]+)[:]?([^}]*)}/ie", "", $view[content]);
 
 if ($mw_basic[cf_no_img_ext]) { // 이미지 확대 사용 안함
     $view[rich_content] = preg_replace("/name='target_resize_image\[\]' onclick='image_window\(this\)'/iUs", "", $view[rich_content]);

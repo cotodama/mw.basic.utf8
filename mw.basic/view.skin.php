@@ -26,11 +26,16 @@ $mw_is_list = false;
 $mw_is_write = false;
 $mw_is_comment = false;
 
+$view_run_time = get_microtime();
+
 include_once("$board_skin_path/mw.lib/mw.skin.basic.lib.php");
+$view_run_time = mw_time_log($view_run_time, "[view] include /mw.lib/mw.skin.basic.lib.php");
 include("view_head.skin.php");
+$view_run_time = mw_time_log($view_run_time, "[view] include view_head.skin.php");
 
 if ($write['wr_key_password'] && !get_session($ss_key_name."_".$write['wr_id'])) {
     include("{$pc_skin_path}/mw.proc/mw.key.php");
+    $view_run_time = mw_time_log($view_run_time, "[view] include /mw.proc/mw.key.php");
     return;
 }
 ?>
@@ -125,13 +130,19 @@ AutoSourcing.init( 'view_%id%' , true);
 <table width="<?=$bo_table_width?>" align="center" cellpadding="0" cellspacing="0"><tr><td id=mw_basic>
 
 <?php
-if ($mw_basic[cf_include_head] && is_file($mw_basic[cf_include_head]) && strstr($mw_basic[cf_include_head_page], '/v/'))
+if ($mw_basic[cf_include_head] && is_file($mw_basic[cf_include_head]) && strstr($mw_basic[cf_include_head_page], '/v/')) {
     include_once($mw_basic[cf_include_head]);
+    $view_run_time = mw_time_log($view_run_time, "[view] include mw_basic[cf_include_head]");
+}
 
-if ($mw_basic['cf_bbs_banner'])
+if ($mw_basic['cf_bbs_banner']) {
     include_once("$bbs_banner_path/list.skin.php"); // 게시판 배너
+    $view_run_time = mw_time_log($view_run_time, "[view] include bbs_banner_path/list.skin.php");
+}
+
 
 include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
+$view_run_time = mw_time_log($view_run_time, "[view] include /mw.proc/mw.list.hot.skin.php");
 ?>
 
 <!-- 분류 셀렉트 박스, 게시물 몇건, 관리자화면 링크 -->
@@ -149,6 +160,7 @@ include_once("$board_skin_path/mw.proc/mw.list.hot.skin.php");
     </td>
     <td align="right">
         <?php include($pc_skin_path."/mw.proc/mw.top.button.php")?>
+        <?php $view_run_time = mw_time_log($view_run_time, "[view] include /mw.proc/mw.top.button.php")?>
     </td>
 </tr>
 <tr><td height=5></td></tr>
@@ -162,8 +174,11 @@ if ('<?=$sca?>') document.fcategory_view.sca.value = '<?=urlencode($sca)?>';
 
 <?php
 include_once("$board_skin_path/mw.proc/mw.notice.top.php");
+$view_run_time = mw_time_log($view_run_time, "[view] /mw.proc/mw.notice.top.php");
 include_once("$board_skin_path/mw.proc/mw.search.top.php");
+$view_run_time = mw_time_log($view_run_time, "[view] /mw.proc/mw.search.top.php");
 include_once("$board_skin_path/mw.proc/mw.cash.membership.skin.php");
+$view_run_time = mw_time_log($view_run_time, "[view] /mw.proc/mw.cash.membership.skin.php");
 ?>
 
 <!-- 링크 버튼 -->
@@ -412,26 +427,29 @@ if ($mw_basic['cf_include_file_tail'] && is_file($mw_basic['cf_include_file_tail
     echo "<tr><td>";
     include_once($mw_basic['cf_include_file_tail']);
     echo "</td></tr>";
+    $view_run_time = mw_time_log($view_run_time, "[view] /mw_basic['cf_include_file_tail']");
 } 
 ?>
 
-<? if ($mw_basic[cf_social_commerce]) { ?>
+<?php if ($mw_basic[cf_social_commerce]) { ?>
 <tr>
     <td>
         <?php include("$social_commerce_path/view.skin.php") ?>
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] /social_commerce/view.skin.php")?>
+<?php } ?>
 
-<? if ($mw_basic[cf_talent_market]) { ?>
+<?php if ($mw_basic[cf_talent_market]) { ?>
 <tr>
     <td>
         <?php include("$talent_market_path/view.skin.php") ?>
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] /social_commerce/view.skin.php")?>
+<?php } ?>
 
-<?
+<?php
 $bomb = sql_fetch(" select * from $mw[bomb_table] where bo_table = '$bo_table' and wr_id = '$wr_id' ");
 if ($bomb) {
 ?>
@@ -476,15 +494,18 @@ if ($bomb) {
         </script>
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] bomb")?>
+<?php } ?>
 
 <tr>
     <td class=mw_basic_view_content>
         <div id=view_<?=$wr_id?>>
 
         <?php
-        if ($mw_basic['cf_include_view_head'] && is_file($mw_basic['cf_include_view_head']))
+        if ($mw_basic['cf_include_view_head'] && is_file($mw_basic['cf_include_view_head'])) {
             include_once($mw_basic['cf_include_view_head']);
+            $view_run_time = mw_time_log($view_run_time, "[view] mw_basic['cf_include_view_head']");
+        }
         ?>
 
         <?=bc_code($mw_basic[cf_content_head], 1, 1)?>
@@ -514,6 +535,7 @@ if ($bomb) {
         <div class="lightbox_container">
         <?
         mw_make_lightbox();
+        $view_run_time = mw_time_log($view_run_time, "[view] mw_make_lightbox()");
         for ($i=$file_start; $i<=$view['file']['count']; $i++) {
             $file = $view['file'][$i];
             if (!$file['view']) continue;
@@ -535,8 +557,10 @@ if ($bomb) {
 
         <?=bc_code($mw_basic[cf_content_add], 1, 1)?>
         <?php
-        if ($mw_basic[cf_include_view] && is_file($mw_basic[cf_include_view]))
+        if ($mw_basic[cf_include_view] && is_file($mw_basic[cf_include_view])) {
             include_once($mw_basic[cf_include_view]);
+            $view_run_time = mw_time_log($view_run_time, "[view] mw_basic[cf_include_view]");
+        }
         ?>
 
         </div>
@@ -643,29 +667,33 @@ if ($bomb) {
         <?=bc_code($mw_basic[cf_content_tail], 1, 1)?>
 
         <?php
-        if ($mw_basic[cf_include_view_tail] && is_file($mw_basic[cf_include_view_tail]))
+        if ($mw_basic[cf_include_view_tail] && is_file($mw_basic[cf_include_view_tail])) {
             include_once($mw_basic[cf_include_view_tail]);
+            $view_run_time = mw_time_log($view_run_time, "[view] mw_basic[cf_include_view_tail]");
+        }
         ?>
 
         </div>
     </td>
 </tr>
 
-<? if ($mw_basic[cf_talent_market]) { ?>
+<?php if ($mw_basic[cf_talent_market]) { ?>
 <tr>
     <td>
         <?php echo $talent_market_content; ?>
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] talent_market_content")?>
+<?php } ?>
 
-<? if ($mw_basic[cf_google_map] && trim($write[wr_google_map]) && !$google_map_is_view && $google_map_code) { ?>
+<?php if ($mw_basic[cf_google_map] && trim($write[wr_google_map]) && !$google_map_is_view && $google_map_code) { ?>
 <tr>
     <td>
         <?=$google_map_code?>
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] google_map_code")?>
+<?php } ?>
 
 <?php if ($mw_basic['cf_rate_level'] && $write['wr_rate'] > 0) { ?>
 <?php
@@ -691,9 +719,10 @@ $write['wr_rate'] = $rate['rate'];
         </script>
     </td>
 </tr>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] rate")?>
 <?php } ?>
 
-<?
+<?php
 if ($is_signature && $signature && !$view[wr_anonymous] && $mw_basic[cf_attribute] != "anonymous") // 서명출력
 { 
     $tmpsize = array(0, 0);
@@ -751,9 +780,10 @@ if ($is_signature && $signature && !$view[wr_anonymous] && $mw_basic[cf_attribut
         </tr>
         </table>
     </td>
-</tr>
-<? } ?>
-<?  if ($mw_basic[cf_quiz]) { // 퀴즈 ?>
+</tr> 
+<?php $view_run_time = mw_time_log($view_run_time, "[view] signature")?>
+<?php } ?>
+<?php if ($mw_basic[cf_quiz]) { // 퀴즈 ?>
 <tr>
     <td class=mw_basic_view_quiz>
         <div id="mw_quiz"></div>
@@ -769,9 +799,9 @@ if ($is_signature && $signature && !$view[wr_anonymous] && $mw_basic[cf_attribut
 
     </td>
 </tr>
-<? } ?>
+<?php } ?>
 
-<?  if ($mw_basic[cf_vote]) { // 설문 ?>
+<?php  if ($mw_basic[cf_vote]) { // 설문 ?>
 <tr>
     <td class=mw_basic_view_vote>
         <div id="mw_vote"></div>
@@ -825,9 +855,10 @@ if ($is_signature && $signature && !$view[wr_anonymous] && $mw_basic[cf_attribut
 
     </td>
 </tr>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] vote")?>
+<?php } ?>
 
-<?
+<?php
 if ($mw_basic[cf_attribute] == 'qna' && !$view[is_notice]) {
     $qna_save_point = round($write[wr_qna_point]*round($mw_basic[cf_qna_save]/100,2));
     $qna_total_point = $qna_save_point + $mw_basic[cf_qna_point_add];
@@ -847,9 +878,9 @@ if ($mw_basic[cf_attribute] == 'qna' && !$view[is_notice]) {
         </div>
     </td>
 </tr>
-<? } ?>
+<?php } ?>
 
-<?  if ($mw_basic[cf_sns] or (($board[bo_use_good] or $board[bo_use_nogood]) and $mw_basic[cf_view_good] and $member[mb_level] >= $mw_basic[cf_view_good]) or $scrap_href) { ?>
+<?php if ($mw_basic[cf_sns] or (($board[bo_use_good] or $board[bo_use_nogood]) and $mw_basic[cf_view_good] and $member[mb_level] >= $mw_basic[cf_view_good]) or $scrap_href) { ?>
 <tr>
     <td>
         <?php
@@ -933,13 +964,14 @@ if ($mw_basic['cf_related'] && $view['wr_related']) {
             echo mw_related2($table, $view['wr_related'], $related_skin); 
         }
     }
+    $view_run_time = mw_time_log($view_run_time, "[view] related");
 }
 ?>
 
-<? if ($mw_basic[cf_latest]) { ?>
-<? $latest = mw_view_latest(); ?>
-<? if (count($latest)) {?>
-<?
+<?php if ($mw_basic[cf_latest]) { ?>
+<?php $latest = mw_view_latest(); ?>
+<?php if (count($latest)) {?>
+<?php
 $bo_subject = $board[bo_subject];
 if ($mw_basic[cf_latest_table]) {
     $tmp = sql_fetch("select bo_subject from $g4[board_table] where bo_table = '$mw_basic[cf_latest_table]'");
@@ -963,30 +995,32 @@ if ($mw_basic[cf_latest_table]) {
         </ul>
     </td>
 </tr>
-<? } ?>
-<? } ?>
-
-
+<?php } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] latest")?>
+<?php } ?>
 
 </table>
 <br>
 
-<?
+<?php
 if (!$view[wr_comment_hide] && ($mw_basic[cf_comment_level] <= $member[mb_level])) {
     include_once("./view_comment.php"); // 코멘트 입출력 
+    $view_run_time = mw_time_log($view_run_time, "[view] include /view_comment.php");
 }
 ?>
 
 <?=$link_buttons?>
 
 <?php
-if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr($mw_basic[cf_include_tail_page], '/v/'))
+if ($mw_basic[cf_include_tail] && is_file($mw_basic[cf_include_tail]) && strstr($mw_basic[cf_include_tail_page], '/v/')) {
     include_once($mw_basic[cf_include_tail]);
+    $view_run_time = mw_time_log($view_run_time, "[view] include mw_basic[cf_include_tail]");
+}
 ?>
 
 </td></tr></table><br>
 
-<? if ($mw_basic[cf_exif]) { ?>
+<?php if ($mw_basic[cf_exif]) { ?>
 <script>
 function show_exif(no, obj, event) {
     var url = "<?=$board_skin_path?>/mw.proc/mw.exif.show.php";
@@ -1020,9 +1054,10 @@ function show_exif(no, obj, event) {
 </style>
 
 <div id="exif-info" title='클릭하면 창이 닫힙니다.'></div>
-<? } ?>
+<?php $view_run_time = mw_time_log($view_run_time, "[view] exif")?>
+<?php } ?>
 
-<? if ($download_log_href) { ?>
+<?php if ($download_log_href) { ?>
 <script>
 function btn_download_log() {
     win_open("<?=$board_skin_path?>/mw.proc/mw.download.log.php?bo_table=<?=$bo_table?>&wr_id=<?=$wr_id?>", "mw_download_log", "width=500, height=300, scrollbars=yes");
@@ -1192,7 +1227,7 @@ function btn_comment_hide() {
 </script>
 <? } ?>
 
-<?
+<?php
 if ($mw_basic[cf_contents_shop] == "1")  // 배추컨텐츠샵-다운로드 결제
 {
     $is_per = true;
@@ -1237,11 +1272,11 @@ if ($mw_basic[cf_contents_shop] == "1")  // 배추컨텐츠샵-다운로드 결�
             }
         }
     }
+    $view_run_time = mw_time_log($view_run_time, "[view] contents_shop_download chekc");
 }
-
 ?>
 
-<? if ($mw_basic[cf_contents_shop]) { // 배추컨텐츠샵 ?>
+<?php if ($mw_basic[cf_contents_shop]) { // 배추컨텐츠샵 ?>
 <script src="<?=$mw_cash[path]?>/cybercash.js"></script>
 <script>
 var mw_cash_path = "<?=$mw_cash[path]?>";
@@ -1415,6 +1450,7 @@ while ($row = sql_fetch_array($qry)) {
     }
     $view = get_view($row2, $board, $board_skin_path, 255);
     mw_board_popup($view, $html);
+    $view_run_time = mw_time_log($view_run_time, "[view] mw_board_popup");
 }
 
 // RSS 수집기
@@ -1429,6 +1465,7 @@ if ($mw_basic[cf_collect] == 'rss' && $rss_collect_path && file_exists("$rss_col
         </script>
         <?
     }
+    $view_run_time = mw_time_log($view_run_time, "[view] rss-collect");
 }
 
 // Youtube 수집기
@@ -1443,5 +1480,21 @@ if ($mw_basic[cf_collect] == 'youtube' && $youtube_collect_path && file_exists("
         </script>
         <?
     }
+    $view_run_time = mw_time_log($view_run_time, "[view] youtube-collect");
+}
+
+// kakao 수집기
+if ($mw_basic[cf_collect] == 'kakao' && $kakao_collect_path && is_file("$kakao_collect_path/_config.php")) {
+    include_once("$kakao_collect_path/_config.php");
+    if ($mw_kakao_collect_config['cf_license']) {
+        ?>
+        <script>
+        $(document).ready(function () {
+            $.get("<?=$kakao_collect_path?>/ajax.php?bo_table=<?=$bo_table?>");
+        });
+        </script>
+        <?
+    }
+    $view_run_time = mw_time_log($view_run_time, "[list] kakao-collect");
 }
 

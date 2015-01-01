@@ -1383,3 +1383,7 @@ if (is_null($mw_basic[cf_talent_market])) {
     sql_query("alter table {$mw['basic_config_table']} add cf_related_subject varchar(1) not null default '1'", false);
     sql_query("alter table {$mw['basic_config_table']} add cf_related_content varchar(1) not null default '1'", false);
 
+    sql_query("alter table {$mw['basic_config_table']} add cf_ca_order varchar(1) not null default ''", false);
+
+    sql_query("alter table {$mw['basic_config_table']} add cf_kakao_key varchar(255) not null default ''", false);
+

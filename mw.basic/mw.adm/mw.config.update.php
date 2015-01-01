@@ -274,6 +274,7 @@ bo_table = '$bo_table'
 ,cf_related = '$cf_related'
 ,cf_latest = '$cf_latest'
 ,cf_sns = '$cf_sns'
+,cf_kakao_key = '$cf_kakao_key'
 ,cf_link_blank = '$cf_link_blank'
 ,cf_comma = '$cf_comma'
 ,cf_search_top = '$cf_search_top'
@@ -373,6 +374,7 @@ bo_table = '$bo_table'
 ,cf_time_comment = '$cf_time_comment'
 ,cf_sns_datetime = ''
 ,cf_content_align = '$cf_content_align'
+,cf_ca_order = '$cf_ca_order'
 ,cf_write_width = '$cf_write_width'
 ,cf_write_height = '$cf_write_height'
 ,cf_read_point_message = '$cf_read_point_message'
@@ -676,7 +678,10 @@ if ($chk[cf_related]) {
     $sql .= ", cf_related_content = '$cf_related_content' ";
 }
 if ($chk[cf_latest]) $sql .= ", cf_latest = '$cf_latest' ";
-if ($chk[cf_sns]) $sql .= ", cf_sns = '$cf_sns' ";
+if ($chk[cf_sns]) {
+    $sql .= ", cf_sns = '$cf_sns' ";
+    $sql .= ", cf_kakao_key = '$cf_kakao_key' ";
+}
 if ($chk[cf_zzal]) $sql .= ", cf_zzal = '$cf_zzal', cf_zzal_must = '$cf_zzal_must' ";
 if ($chk[cf_link_blank]) $sql .= ", cf_link_blank = '$cf_link_blank' ";
 if ($chk[cf_comma]) $sql .= ", cf_comma = '$cf_comma' ";
@@ -788,6 +793,7 @@ if ($chk[cf_time_list]) {
     $sql .= ", cf_sns_datetime = '' ";
 }
 if ($chk[cf_content_align]) $sql .= ", cf_content_align = '$cf_content_align' ";
+if ($chk[cf_ca_order]) $sql .= ", cf_ca_order = '$cf_ca_order' ";
 if ($chk[cf_write_width]) {
     $sql .= ", cf_write_width = '$cf_write_width' ";
     $sql .= ", cf_write_height = '$cf_write_height' ";

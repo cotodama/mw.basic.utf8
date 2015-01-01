@@ -1606,6 +1606,17 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	</div>
     </div>
 
+
+    <div class="cf_item">
+	<div class="cf_title"><input type=checkbox name=chk[cf_ca_order] value=1>&nbsp; 분류정렬</div>
+	<div class="cf_content">
+	    <input type=checkbox name=cf_ca_order value=1> 사용 
+	    <span class="cf_info">(분류이름을 오른차순으로 정렬하여 출력합니다.)</span>
+	    <script> document.cf_form.cf_ca_order.checked = '<?=$mw_basic[cf_ca_order]?>'; </script>
+	</div>
+    </div>
+
+
     <div class="block"></div>
 </div>
 
@@ -1930,6 +1941,10 @@ input.bt { background-color:#efefef; height:20px; cursor:pointer; font-size:11px
 	    <input type=checkbox name=cf_sns_kakao value=1> 카카오톡 <span class="cf_info">(모바일에서만)</span>
 	    <input type=checkbox name=cf_sns_kakaostory value=1> 카카오스토리 <span class="cf_info">(모바일에서만)</span>
 	    <input type=checkbox name=cf_sns_line value=1> 라인 <span class="cf_info">(모바일에서만)</span>
+            <br>
+            카카오톡 앱 키 :
+            <input type="text" size="20" class="ed" name="cf_kakao_key" value="<?php echo $mw_basic['cf_kakao_key']?>">
+            <a href="http://www.miwit.com/b/mw_tip-4225" target="_blank">등록방법</a>
 	    <script>
             document.cf_form.cf_sns_twitter.checked = '<? echo strstr($mw_basic[cf_sns], '/twitter/')?'1':''; ?>';
             //document.cf_form.cf_sns_me2day.checked = '<? echo strstr($mw_basic[cf_sns], '/me2day/')?'1':''; ?>';

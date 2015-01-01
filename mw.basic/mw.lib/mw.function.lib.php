@@ -373,7 +373,7 @@ function mw_make_thumbnail($set_width, $set_height, $source_file, $thumbnail_fil
         $time = $write['wr_datetime'];
 
     if ($time)
-        touch($thumbnail_file, strtotime($time));
+        @touch($thumbnail_file, strtotime($time));
 
     thumb_log($thumbnail_file, 'finally');
 }
@@ -668,9 +668,15 @@ function mw_is_hp($hp)
 // 분류 옵션을 얻음
 function mw_get_category_option($bo_table='')
 {
-    global $g4, $board;
+    global $g4;
+    global $board;
+    global $mw_basic;
 
-    $arr = explode("|", $board[bo_category_list]); // 구분자가 , 로 되어 있음
+    $arr = array_map("trim", explode("|", $board[bo_category_list]));
+    if ($mw_basic['cf_ca_order']) {
+        sort($arr);
+    }
+
     $str = "";
     for ($i=0; $i<count($arr); $i++)
         if (trim($arr[$i]))
@@ -1374,6 +1380,8 @@ function mw_basic_counting_date($datetime, $endstr=" 남았습니다")
     global $g4;
 
     $timestamp = strtotime($datetime); // 글쓴날짜시간 Unix timestamp 형식 
+    if (!$timestamp) return;
+
     $current = $g4['server_time']; // 현재날짜시간 Unix timestamp 형식 
 
     if ($current >= $timestamp)
@@ -1466,7 +1474,9 @@ function bc_code($str, $is_content=1, $only_admin=0) {
 
     preg_match_all("/\[counting (.*)\]/iU", $str, $matches);
     for ($i=0, $m=count($matches[1]); $i<$m; $i++) {
-        $str = preg_replace("/\[counting {$matches[1][$i]}\]/iU", mw_basic_counting_date($matches[1][$i]), $str);
+        $t = mw_basic_counting_date($matches[1][$i]);
+        if (!$t) continue;
+        $str = preg_replace("/\[counting {$matches[1][$i]}\]/iU", $t, $str);
     }
 
     $str = mw_tag_debug($str);
@@ -1826,6 +1836,14 @@ function mw_delete_row($board, $write, $save_log=false, $save_message='삭제되
 
         // 모아보기 삭제
         if (function_exists('mw_moa_delete')) mw_moa_delete($write[wr_id]);
+
+        // 통합검색
+        if (function_exists('mw_del_united_search')) {
+            if ($write['wr_is_comment'])
+                mw_del_united_search($board['gr_id'], $board['bo_table'], $write['wr_id']);
+            else
+                mw_del_united_search($board['gr_id'], $board['bo_table'], $write['wr_id'], $write['wr_id']);
+        }
 
         if ($write[wr_is_comment]) {
             // 원글의 코멘트 숫자를 감소(다시계산)
@@ -2699,6 +2717,9 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
 {
     global $g4, $mw_basic, $thumb_path;
 
+    $file = mw_thumb_jpg("$thumb_path/{$wr_id}");
+    if (is_file($file)) return;
+
     if (preg_match("/^http:\/\/youtu.be\/(.*)$/i", $url, $mat)) {
         $v = $mat[1];
     }
@@ -2723,7 +2744,6 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     while (!feof($fp)) $buffer .= fgets($fp,1024);
     fclose($fp);
 
-    $file = mw_thumb_jpg("$thumb_path/{$wr_id}");
     if ($buffer) {
         $fw = @fopen ($file, "wb");
         if ($fw) {
@@ -2738,7 +2758,8 @@ function mw_get_youtube_thumb($wr_id, $url, $datetime='')
     }
 
     thumb_log($thumbnail_file, 'youtube');
-    mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+    //mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+    mw_make_thumbnail_all($file);
 
     if (!$datetime) {
         global $write;
@@ -2758,6 +2779,9 @@ function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
     $v = $mat[1];
 
     if (!$v) return;
+
+    $file = mw_thumb_jpg("$thumb_path/{$wr_id}");
+    if (is_file($file)) return;
 
     $fp = fsockopen ("vimeo.com", 80, $errno, $errstr, 10);
     if (!$fp) return false;
@@ -2784,7 +2808,6 @@ function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
     while (!feof($fp)) $buffer .= fgets($fp,1024);
     fclose($fp);
 
-    $file = mw_thumb_jpg("$thumb_path/{$wr_id}");
     if ($buffer) {
         $fw = @fopen ($file, "wb");
         if ($fw) {
@@ -2799,7 +2822,8 @@ function mw_get_vimeo_thumb($wr_id, $url, $datetime='')
     }
 
     thumb_log($thumbnail_file, 'vimeo');
-    mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+    //mw_make_thumbnail($mw_basic[cf_thumb_width], $mw_basic[cf_thumb_height], $file, $file, true);
+    mw_make_thumbnail_all($file);
 
     if (!$datetime) {
         global $write;
@@ -3608,7 +3632,8 @@ function mw_make_thumbnail_row ($bo_table, $wr_id, $wr_content, $remote=false, $
             if ($mat)
             {
                 //$mat = str_replace($g4[url], "..", $mat);
-                $dat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
+                //$dat = preg_replace("/(http:\/\/.*)\/data\//i", "../data/", $mat);
+                $dat = preg_replace("/(http:\/\/.*)\/data\//i", $g4['path']."/data/", $mat);
                 if (!is_file($dat) && (substr($mat, 0, 1) == '/' or substr($mat, 0, 1) == '.'))
                     $dat = str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].$mat);
 
@@ -3909,27 +3934,6 @@ function is_g5()
     return false;
 }
 
-function thumb_log($thumb_file, $act)
-{
-    //return;
-    global $member;
-    global $bo_table;
-    global $wr_id;
-    global $g4;
-    global $w;
-
-    if (strstr($_SERVER['PHP_SELF'], "mw.adm.thumb.remake.php")) return;
-
-    include_once($g4['path']."/lib/etc.lib.php");
-
-    $file = $g4['path']."/data/thumb_log";
-    $url = mw_seo_url($bo_table, $wr_id);
-
-    $log = date("Y-m-d H:i:s")." {$act} [{$member['mb_id']}] {$_SERVER['REMOTE_ADDR']} {$_SERVER['PHP_SELF']}?{$_SERVER["QUERY_STRING"]} [{$w}] {$thumb_file} {$url}\n";
-
-    write_log($file, $log);
-}
-
 function is_ani($filename)
 {
     $filecontents = file_get_contents($filename);
@@ -3962,4 +3966,53 @@ function is_ani($filename)
     else
         return(false);
 }
+
+function mw_time_log($mw_run_time, $log)
+{
+    return;
+    global $g4;
+    global $bo_table;
+    global $wr_id;
+
+    $file = $g4['path']."/data/slow";
+
+    if (!$mw_run_time)
+        $mw_run_time = get_microtime();
+
+    $run_time = number_format(get_microtime() - $mw_run_time, 5);
+
+    if ($run_time < 0.5) return;
+
+    $content = "[{$bo_table}-{$wr_id}] [{$run_time}] {$log}\n";
+
+    $fp = fopen($file, "a+");
+    fwrite($fp, $content);
+    fclose($fp);
+
+    $mw_run_time = get_microtime();
+
+    return $mw_run_time;
+}
+
+function thumb_log($thumb_file, $act)
+{
+    return;
+    global $member;
+    global $bo_table;
+    global $wr_id;
+    global $g4;
+    global $w;
+
+    if (strstr($_SERVER['PHP_SELF'], "mw.adm.thumb.remake.php")) return;
+
+    include_once($g4['path']."/lib/etc.lib.php");
+
+    $file = $g4['path']."/data/thumb_log";
+    $url = mw_seo_url($bo_table, $wr_id);
+
+    $log = date("Y-m-d H:i:s")." {$act} [{$member['mb_id']}] {$_SERVER['REMOTE_ADDR']} {$_SERVER['PHP_SELF']}?{$_SERVER["QUERY_STRING"]} [{$w}] {$thumb_file} {$url}\n";
+
+    write_log($file, $log);
+}
+
 
