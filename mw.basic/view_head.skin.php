@@ -574,10 +574,25 @@ if ($mw_basic[cf_sns])
             $kakao_thumb_url .= ".jpg";
         }
 
+        if ($mw_basic['cf_thumb_width'] < 70 or $mw_basic['cf_thumb_width'] < 70) {
+            for ($i=2, $m=5; $i<$m; ++$i) {
+                if ($mw_basic['cf_thumb'.$i.'_width'] >= 70 and $mw_basic['cf_thumb'.$i.'_height'] >= 70) {
+                    $kakao_thumb_path = str_replace("/thumbnail/", "/thumbnail{$i}/", $kakao_thumb_path);
+                    $kakao_thumb_url = str_replace("/thumbnail/", "/thumbnail{$i}/", $kakao_thumb_url);
+                    break;
+                }
+            }
+        }
+
         if (!is_file($kakao_thumb_path))
             $kakao_thumb_url = '';
         else
             $kakao_thumb_size = @getImageSize($kakao_thumb_path);
+
+        if ($kakao_thumb_size[0] < 70 or $kakao_thumb_size[1] < 70) {
+            $kakao_thumb_path = '';
+            $kakao_thumb_url = '';
+        }
 
         if (!strstr(strtolower($_SERVER[HTTP_USER_AGENT]), "mobile"))
             $kakao_url = "#;\" onclick=\"javascript:alert('모바일 기기에서만 작동합니다.');";
@@ -614,7 +629,7 @@ if ($mw_basic[cf_sns])
         // 카카오톡 링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
         Kakao.Link.createTalkLinkButton({
             container: '#kakao-link-btn',
-            label: '<?php echo $kakao_subject?>\n',
+            label: "<?php echo $kakao_subject?>",
             <?php if ($kakao_thumb_url) { ?>
             image: {
                 src: '<?php echo $kakao_thumb_url?>',
