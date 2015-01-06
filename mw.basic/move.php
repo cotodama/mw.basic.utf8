@@ -1,6 +1,9 @@
 <?php
 include_once("./_common.php");
 
+if (defined("G5_PATH"))
+    include_once($board_skin_path."/mw.proc/mw.g5.adapter.extend.php");
+
 if ($sw == "move")
     $act = "이동";
 else if ($sw == "copy")

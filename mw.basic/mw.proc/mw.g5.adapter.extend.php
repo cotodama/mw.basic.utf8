@@ -37,3 +37,4 @@ else {
     $faq_skin_path      = $g4['skin_path'].'/faq/'.$config['cf_faq_skin'];
 }
 
+$g4['bbs_img_path']     = $board_skin_path."/bbs-img";
